@@ -4,6 +4,7 @@ using MLAPI.Messaging;
 using MLAPI.NetworkVariable;
 using Networking;
 using System;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -185,14 +186,30 @@ public class PlayerController : NetworkBehaviour {
     public void TogglePlayerReadyServerRpc()
     {
         IsReady.Value = !IsReady.Value;
-        UpdateReadyStatusClientRpc(new bool[] {
-            pongManager.ConnectedClientsList[0].PlayerObject.GetComponent<PlayerController>().IsReady.Value,
-            pongManager.ConnectedClientsList[1].PlayerObject.GetComponent<PlayerController>().IsReady.Value
-        });
+        /*bool[] readyStatuses = new bool[pongManager.ConnectedClientsList.Count];
+        if (pongManager.ConnectedClients.Count > 0)
+        {
+            readyStatuses[0] = pongManager.ConnectedClientsList[0].PlayerObject.GetComponent<PlayerController>().IsReady.Value;
+            if (pongManager.ConnectedClients.Count > 1)
+            {
+                readyStatuses[1] = pongManager.ConnectedClientsList[1].PlayerObject.GetComponent<PlayerController>().IsReady.Value;
+            }
+        }*/
+        bool everyoneIsReady = true;
+        foreach (var client in pongManager.ConnectedClientsList)
+        {
+            if (!client.PlayerObject.GetComponent<PlayerController>().IsReady.Value && client.ClientId != pongManager.LocalClientId)
+            {
+                everyoneIsReady = false;
+                break;
+            }
+        }
+        var readyStatuses = from player in pongManager.ConnectedClientsList select player.PlayerObject.GetComponent<PlayerController>().IsReady.Value;
+        UpdateReadyStatusClientRpc(readyStatuses.ToArray(), everyoneIsReady);
     }
 
     [ClientRpc]
-    public void UpdateReadyStatusClientRpc(bool[] readyStatuses)
+    public void UpdateReadyStatusClientRpc(bool[] readyStatuses, bool everyoneIsReady)
     {
         if (readyStatuses.Length > 0)
         {
@@ -202,17 +219,8 @@ public class PlayerController : NetworkBehaviour {
                 gameController.player2State.text = readyStatuses[1].ToString();
             }
         }
-        if (IsLeader.Value)
+        if (pongManager.IsHost && readyStatuses.Length == 2)
         {
-            bool everyoneIsReady = true;
-            foreach (var client in pongManager.ConnectedClientsList)
-            {
-                if (!client.PlayerObject.GetComponent<PlayerController>().IsReady.Value && client.ClientId != pongManager.LocalClientId)
-                {
-                    everyoneIsReady = false;
-                    break;
-                }
-            }
             if (everyoneIsReady)
             {
                 gameController.ReadyToStart();

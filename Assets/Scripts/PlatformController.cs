@@ -28,6 +28,7 @@ public class PlatformController : NetworkBehaviour
 
     [ServerRpc]
     public void MoveServerRpc(float direction) {
+        /*TODO ball loses y-axis velocity if platform is frozen in x-axis rotation.*/
         /*if (!isLocalPlayer)
 	    {
 		    return;
@@ -36,7 +37,7 @@ public class PlatformController : NetworkBehaviour
         // don't move if reached side walls
         if (hit.collider is null) {
 	    	//transform.position += new Vector3(direction * speed * Time.deltaTime, 0, 0);
-            MoveSpeed.Value = new Vector3(direction, 0, 0) * speed;
+            MoveSpeed.Value = new Vector2(direction, 0) * speed;
         }
     }
 
@@ -67,5 +68,6 @@ public class PlatformController : NetworkBehaviour
     public void ResetPlatform() {
     	transform.localRotation = Quaternion.identity;
     	transform.position = new Vector3(0f, transform.position.y, transform.position.z);
+        rigidbody2d.velocity = Vector2.zero;
     }
 }

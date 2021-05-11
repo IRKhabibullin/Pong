@@ -8,16 +8,31 @@ public class ScoreHandler : MonoBehaviour {
     private Dictionary<string, TextMeshProUGUI> scoreTexts = new Dictionary<string, TextMeshProUGUI>();
 
     void Start() {
-    	foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player")) {
+    	/*foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player")) {
     		scores.Add(player.name, 0);
     		TextMeshProUGUI scoreText = GameObject.Find(player.name + "Score").GetComponent<TextMeshProUGUI>();
     		scoreText.text = scores[player.name].ToString();
     		scoreTexts.Add(player.name, scoreText);
-		}
+		}*/
     }
 
-    public void updateScore(string player) {
-    	scores[player]++;
+    public void InitScore(string[] player_names)
+    {
+        scores.Clear();
+        scoreTexts.Clear();
+        foreach (var player_name in player_names)
+        {
+            scores.Add(player_name, 0);
+            TextMeshProUGUI scoreText = GameObject.Find(player_name + "Score").GetComponent<TextMeshProUGUI>();
+            scoreText.text = scores[player_name].ToString();
+            scoreTexts.Add(player_name, scoreText);
+        }
+    }
+
+    public void UpdateScore(string player)
+    {
+        Debug.Log($"UpdateScore {player}");
+        scores[player]++;
     	scoreTexts[player].text = scores[player].ToString();
     }
 }

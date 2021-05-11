@@ -9,6 +9,7 @@ public class ConnectionManager : MonoBehaviour
 {
     [SerializeField] private GameObject menuPanel;
     [SerializeField] private GameObject leaveButton;
+    [SerializeField] private GameObject readyButton;
     [SerializeField] private GameController gameController;
 
     private void Start()
@@ -21,9 +22,9 @@ public class ConnectionManager : MonoBehaviour
     private void OnDestroy()
     {
         if (pongManager == null) { return; }
-        pongManager.OnServerStarted += HandleServerStarted;
-        pongManager.OnClientConnectedCallback += HandleClientConnected;
-        pongManager.OnClientDisconnectCallback += HandleClientDisconnect;
+        pongManager.OnServerStarted -= HandleServerStarted;
+        pongManager.OnClientConnectedCallback -= HandleClientConnected;
+        pongManager.OnClientDisconnectCallback -= HandleClientDisconnect;
     }
 
     private void HandleClientDisconnect(ulong ClientId)
@@ -32,6 +33,12 @@ public class ConnectionManager : MonoBehaviour
         {
             menuPanel.SetActive(true);
             leaveButton.SetActive(false);
+            readyButton.SetActive(false);
+            pongManager.ConnectedClients[pongManager.LocalClientId].PlayerObject.GetComponent<PlayerController>().IsReady.Value = false;
+        }
+        if (pongManager.IsHost)
+        {
+            gameController.DestroyBall();
         }
     }
 
@@ -41,6 +48,7 @@ public class ConnectionManager : MonoBehaviour
         {
             menuPanel.SetActive(false);
             leaveButton.SetActive(true);
+            readyButton.SetActive(true);
         }
         if (pongManager.IsServer)
         {
@@ -49,18 +57,24 @@ public class ConnectionManager : MonoBehaviour
             {
                 if (client.ClientId == ClientId)
                 {
+                    client.PlayerObject.tag = $"Player{i + 1}";
+                    client.PlayerObject.name = $"Player{i + 1}";
                     var player = client.PlayerObject.GetComponent<PlayerController>();
-                    player.Position.Value = gameController.playersPositions[i].position;
-                    player.Rotation.Value = gameController.playersPositions[i].rotation;
+                    player.SetPositionClientRpc(gameController.playersPositions[i].position, gameController.playersPositions[i].rotation);
                     player.SetColorClientRpc(gameController.playersColors[i]);
+                    gameController.AddPlayer(client.PlayerObject);
                     if (pongManager.ConnectedClients.Count == 1)
                     {
                         player.IsLeader.Value = true;
-                        Debug.Log($"Qwe {player.IsLeader.Value} {player.OwnerClientId} {pongManager.ConnectedClients.Count}");
                     }
                     break;
                 }
                 i++;
+            }
+            if (pongManager.ConnectedClientsList.Count == 2)
+            {
+                Debug.Log("Two players");
+                gameController.BothPlayersConnected();
             }
         }
     }

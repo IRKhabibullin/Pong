@@ -1050,7 +1050,7 @@ GameObject:
   - component: {fileID: 85497383}
   - component: {fileID: 85497382}
   - component: {fileID: 85497385}
-  m_Layer: 10
+  m_Layer: 7
   m_Name: UpBackWall
   m_TagString: Player1
   m_Icon: {fileID: 0}
@@ -3073,7 +3073,7 @@ GameObject:
   - component: {fileID: 525672277}
   - component: {fileID: 525672276}
   - component: {fileID: 525672279}
-  m_Layer: 10
+  m_Layer: 7
   m_Name: DownBackWall
   m_TagString: Player2
   m_Icon: {fileID: 0}
@@ -5599,6 +5599,8 @@ MonoBehaviour:
     NetworkPrefabs:
     - Prefab: {fileID: 9109471681161763670, guid: ea929da38602fa1408f17818b0a7b8a6, type: 3}
       PlayerPrefab: 1
+    - Prefab: {fileID: 4665305299079008131, guid: 5f53ba0f401affb40835a0a91b9c1401, type: 3}
+      PlayerPrefab: 0
     PlayerPrefabHash:
       id: 0
     CreatePlayerPrefab: 1
@@ -5941,7 +5943,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1089641020
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7526,8 +7528,9 @@ MonoBehaviour:
   countdown: {fileID: 1651516987}
   scoreHandler: {fileID: 612305229}
   readyButton: {fileID: 1089641019}
+  readyButtonText: {fileID: 1632813827}
   startButton: {fileID: 1794777690}
-  startButtonText: {fileID: 1632813827}
+  ballPrefab: {fileID: 7439768786198271796, guid: 5f53ba0f401affb40835a0a91b9c1401, type: 3}
   debugText: {fileID: 676634903}
   OnReady:
     m_PersistentCalls:
@@ -8189,6 +8192,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menuPanel: {fileID: 1147765180}
   leaveButton: {fileID: 1957918324}
+  readyButton: {fileID: 1089641019}
   gameController: {fileID: 1334908331}
 --- !u!1 &1494051127
 GameObject:
@@ -9286,7 +9290,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1651516984
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10264,7 +10268,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1794777695}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1334908331}
+        m_TargetAssemblyTypeName: GameController, Assembly-CSharp
+        m_MethodName: OnStartButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1794777695
 MonoBehaviour:
   m_ObjectHideFlags: 0

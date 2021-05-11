@@ -1,13 +1,12 @@
 ﻿using System.Collections;
-/*using Mirror;*/
 using UnityEngine;
 using Networking;
 using TMPro;
 using UnityEngine.Events;
 using MLAPI;
-using MLAPI.Connection;
 using System.Collections.Generic;
 using MLAPI.Messaging;
+using System.Linq;
 
 public class GameController : NetworkBehaviour
 {
@@ -36,15 +35,16 @@ public class GameController : NetworkBehaviour
     [SerializeField] private CountdownHandler countdown;
     [SerializeField] private ScoreHandler scoreHandler;
     [SerializeField] private GameObject readyButton;
+    [SerializeField] TextMeshProUGUI readyButtonText;
     [SerializeField] private GameObject startButton;
-    [SerializeField] private TextMeshProUGUI startButtonText;
+    [SerializeField] private NetworkObject ballPrefab;
 
     [SerializeField] private TextMeshProUGUI debugText;
     public UnityEvent OnReady;
 
     /*private PongNetworkDiscovery networkDiscovery;*/
     private BallController ballController;
-    private GameObject[] players;
+    private List<NetworkObject> players;
     public GameStates gameState;
     public PlatformController pitcher; // player who started round
     public GameObject lastFender; // player last reflected ball
@@ -62,15 +62,14 @@ public class GameController : NetworkBehaviour
 
     private void Start()
     {
-        /*networkDiscovery = GameObject.Find("NetworkManager").GetComponent<PongNetworkDiscovery>();*/
-        gameState = GameStates.Initial;
+        /*gameState = GameStates.Initial;*/
 
         leftWallPosition = GameObject.Find("LeftSideWall").transform.position.x;
         rightWallPosition = GameObject.Find("RightSideWall").transform.position.x;
 
         gameCanvas = GameObject.Find("Game");
         menuCanvas = GameObject.Find("Menu");
-        /*gameCanvas.SetActive(false);*/
+        players = new List<NetworkObject>();
     }
 
     public void EnterGame()
@@ -84,9 +83,9 @@ public class GameController : NetworkBehaviour
         Debug.Log("InitGame called");
         /*networkDiscovery.StopDiscovery();*/
         ballController = GameObject.FindWithTag("Ball").GetComponent<BallController>();
-        players = GameObject.FindGameObjectsWithTag("Player");
-        pitcher = players[0].GetComponent<PlatformController>();
-        lastFender = players[0];
+        /*players = GameObject.FindGameObjectsWithTag("Player");
+        pitcher = players[0].GetComponent<PlatformController>();*/
+        /*lastFender = players[0];*/
 
         //if ((PlayerMode) PlayerPrefs.GetInt("PlayerMode") == PlayerMode.Multiplayer)
         //{
@@ -97,23 +96,42 @@ public class GameController : NetworkBehaviour
         //    players[1].AddComponent<AIController>();
         //}
 
-        gameState = GameStates.Initial;
+        /*gameState = GameStates.Initial;*/
+    }
+
+    public void BothPlayersConnected()
+    {
+        if (!pongManager.IsServer)
+        {
+            return;
+        }
+        Debug.Log($"BothPlayersConnected {IsServer} {IsClient}");
+        var player_names = from player in pongManager.ConnectedClientsList select player.PlayerObject.name;
+        BothPlayersConnectedClientRpc(player_names.ToArray());
+        pitcher = pongManager.ConnectedClientsList[0].PlayerObject.GetComponent<PlatformController>();
+        var ball = Instantiate(ballPrefab, Vector2.zero, Quaternion.identity);
+        ballController = ball.GetComponent<BallController>();
+        ball.Spawn();
+    }
+
+    [ClientRpc]
+    public void BothPlayersConnectedClientRpc(string[] player_names)
+    {
+        Debug.Log($"BothPlayersConnectedClientRpc {IsServer} {IsClient} {player_names}");
+        scoreHandler.InitScore(player_names);
     }
 
     private void Update()
     {
-        //if (gameState == GameStates.Initial)
-        //{
-        //    ResetGameObjects();
-        //    gameState = GameStates.Prepare;
-        //}
-
         if (testMode)
         {
             CheckForDebugTouch();
         }
+    }
 
-        //debugText.text = 
+    public void AddPlayer(NetworkObject player)
+    {
+        players.Add(player);
     }
 
     /// <summary>
@@ -135,8 +153,36 @@ public class GameController : NetworkBehaviour
 
     public void OnReadyButtonClicked()
     {
-        NetworkManager.Singleton.ConnectedClients[NetworkManager.Singleton.LocalClientId]
-            .PlayerObject.GetComponent<PlayerController>().TogglePlayerReadyServerRpc();
+        var player = pongManager.ConnectedClients[NetworkManager.Singleton.LocalClientId]
+            .PlayerObject.GetComponent<PlayerController>();
+        readyButtonText.text = player.IsReady.Value ? "Ready" : "Not ready";
+        player.TogglePlayerReadyServerRpc();
+    }
+
+    public void OnStartButtonClicked()
+    {
+        StartServerRpc();
+    }
+
+    [ServerRpc]
+    private void StartServerRpc()
+    {
+        StartRoundClientRpc();
+        /*StartNewRound();*/
+
+        /*make it after coroutine*/
+        /*gameState = GameStates.Play;*/
+        if (!testMode)
+        {
+            ballController.LaunchBall();
+        }
+    }
+
+    [ClientRpc]
+    private void StartRoundClientRpc()
+    {
+        readyButton.SetActive(false);
+        startButton.SetActive(false);
     }
 
     public void ReadyToStart()
@@ -153,10 +199,20 @@ public class GameController : NetworkBehaviour
         }
     }
 
+    public void DestroyBall()
+    {
+        if (ballController != null)
+        {
+            Destroy(ballController.gameObject);
+        }
+    }
+
     private IEnumerator StartAfterCountdown()
     {
+        /*TODO synced countdown*/
+        Debug.Log("StartAfterCountdown");
         yield return StartCoroutine(countdown.CountDown());
-        gameState = GameStates.Play;
+        /*gameState = GameStates.Play;*/
         if (!testMode)
         {
             ballController.LaunchBall();
@@ -165,46 +221,66 @@ public class GameController : NetworkBehaviour
 
     public void FinishRound(GameObject winner)
     {
-        scoreHandler.updateScore(winner.tag);
-
-        foreach (GameObject player in players)
+        Debug.Log("FinishRound");
+        if (!pongManager.IsServer)
         {
-            if (!winner.CompareTag(player.name))
-            {
-                pitcher = player.GetComponent<PlatformController>();
-                break;
-            }
+            Debug.Log("I am not server, so i cant finish round");
+            return;
         }
 
+        foreach (NetworkObject player in players)
+        {
+            if (!winner.CompareTag(player.tag))
+            {
+                pitcher = player.GetComponent<PlatformController>();
+            }
+            player.GetComponent<PlayerController>().IsReady.Value = false;
+        }
+
+        FinishRoundClientRpc(winner.tag);
+
         ResetGameObjects();
-        gameState = GameStates.Prepare;
+        /*gameState = GameStates.Prepare;*/
     }
 
+    [ClientRpc]
+    public void FinishRoundClientRpc(string winnerName)
+    {
+        Debug.Log($"FinishRoundClientRpc {winnerName}");
+        scoreHandler.UpdateScore(winnerName);
+        readyButtonText.text = "Ready";
+        readyButton.SetActive(true);
+        startButton.SetActive(false);
+    }
+
+    /// <summary>
+    /// Called on the server in order to sync between clients
+    /// </summary>
     private void ResetGameObjects()
     {
-        countdown.Reset();
+        /*countdown.Reset();*/
 
-        foreach (GameObject player in players)
+        foreach (NetworkObject player in players)
         {
             player.GetComponent<PlatformController>().ResetPlatform();
         }
 
         ballController.ResetBall(pitcher.GetBallStartPosition());
         gameObject.GetComponent<PowerUpsManager>().clearPowerUps();
-        //startButton.SetActive(true);
+        startButton.SetActive(true);
     }
 
     public void PlatformTouchHandler(GameObject platform)
     {
-        if (gameState != GameStates.Play)
-            return;
+        /*if (gameState != GameStates.Play)
+            return;*/
         lastFender = platform;
         GetComponent<PowerUpsManager>().TriggerPowerUp();
     }
 
     private PongManager pnm;
 
-    private PongManager networkManager
+    private PongManager pongManager
     {
         get
         {

@@ -1,4 +1,6 @@
 ﻿/*using Mirror;*/
+using MLAPI;
+using Networking;
 using System;
 using UnityEngine;
 using UnityEngine.Events;
@@ -33,15 +35,15 @@ public class BallController : MonoBehaviour {
         _rb = GetComponent<Rigidbody2D>();
     }
 
-    /*[ServerCallback]
     void OnCollisionEnter2D(Collision2D collision) {
+        if (!pongManager.IsServer) { return; }
         if (collision.gameObject.layer == backWalls) {
             touchdownEvent.Invoke(collision.gameObject);
         }
         else if (collision.gameObject.CompareTag("Player")) {
             platformTouchEvent.Invoke(collision.gameObject);
         }
-    }*/
+    }
 
     public void ResetBall(Vector2 position) {
         _rb.velocity = Vector2.zero;
@@ -56,5 +58,16 @@ public class BallController : MonoBehaviour {
 
     public void MoveBall(Vector3 position) {
         gameObject.transform.position = position;
+    }
+
+    private PongManager pnm;
+
+    private PongManager pongManager
+    {
+        get
+        {
+            if (pnm != null) { return pnm; }
+            return pnm = NetworkManager.Singleton as PongManager;
+        }
     }
 }
