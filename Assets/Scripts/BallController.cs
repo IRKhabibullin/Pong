@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public class BallController : MonoBehaviour {
-    [SerializeField] private Rigidbody2D _rb;
+    [SerializeField] private Rigidbody _rb;
     private LayerMask backWalls;
     public float speed;
 
@@ -32,10 +32,10 @@ public class BallController : MonoBehaviour {
 
     void Start() {
         backWalls = LayerMask.NameToLayer("BackWall");
-        _rb = GetComponent<Rigidbody2D>();
+        _rb = GetComponent<Rigidbody>();
     }
 
-    void OnCollisionEnter2D(Collision2D collision) {
+    void OnCollisionEnter(Collision collision) {
         if (!pongManager.IsServer) { return; }
         if (collision.gameObject.layer == backWalls) {
             touchdownEvent.Invoke(collision.gameObject);
@@ -45,15 +45,15 @@ public class BallController : MonoBehaviour {
         }
     }
 
-    public void ResetBall(Vector2 position) {
-        _rb.velocity = Vector2.zero;
+    public void ResetBall(Vector3 position) {
+        _rb.velocity = Vector3.zero;
         transform.position = new Vector3(position.x, position.y, 0);
     }
 
     public void LaunchBall() {
         float x_axis_velocity = UnityEngine.Random.Range(-3*speed/4, 3*speed/4);
         float y_axis_velocity = Mathf.Sqrt(speed*speed - x_axis_velocity*x_axis_velocity);
-        _rb.velocity = new Vector2(x_axis_velocity, y_axis_velocity);
+        _rb.velocity = new Vector3(x_axis_velocity, y_axis_velocity);
     }
 
     public void MoveBall(Vector3 position) {

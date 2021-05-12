@@ -74,9 +74,9 @@ public class PlayerController : NetworkBehaviour {
     }
 
     [ClientRpc]
-    public void SetColorClientRpc(Color color)
+    public void SetColorClientRpc(int playerNumber)
     {
-        GetComponent<SpriteRenderer>().color = color;
+        GetComponent<MeshRenderer>().material = gameController.playersMaterials[playerNumber];
     }
 
     void CheckForTouch() {

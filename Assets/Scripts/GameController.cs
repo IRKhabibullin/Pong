@@ -31,7 +31,7 @@ public class GameController : NetworkBehaviour
     }
 
     public List<Transform> playersPositions;
-    public List<Color> playersColors;
+    public List<Material> playersMaterials;
     [SerializeField] private CountdownHandler countdown;
     [SerializeField] private ScoreHandler scoreHandler;
     [SerializeField] private GameObject readyButton;
@@ -109,7 +109,7 @@ public class GameController : NetworkBehaviour
         var player_names = from player in pongManager.ConnectedClientsList select player.PlayerObject.name;
         BothPlayersConnectedClientRpc(player_names.ToArray());
         pitcher = pongManager.ConnectedClientsList[0].PlayerObject.GetComponent<PlatformController>();
-        var ball = Instantiate(ballPrefab, Vector2.zero, Quaternion.identity);
+        var ball = Instantiate(ballPrefab, Vector3.zero, Quaternion.identity);
         ballController = ball.GetComponent<BallController>();
         ball.Spawn();
     }

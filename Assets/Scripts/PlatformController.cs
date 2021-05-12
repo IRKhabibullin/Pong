@@ -8,11 +8,10 @@ public class PlatformController : NetworkBehaviour
 {
 	public float speed = 30f;
 	public float width = 5f;
-	public Vector2 ballPosition;
+	public Vector3 ballPosition;
 	public float maxRotateAngle = 45f;
 	public float rotateSpeed = 100f;
-    /*public Vector2 moveSpeed = Vector2.zero;*/
-    public Rigidbody2D rigidbody2d;
+    [SerializeField] private Rigidbody pRigidbody;
     private PlayerController _pc;
 
     private void Start()
@@ -20,7 +19,7 @@ public class PlatformController : NetworkBehaviour
         _pc = GetComponent<PlayerController>();
     }
 
-    public NetworkVariableVector2 MoveSpeed = new NetworkVariableVector2(new NetworkVariableSettings
+    public NetworkVariableVector3 MoveSpeed = new NetworkVariableVector3(new NetworkVariableSettings
     {
         WritePermission = NetworkVariablePermission.ServerOnly,
         ReadPermission = NetworkVariablePermission.Everyone
@@ -37,13 +36,13 @@ public class PlatformController : NetworkBehaviour
         // don't move if reached side walls
         if (hit.collider is null) {
 	    	//transform.position += new Vector3(direction * speed * Time.deltaTime, 0, 0);
-            MoveSpeed.Value = new Vector2(direction, 0) * speed;
+            MoveSpeed.Value = new Vector3(direction, 0, 0) * speed;
         }
     }
 
     void FixedUpdate()
     {
-        rigidbody2d.velocity = MoveSpeed.Value;
+        pRigidbody.velocity = MoveSpeed.Value;
     }
 
     public float GetCurrentAngle() {
@@ -62,12 +61,12 @@ public class PlatformController : NetworkBehaviour
 
     /// <summary> Returns where the ball should be placed on a platform at start of the round </summary>
     public Vector2 GetBallStartPosition() {
-    	return new Vector2(transform.position.x, transform.position.y) + ballPosition;
+    	return new Vector3(transform.position.x, transform.position.y, 0) + ballPosition;
     }
 
     public void ResetPlatform() {
     	transform.localRotation = Quaternion.identity;
     	transform.position = new Vector3(0f, transform.position.y, transform.position.z);
-        rigidbody2d.velocity = Vector2.zero;
+        pRigidbody.velocity = Vector3.zero;
     }
 }
