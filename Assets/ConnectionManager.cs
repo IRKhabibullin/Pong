@@ -62,6 +62,7 @@ public class ConnectionManager : MonoBehaviour
                     var player = client.PlayerObject.GetComponent<PlayerController>();
                     player.SetPositionClientRpc(gameController.playersPositions[i].position, gameController.playersPositions[i].rotation);
                     player.SetColorClientRpc(i);
+                    client.PlayerObject.GetComponent<PlatformController>().launchDirection = i == 0 ? 1 : -1;
                     gameController.AddPlayer(client.PlayerObject);
                     if (pongManager.ConnectedClients.Count == 1)
                     {

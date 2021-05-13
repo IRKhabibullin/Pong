@@ -50,9 +50,9 @@ public class BallController : MonoBehaviour {
         transform.position = new Vector3(position.x, position.y, 0);
     }
 
-    public void LaunchBall() {
+    public void LaunchBall(int direction) {
         float x_axis_velocity = UnityEngine.Random.Range(-3*speed/4, 3*speed/4);
-        float y_axis_velocity = Mathf.Sqrt(speed*speed - x_axis_velocity*x_axis_velocity);
+        float y_axis_velocity = Mathf.Sqrt(speed*speed - x_axis_velocity*x_axis_velocity) * direction;
         _rb.velocity = new Vector3(x_axis_velocity, y_axis_velocity);
     }
 

@@ -11,6 +11,7 @@ public class PlatformController : NetworkBehaviour
 	public Vector3 ballPosition;
 	public float maxRotateAngle = 45f;
 	public float rotateSpeed = 100f;
+    public int launchDirection;
     [SerializeField] private Rigidbody pRigidbody;
     private PlayerController _pc;
 
@@ -61,7 +62,7 @@ public class PlatformController : NetworkBehaviour
 
     /// <summary> Returns where the ball should be placed on a platform at start of the round </summary>
     public Vector2 GetBallStartPosition() {
-    	return new Vector3(transform.position.x, transform.position.y, 0) + ballPosition;
+    	return new Vector3(transform.position.x, transform.position.y, 0) + ballPosition * launchDirection;
     }
 
     public void ResetPlatform() {

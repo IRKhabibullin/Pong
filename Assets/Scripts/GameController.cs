@@ -174,7 +174,7 @@ public class GameController : NetworkBehaviour
         /*gameState = GameStates.Play;*/
         if (!testMode)
         {
-            ballController.LaunchBall();
+            ballController.LaunchBall(pitcher.launchDirection);
         }
     }
 
@@ -215,7 +215,7 @@ public class GameController : NetworkBehaviour
         /*gameState = GameStates.Play;*/
         if (!testMode)
         {
-            ballController.LaunchBall();
+            ballController.LaunchBall(pitcher.launchDirection);
         }
     }
 
