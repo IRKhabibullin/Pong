@@ -13,12 +13,6 @@ public class PlatformController : NetworkBehaviour
 	public float rotateSpeed = 100f;
     public int launchDirection;
     [SerializeField] private Rigidbody pRigidbody;
-    private PlayerController _pc;
-
-    private void Start()
-    {
-        _pc = GetComponent<PlayerController>();
-    }
 
     public NetworkVariableVector3 MoveSpeed = new NetworkVariableVector3(new NetworkVariableSettings
     {
@@ -28,22 +22,16 @@ public class PlatformController : NetworkBehaviour
 
     [ServerRpc]
     public void MoveServerRpc(float direction) {
-        /*TODO ball loses y-axis velocity if platform is frozen in x-axis rotation.*/
-        /*if (!isLocalPlayer)
-	    {
-		    return;
-	    }*/
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(Math.Sign(direction), 0), width, LayerMask.GetMask("SideWall"));
-        // don't move if reached side walls
-        if (hit.collider is null) {
-	    	//transform.position += new Vector3(direction * speed * Time.deltaTime, 0, 0);
-            MoveSpeed.Value = new Vector3(direction, 0, 0) * speed;
-        }
+        MoveSpeed.Value = new Vector3(direction, 0, 0) * speed;
     }
 
     void FixedUpdate()
     {
-        pRigidbody.velocity = MoveSpeed.Value;
+        // don't move if reached side walls
+        if (!Physics.Raycast(transform.position, new Vector3(Math.Sign(MoveSpeed.Value.x), 0, 0), width, LayerMask.GetMask("SideWall")))
+        {
+            transform.position += MoveSpeed.Value * Time.fixedDeltaTime;
+        }
     }
 
     public float GetCurrentAngle() {
@@ -68,6 +56,5 @@ public class PlatformController : NetworkBehaviour
     public void ResetPlatform() {
     	transform.localRotation = Quaternion.identity;
     	transform.position = new Vector3(0f, transform.position.y, transform.position.z);
-        pRigidbody.velocity = Vector3.zero;
     }
 }
