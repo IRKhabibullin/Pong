@@ -22,6 +22,10 @@ public class PlatformController : NetworkBehaviour
 
     [ServerRpc]
     public void MoveServerRpc(float direction) {
+        if (Math.Abs(direction) < 0.1)
+        {
+            direction = 0;
+        }
         MoveSpeed.Value = new Vector3(direction, 0, 0) * speed;
     }
 

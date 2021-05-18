@@ -40,7 +40,7 @@ public class BallController : MonoBehaviour {
         if (collision.gameObject.layer == backWalls) {
             touchdownEvent.Invoke(collision.gameObject);
         }
-        else if (collision.gameObject.CompareTag("Player")) {
+        else if (collision.gameObject.CompareTag("Player1") || collision.gameObject.CompareTag("Player2")) {
             platformTouchEvent.Invoke(collision.gameObject);
         }
     }

@@ -105,20 +105,12 @@ public class GameController : NetworkBehaviour
         {
             return;
         }
-        Debug.Log($"BothPlayersConnected {IsServer} {IsClient}");
-        var player_names = from player in pongManager.ConnectedClientsList select player.PlayerObject.name;
-        BothPlayersConnectedClientRpc(player_names.ToArray());
+        var player_names = (from player in pongManager.ConnectedClientsList select player.PlayerObject.name).ToArray();
+        scoreHandler.InitScore(player_names);
         pitcher = pongManager.ConnectedClientsList[0].PlayerObject.GetComponent<PlatformController>();
-        var ball = Instantiate(ballPrefab, Vector3.zero, Quaternion.identity);
+        var ball = Instantiate(ballPrefab, pitcher.GetBallStartPosition(), Quaternion.identity);
         ballController = ball.GetComponent<BallController>();
         ball.Spawn();
-    }
-
-    [ClientRpc]
-    public void BothPlayersConnectedClientRpc(string[] player_names)
-    {
-        Debug.Log($"BothPlayersConnectedClientRpc {IsServer} {IsClient} {player_names}");
-        scoreHandler.InitScore(player_names);
     }
 
     private void Update()
@@ -221,12 +213,7 @@ public class GameController : NetworkBehaviour
 
     public void FinishRound(GameObject winner)
     {
-        Debug.Log("FinishRound");
-        if (!pongManager.IsServer)
-        {
-            Debug.Log("I am not server, so i cant finish round");
-            return;
-        }
+        if (!pongManager.IsServer) return;
 
         foreach (NetworkObject player in players)
         {
@@ -235,6 +222,11 @@ public class GameController : NetworkBehaviour
                 pitcher = player.GetComponent<PlatformController>();
             }
             player.GetComponent<PlayerController>().IsReady.Value = false;
+        }
+        bool hasWinner = scoreHandler.UpdateScore(winner.tag);
+        if (hasWinner)
+        {
+            Debug.Log($"{winner.tag} has won!");
         }
 
         FinishRoundClientRpc(winner.tag);
@@ -246,8 +238,6 @@ public class GameController : NetworkBehaviour
     [ClientRpc]
     public void FinishRoundClientRpc(string winnerName)
     {
-        Debug.Log($"FinishRoundClientRpc {winnerName}");
-        scoreHandler.UpdateScore(winnerName);
         readyButtonText.text = "Ready";
         readyButton.SetActive(true);
         startButton.SetActive(false);
@@ -275,6 +265,7 @@ public class GameController : NetworkBehaviour
         /*if (gameState != GameStates.Play)
             return;*/
         lastFender = platform;
+        Debug.Log("Triggering power up");
         GetComponent<PowerUpsManager>().TriggerPowerUp();
     }
 

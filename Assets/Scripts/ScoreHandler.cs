@@ -1,38 +1,58 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using MLAPI;
+using MLAPI.Messaging;
+using MLAPI.NetworkVariable;
+using MLAPI.NetworkVariable.Collections;
 
-public class ScoreHandler : MonoBehaviour {
+public class ScoreHandler : NetworkBehaviour {
 
-    private Dictionary<string, int> scores = new Dictionary<string, int>();
+    private NetworkDictionary<string, int> scores = new NetworkDictionary<string, int>();
+
     private Dictionary<string, TextMeshProUGUI> scoreTexts = new Dictionary<string, TextMeshProUGUI>();
+    public int winScore;
 
-    void Start() {
-    	/*foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player")) {
-    		scores.Add(player.name, 0);
-    		TextMeshProUGUI scoreText = GameObject.Find(player.name + "Score").GetComponent<TextMeshProUGUI>();
-    		scoreText.text = scores[player.name].ToString();
-    		scoreTexts.Add(player.name, scoreText);
-		}*/
-    }
-
-    public void InitScore(string[] player_names)
+    public void InitScore(string[] players_names)
     {
         scores.Clear();
-        scoreTexts.Clear();
-        foreach (var player_name in player_names)
+        foreach (var player_name in players_names)
         {
             scores.Add(player_name, 0);
+        }
+        InitsCoreClientRpc(players_names);
+    }
+
+    [ClientRpc]
+    public void InitsCoreClientRpc(string[] players_names)
+    {
+        scoreTexts.Clear();
+        foreach (var player_name in players_names)
+        {
             TextMeshProUGUI scoreText = GameObject.Find(player_name + "Score").GetComponent<TextMeshProUGUI>();
             scoreText.text = scores[player_name].ToString();
             scoreTexts.Add(player_name, scoreText);
         }
+
+        scores.OnDictionaryChanged += OnDictChanged;
     }
 
-    public void UpdateScore(string player)
+    private void OnDictChanged(NetworkDictionaryEvent<string, int> changeEvent)
     {
-        Debug.Log($"UpdateScore {player}");
+        RedrawScore();
+    }
+
+    public void RedrawScore()
+    {
+        foreach (var player in scores.Keys)
+        {
+            scoreTexts[player].text = scores[player].ToString();
+        }
+    }
+
+    public bool UpdateScore(string player)
+    {
         scores[player]++;
-    	scoreTexts[player].text = scores[player].ToString();
+        return scores.Values.Contains(winScore);
     }
 }
