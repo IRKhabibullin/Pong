@@ -7,6 +7,8 @@ using MLAPI;
 using System.Collections.Generic;
 using MLAPI.Messaging;
 using System.Linq;
+using MLAPI.NetworkVariable;
+using System;
 
 public class GameController : NetworkBehaviour
 {
@@ -14,7 +16,6 @@ public class GameController : NetworkBehaviour
     {
         Initial,                // state of the game at the very start
         Prepare,                // when players need to press "start" button
-        Ready,                  // when current player waits another player to connect
         Play                    // when the game is going
     }
 
@@ -29,6 +30,8 @@ public class GameController : NetworkBehaviour
         Classic = 0,
         Accuracy = 1
     }
+
+    public NetworkVariable<GameStates> gameState = new NetworkVariable<GameStates>(GameStates.Initial);
 
     public List<Transform> playersPositions;
     public List<Material> playersMaterials;
@@ -45,7 +48,6 @@ public class GameController : NetworkBehaviour
     /*private PongNetworkDiscovery networkDiscovery;*/
     private BallController ballController;
     private List<NetworkObject> players;
-    public GameStates gameState;
     public PlatformController pitcher; // player who started round
     public GameObject lastFender; // player last reflected ball
     private GameObject gameCanvas;
@@ -62,8 +64,6 @@ public class GameController : NetworkBehaviour
 
     private void Start()
     {
-        /*gameState = GameStates.Initial;*/
-
         leftWallPosition = GameObject.Find("LeftSideWall").transform.position.x;
         rightWallPosition = GameObject.Find("RightSideWall").transform.position.x;
 
@@ -111,6 +111,7 @@ public class GameController : NetworkBehaviour
         var ball = Instantiate(ballPrefab, pitcher.GetBallStartPosition(), Quaternion.identity);
         ballController = ball.GetComponent<BallController>();
         ball.Spawn();
+        gameState.Value = GameStates.Prepare;
     }
 
     private void Update()
@@ -163,7 +164,7 @@ public class GameController : NetworkBehaviour
         /*StartNewRound();*/
 
         /*make it after coroutine*/
-        /*gameState = GameStates.Play;*/
+        gameState.Value = GameStates.Play;
         if (!testMode)
         {
             ballController.LaunchBall(pitcher.launchDirection);
@@ -232,7 +233,7 @@ public class GameController : NetworkBehaviour
         FinishRoundClientRpc(winner.tag);
 
         ResetGameObjects();
-        /*gameState = GameStates.Prepare;*/
+        gameState.Value = GameStates.Prepare;
     }
 
     [ClientRpc]

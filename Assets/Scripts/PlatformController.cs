@@ -3,39 +3,44 @@ using MLAPI.Messaging;
 using MLAPI.NetworkVariable;
 using System;
 using UnityEngine;
+using static GameController;
 
 public class PlatformController : NetworkBehaviour
 {
-	public float speed = 30f;
+	public float maxSpeed = 30f;
 	public float width = 5f;
 	public Vector3 ballPosition;
 	public float maxRotateAngle = 45f;
 	public float rotateSpeed = 100f;
     public int launchDirection;
-    [SerializeField] private Rigidbody pRigidbody;
+    public GameController _gc;
 
-    public NetworkVariableVector3 MoveSpeed = new NetworkVariableVector3(new NetworkVariableSettings
+    public Vector3 mSpeed = Vector3.zero;  // current speed. Used only on server, position on client is synced from server
+    public NetworkVariableVector3 mPosition = new NetworkVariableVector3();
+
+    private void Start()
     {
-        WritePermission = NetworkVariablePermission.ServerOnly,
-        ReadPermission = NetworkVariablePermission.Everyone
-    });
+        _gc = GameObject.Find("GameManager").GetComponent<GameController>();
+    }
 
     [ServerRpc]
     public void MoveServerRpc(float direction) {
         if (Math.Abs(direction) < 0.1)
         {
-            direction = 0;
+            mSpeed = Vector3.zero;
+            return;
         }
-        MoveSpeed.Value = new Vector3(direction, 0, 0) * speed;
+        mSpeed = new Vector3(direction, 0, 0) * maxSpeed;
     }
 
     void FixedUpdate()
     {
-        // don't move if reached side walls
-        if (!Physics.Raycast(transform.position, new Vector3(Math.Sign(MoveSpeed.Value.x), 0, 0), width, LayerMask.GetMask("SideWall")))
+        if (IsServer)
         {
-            transform.position += MoveSpeed.Value * Time.fixedDeltaTime;
+            if (!Physics.Raycast(transform.position, new Vector3(Math.Sign(mSpeed.x), 0, 0), width, LayerMask.GetMask("SideWall")))
+                mPosition.Value += mSpeed * Time.fixedDeltaTime;
         }
+        transform.position = mPosition.Value;
     }
 
     public float GetCurrentAngle() {
@@ -57,8 +62,9 @@ public class PlatformController : NetworkBehaviour
     	return new Vector3(transform.position.x, transform.position.y, 0) + ballPosition * launchDirection;
     }
 
-    public void ResetPlatform() {
-    	transform.localRotation = Quaternion.identity;
-    	transform.position = new Vector3(0f, transform.position.y, transform.position.z);
+    public void ResetPlatform()
+    {
+        transform.localRotation = Quaternion.identity;
+    	mPosition.Value = new Vector3(0f, mPosition.Value.y, 0f);
     }
 }

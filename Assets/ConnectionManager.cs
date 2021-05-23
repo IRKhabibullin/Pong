@@ -59,10 +59,11 @@ public class ConnectionManager : MonoBehaviour
                 {
                     client.PlayerObject.tag = $"Player{i + 1}";
                     client.PlayerObject.name = $"Player{i + 1}";
+                    var platform = client.PlayerObject.GetComponent<PlatformController>();
+                    platform.launchDirection = i == 0 ? 1 : -1;
+                    platform.mPosition.Value = gameController.playersPositions[i].position;
                     var player = client.PlayerObject.GetComponent<PlayerController>();
-                    player.SetPositionClientRpc(gameController.playersPositions[i].position, gameController.playersPositions[i].rotation);
                     player.SetColorClientRpc(i);
-                    client.PlayerObject.GetComponent<PlatformController>().launchDirection = i == 0 ? 1 : -1;
                     gameController.AddPlayer(client.PlayerObject);
                     if (pongManager.ConnectedClients.Count == 1)
                     {
@@ -74,7 +75,6 @@ public class ConnectionManager : MonoBehaviour
             }
             if (pongManager.ConnectedClientsList.Count == 2)
             {
-                Debug.Log("Two players");
                 gameController.BothPlayersConnected();
             }
         }
