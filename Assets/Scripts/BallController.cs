@@ -1,5 +1,4 @@
-﻿/*using Mirror;*/
-using MLAPI;
+﻿using MLAPI;
 using Networking;
 using System;
 using UnityEngine;
@@ -14,14 +13,6 @@ public class BallController : MonoBehaviour {
     public class BallEvent : UnityEvent<GameObject> {}
     public BallEvent touchdownEvent;
     public BallEvent platformTouchEvent;
-
-    /*public override void OnStartServer()
-    {
-        base.OnStartServer();
-
-        // only simulate ball physics on server
-        _rb.simulated = true;
-    }*/
 
     private void Awake()
     {

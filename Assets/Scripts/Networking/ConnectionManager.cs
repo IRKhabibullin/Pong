@@ -2,7 +2,6 @@ using UnityEngine;
 using MLAPI;
 using MLAPI.Connection;
 using Networking;
-using System.Collections;
 using MLAPI.Messaging;
 
 public class ConnectionManager : MonoBehaviour

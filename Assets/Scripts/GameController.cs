@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using MLAPI.Messaging;
 using System.Linq;
 using MLAPI.NetworkVariable;
-using System;
 
 public class GameController : NetworkBehaviour
 {
