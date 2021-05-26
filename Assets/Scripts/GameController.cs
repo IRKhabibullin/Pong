@@ -41,6 +41,8 @@ public class GameController : NetworkBehaviour
     [SerializeField] TextMeshProUGUI readyButtonText;
     [SerializeField] private GameObject startButton;
     [SerializeField] private NetworkObject ballPrefab;
+    [SerializeField] private GameObject serverDisconnectedPanel;
+    [SerializeField] private ConnectionManager connectionManager;
 
     [SerializeField] private TextMeshProUGUI debugText;
     public UnityEvent OnReady;
@@ -78,27 +80,6 @@ public class GameController : NetworkBehaviour
         menuCanvas.SetActive(false);
     }
 
-    public void InitGame()
-    {
-        Debug.Log("InitGame called");
-        /*networkDiscovery.StopDiscovery();*/
-        ballController = GameObject.FindWithTag("Ball").GetComponent<BallController>();
-        /*players = GameObject.FindGameObjectsWithTag("Player");
-        pitcher = players[0].GetComponent<PlatformController>();*/
-        /*lastFender = players[0];*/
-
-        //if ((PlayerMode) PlayerPrefs.GetInt("PlayerMode") == PlayerMode.Multiplayer)
-        //{
-        //    players[1].AddComponent<PlayerController>();
-        //}
-        //else
-        //{
-        //    players[1].AddComponent<AIController>();
-        //}
-
-        /*gameState = GameStates.Initial;*/
-    }
-
     public void BothPlayersConnected()
     {
         if (!pongManager.IsServer)
@@ -112,6 +93,19 @@ public class GameController : NetworkBehaviour
         ballController = ball.GetComponent<BallController>();
         ball.Spawn();
         gameState.Value = GameStates.Prepare;
+    }
+
+    /*public void ServerDisconnected()
+    {
+        ServerDisconnectedClientRpc();
+    }*/
+
+    [ClientRpc]
+    public void ServerDisconnectedClientRpc(ClientRpcParams clientRpcParams)
+    {
+        connectionManager.Leave();
+        serverDisconnectedPanel.SetActive(true);
+        StopHostServerRpc();
     }
 
     private void Update()
@@ -174,14 +168,14 @@ public class GameController : NetworkBehaviour
     [ClientRpc]
     private void StartRoundClientRpc()
     {
+        Debug.Log("StartRoundClientRpc");
         readyButton.SetActive(false);
         startButton.SetActive(false);
     }
 
-    public void ReadyToStart()
+    public void ReadyToStart(bool everyoneIsReady)
     {
-        readyButton.SetActive(false);
-        startButton.SetActive(true);
+        startButton.SetActive(everyoneIsReady);
     }
 
     public void StartNewRound()
@@ -268,6 +262,12 @@ public class GameController : NetworkBehaviour
         lastFender = platform;
         Debug.Log("Triggering power up");
         GetComponent<PowerUpsManager>().TriggerPowerUp();
+    }
+
+    [ServerRpc]
+    public void StopHostServerRpc()
+    {
+        pongManager.StopHost();
     }
 
     private PongManager pnm;

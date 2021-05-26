@@ -1,11 +1,8 @@
 ﻿using MLAPI;
-using MLAPI.Connection;
 using MLAPI.Messaging;
 using MLAPI.NetworkVariable;
 using Networking;
-using System;
 using System.Linq;
-using TMPro;
 using UnityEngine;
 
 public class PlayerController : NetworkBehaviour {
@@ -16,39 +13,15 @@ public class PlayerController : NetworkBehaviour {
     private float startAngle;
     private float angleBetweenTouches;
 
-    private GameController gameController;
+    public GameController gameController;
     private Camera mainCamera;
 
     public string _name = "";
 
-    public NetworkVariableVector3 Position = new NetworkVariableVector3(new NetworkVariableSettings
-    {
-        WritePermission = NetworkVariablePermission.ServerOnly,
-        ReadPermission = NetworkVariablePermission.Everyone
-    });
-    public NetworkVariableQuaternion Rotation = new NetworkVariableQuaternion(new NetworkVariableSettings
-    {
-        WritePermission = NetworkVariablePermission.ServerOnly,
-        ReadPermission = NetworkVariablePermission.Everyone
-    });
-    public NetworkVariableBool IsReady = new NetworkVariableBool(new NetworkVariableSettings
-    {
-        WritePermission = NetworkVariablePermission.ServerOnly,
-        ReadPermission = NetworkVariablePermission.Everyone
-    });
-    public NetworkVariableBool IsLeader = new NetworkVariableBool(new NetworkVariableSettings
-    {
-        WritePermission = NetworkVariablePermission.ServerOnly,
-        ReadPermission = NetworkVariablePermission.Everyone
-    });
-
-    /*private bool isLeader
-    {
-        get
-        {
-            return networkManager.players[0].connectionToClient == connectionToClient;
-        }
-    }*/
+    public NetworkVariableVector3 Position = new NetworkVariableVector3();
+    public NetworkVariableQuaternion Rotation = new NetworkVariableQuaternion();
+    public NetworkVariableBool IsReady = new NetworkVariableBool();
+    public NetworkVariableBool IsLeader = new NetworkVariableBool();
 
     void Start() {
         mainCamera = Camera.main;
@@ -58,8 +31,6 @@ public class PlayerController : NetworkBehaviour {
 
     private void Update()
     {
-        /*transform.position = Position.Value;
-        transform.rotation = Rotation.Value;*/
         if (IsLocalPlayer)
         {
             CheckForKeyboard();
@@ -138,39 +109,6 @@ public class PlayerController : NetworkBehaviour {
         }
     }
 
-    private void HandleNewMessage(string message)
-    {
-        Debug.Log($"Opponent says: {message}");
-    }
-
-    public void HandleReadyStatusChanged(bool oldValue, bool newValue) => CheckReady();
-
-    private void CheckReady()
-    {
-        /*if (!isLeader)
-        {
-            return;
-        }*/
-        /*foreach (var player in networkManager.players)
-        {
-            if (!player.isReady)
-            {
-                return;
-            }
-        }*/
-
-        gameController.ReadyToStart();
-    }
-
-    /*[Command]
-    public void CmdStartGame()
-    {
-        if (!isLeader) {
-            return;
-        }
-        // start game
-    }*/
-
     private PongManager pnm;
 
     private PongManager pongManager
@@ -186,15 +124,6 @@ public class PlayerController : NetworkBehaviour {
     public void TogglePlayerReadyServerRpc()
     {
         IsReady.Value = !IsReady.Value;
-        /*bool[] readyStatuses = new bool[pongManager.ConnectedClientsList.Count];
-        if (pongManager.ConnectedClients.Count > 0)
-        {
-            readyStatuses[0] = pongManager.ConnectedClientsList[0].PlayerObject.GetComponent<PlayerController>().IsReady.Value;
-            if (pongManager.ConnectedClients.Count > 1)
-            {
-                readyStatuses[1] = pongManager.ConnectedClientsList[1].PlayerObject.GetComponent<PlayerController>().IsReady.Value;
-            }
-        }*/
         bool everyoneIsReady = true;
         foreach (var client in pongManager.ConnectedClientsList)
         {
@@ -221,10 +150,7 @@ public class PlayerController : NetworkBehaviour {
         }
         if (pongManager.IsHost && readyStatuses.Length == 2)
         {
-            if (everyoneIsReady)
-            {
-                gameController.ReadyToStart();
-            }
+            gameController.ReadyToStart(everyoneIsReady);
         }
     }
 }

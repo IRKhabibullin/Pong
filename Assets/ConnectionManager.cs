@@ -1,9 +1,9 @@
 using UnityEngine;
 using MLAPI;
-using System;
 using MLAPI.Connection;
-using MLAPI.Messaging;
 using Networking;
+using System.Collections;
+using MLAPI.Messaging;
 
 public class ConnectionManager : MonoBehaviour
 {
@@ -102,7 +102,27 @@ public class ConnectionManager : MonoBehaviour
     {
         if (pongManager.IsHost)
         {
-            pongManager.StopHost();
+            if (pongManager.ConnectedClientsList.Count < 2)
+            {
+                pongManager.StopHost();
+            }
+            else if (pongManager.IsServer)
+            {
+                foreach (var playerClientId in pongManager.ConnectedClients.Keys)
+                {
+                    if (playerClientId != pongManager.LocalClientId)
+                    {
+                        ClientRpcParams clientRpcParams = new ClientRpcParams
+                        {
+                            Send = new ClientRpcSendParams
+                            {
+                                TargetClientIds = new ulong[] { playerClientId }
+                            }
+                        };
+                        gameController.ServerDisconnectedClientRpc(clientRpcParams);
+                    }
+                }
+            }
         }
         else if (pongManager.IsClient)
         {
