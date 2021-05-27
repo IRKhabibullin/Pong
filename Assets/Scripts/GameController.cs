@@ -226,7 +226,7 @@ public class GameController : NetworkBehaviour
 
         FinishRoundClientRpc(winner.tag);
 
-        ResetGameObjects();
+        ResetGameObjects(); // todo if platform moving on round finishing, it doesnt stop
         gameState.Value = GameStates.Prepare;
     }
 

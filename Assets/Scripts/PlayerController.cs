@@ -138,22 +138,15 @@ public class PlayerController : NetworkBehaviour {
                 break;
             }
         }
-        var readyStatuses = from player in pongManager.ConnectedClientsList select player.PlayerObject.GetComponent<PlayerController>().IsReady.Value;
-        UpdateReadyStatusClientRpc(readyStatuses.ToArray(), everyoneIsReady);
+        if (pongManager.ConnectedClientsList.Count == 2) {
+            UpdateReadyStatusClientRpc(everyoneIsReady);
+        }
     }
 
     [ClientRpc]
-    public void UpdateReadyStatusClientRpc(bool[] readyStatuses, bool everyoneIsReady)
+    public void UpdateReadyStatusClientRpc(bool everyoneIsReady)
     {
-        if (readyStatuses.Length > 0)
-        {
-            gameController.player1State.text = readyStatuses[0].ToString();
-            if (readyStatuses.Length > 1)
-            {
-                gameController.player2State.text = readyStatuses[1].ToString();
-            }
-        }
-        if (pongManager.IsHost && readyStatuses.Length == 2)
+        if (pongManager.IsHost)
         {
             gameController.ReadyToStart(everyoneIsReady);
         }
