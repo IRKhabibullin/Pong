@@ -4,6 +4,7 @@ using MLAPI.NetworkVariable;
 using Networking;
 using System.Linq;
 using UnityEngine;
+using static GameController;
 
 public class PlayerController : NetworkBehaviour {
     private PlatformController platform;
@@ -86,6 +87,10 @@ public class PlayerController : NetworkBehaviour {
 
     void CheckForKeyboard()
     {
+        if (gameController.gameState.Value == GameStates.Prepare)
+        {
+            return;
+        }
         var direction = Input.GetAxis("Horizontal");
         if (direction != 0.0 || platform.mSpeed != Vector3.zero)
         {

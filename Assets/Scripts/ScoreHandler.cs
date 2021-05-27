@@ -3,7 +3,6 @@ using UnityEngine;
 using TMPro;
 using MLAPI;
 using MLAPI.Messaging;
-using MLAPI.NetworkVariable;
 using MLAPI.NetworkVariable.Collections;
 
 public class ScoreHandler : NetworkBehaviour {
@@ -20,11 +19,19 @@ public class ScoreHandler : NetworkBehaviour {
         {
             scores.Add(player_name, 0);
         }
-        InitsCoreClientRpc(players_names);
+        InitScoreClientRpc(players_names);
+    }
+
+    public void ClearScores()
+    {
+        foreach (var score in new List<string>(scores.Keys))
+        {
+            scores[score] = 0;
+        }
     }
 
     [ClientRpc]
-    public void InitsCoreClientRpc(string[] players_names)
+    public void InitScoreClientRpc(string[] players_names)
     {
         scoreTexts.Clear();
         foreach (var player_name in players_names)

@@ -41,6 +41,7 @@ public class GameController : NetworkBehaviour
     [SerializeField] private GameObject startButton;
     [SerializeField] private NetworkObject ballPrefab;
     [SerializeField] private GameObject serverDisconnectedPanel;
+    [SerializeField] private GameObject winnerPanel;
     [SerializeField] private ConnectionManager connectionManager;
 
     [SerializeField] private TextMeshProUGUI debugText;
@@ -167,7 +168,6 @@ public class GameController : NetworkBehaviour
     [ClientRpc]
     private void StartRoundClientRpc()
     {
-        Debug.Log("StartRoundClientRpc");
         readyButton.SetActive(false);
         startButton.SetActive(false);
     }
@@ -220,13 +220,20 @@ public class GameController : NetworkBehaviour
         bool hasWinner = scoreHandler.UpdateScore(winner.tag);
         if (hasWinner)
         {
-            Debug.Log($"{winner.tag} has won!");
+            scoreHandler.ClearScores();
+            WinnerNotificationClientRpc(winner.tag);
         }
 
         FinishRoundClientRpc(winner.tag);
 
         ResetGameObjects();
         gameState.Value = GameStates.Prepare;
+    }
+
+    [ClientRpc]
+    public void WinnerNotificationClientRpc(string winner) {
+        winnerPanel.GetComponentInChildren<TextMeshProUGUI>().text = $"{winner} won!";
+        winnerPanel.SetActive(true);
     }
 
     [ClientRpc]
@@ -259,8 +266,7 @@ public class GameController : NetworkBehaviour
         /*if (gameState != GameStates.Play)
             return;*/
         lastFender = platform;
-        Debug.Log("Triggering power up");
-        GetComponent<PowerUpsManager>().TriggerPowerUp();
+        /*GetComponent<PowerUpsManager>().TriggerPowerUp();*/
     }
 
     [ServerRpc]
