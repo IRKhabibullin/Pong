@@ -95,11 +95,6 @@ public class GameController : NetworkBehaviour
         gameState.Value = GameStates.Prepare;
     }
 
-    /*public void ServerDisconnected()
-    {
-        ServerDisconnectedClientRpc();
-    }*/
-
     [ClientRpc]
     public void ServerDisconnectedClientRpc(ClientRpcParams clientRpcParams)
     {
@@ -146,22 +141,12 @@ public class GameController : NetworkBehaviour
         player.TogglePlayerReadyServerRpc();
     }
 
-    public void OnStartButtonClicked()
-    {
-        StartServerRpc();
-    }
-
     [ServerRpc]
-    private void StartServerRpc()
+    public void StartServerRpc()
     {
-        StartRoundClientRpc();
-        /*StartNewRound();*/
-
-        /*make it after coroutine*/
-        gameState.Value = GameStates.Play;
-        if (!testMode)
+        if (!debugMode)
         {
-            ballController.LaunchBall(pitcher.launchDirection);
+            StartCoroutine(StartAfterCountdown());
         }
     }
 
@@ -177,14 +162,6 @@ public class GameController : NetworkBehaviour
         startButton.SetActive(everyoneIsReady);
     }
 
-    public void StartNewRound()
-    {
-        if (!debugMode)
-        {
-            StartCoroutine(StartAfterCountdown());
-        }
-    }
-
     public void DestroyBall()
     {
         if (ballController != null)
@@ -195,10 +172,9 @@ public class GameController : NetworkBehaviour
 
     private IEnumerator StartAfterCountdown()
     {
-        /*TODO synced countdown*/
-        Debug.Log("StartAfterCountdown");
+        StartRoundClientRpc();
         yield return StartCoroutine(countdown.CountDown());
-        /*gameState = GameStates.Play;*/
+        gameState.Value = GameStates.Play;
         if (!testMode)
         {
             ballController.LaunchBall(pitcher.launchDirection);
@@ -226,7 +202,7 @@ public class GameController : NetworkBehaviour
 
         FinishRoundClientRpc(winner.tag);
 
-        ResetGameObjects(); // todo if platform moving on round finishing, it doesnt stop
+        ResetGameObjects();
         gameState.Value = GameStates.Prepare;
     }
 
@@ -249,8 +225,6 @@ public class GameController : NetworkBehaviour
     /// </summary>
     private void ResetGameObjects()
     {
-        /*countdown.Reset();*/
-
         foreach (NetworkObject player in players)
         {
             player.GetComponent<PlatformController>().ResetPlatform();

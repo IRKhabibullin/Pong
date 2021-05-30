@@ -8254,7 +8254,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1334908331}
         m_TargetAssemblyTypeName: GameController, Assembly-CSharp
-        m_MethodName: OnStartButtonClicked
+        m_MethodName: StartServerRpc
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9351,13 +9351,14 @@ GameObject:
   - component: {fileID: 1651516986}
   - component: {fileID: 1651516985}
   - component: {fileID: 1651516987}
+  - component: {fileID: 1651516988}
   m_Layer: 5
   m_Name: Countdown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1651516984
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9486,6 +9487,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99f591013f596b44cb5e56c31dd3e5cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  countDownText: {fileID: 1651516985}
+  currentCountdownText:
+    m_InternalValue: 
+--- !u!114 &1651516988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1651516983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NetworkInstanceId: 0
+  PrefabHash: 18132154069223858778
+  PrefabHashGenerator: Countdown
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
 --- !u!1 &1660330714
 GameObject:
   m_ObjectHideFlags: 0

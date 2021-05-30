@@ -1,18 +1,23 @@
 ﻿using UnityEngine;
 using TMPro;
 using System.Collections;
+using MLAPI;
+using MLAPI.NetworkVariable;
 
-public class CountdownHandler : MonoBehaviour {
+public class CountdownHandler : NetworkBehaviour {
 	private int countDownTime = 3;
-	private TextMeshProUGUI countDownText;
+	[SerializeField] private TextMeshProUGUI countDownText;
 
-    void Start() {
-        countDownText = GetComponent<TextMeshProUGUI>();
-        Reset();
+    public NetworkVariable<string> currentCountdownText = new NetworkVariable<string>();
+
+    void Start()
+    {
+        currentCountdownText.OnValueChanged += CountdownUpdated;
     }
 
-    public void Reset() {
-	    countDownText.text = countDownTime.ToString();
+    public void CountdownUpdated(string previousValue, string newValue)
+    {
+        countDownText.text = currentCountdownText.Value;
     }
 
     public IEnumerator CountDown()
@@ -20,10 +25,10 @@ public class CountdownHandler : MonoBehaviour {
         int counter = countDownTime;
         while (counter > 0)
         {
-            countDownText.text = counter.ToString();
+            currentCountdownText.Value = counter.ToString();
             yield return new WaitForSeconds(1);
             counter--;
         }
-        countDownText.text = "";
+        currentCountdownText.Value = "";
     }
 }
