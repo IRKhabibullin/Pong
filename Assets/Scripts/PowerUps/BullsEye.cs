@@ -31,10 +31,10 @@ public class BullsEye : AbstractPowerUp {
         }
     }
 
-    protected override void OnTriggerEnter2D(Collider2D collider) {
+    protected override void OnTriggerEnter(Collider collider) {
         target = _gc.lastFender;
         // GameObject.Find("CurrentAngle").GetComponent<TextMeshProUGUI>().text = $"{target}";
-        base.OnTriggerEnter2D(collider);
+        base.OnTriggerEnter(collider);
     }
 
     // Update is called once per frame

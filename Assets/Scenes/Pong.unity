@@ -5324,6 +5324,10 @@ MonoBehaviour:
       PlayerPrefab: 1
     - Prefab: {fileID: 7168978363348635289, guid: 5f53ba0f401affb40835a0a91b9c1401, type: 3}
       PlayerPrefab: 0
+    - Prefab: {fileID: 8856066835511557508, guid: f3dee69b9320f3a44b1c129b9f5527e4, type: 3}
+      PlayerPrefab: 0
+    - Prefab: {fileID: 4645332811973843429, guid: 1f3ee8ee0cb50dd4cbd34be801afc0b4, type: 3}
+      PlayerPrefab: 0
     PlayerPrefabHash:
       id: 0
     CreatePlayerPrefab: 1
@@ -7418,8 +7422,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   triggerChance: 0.6
   powerUpPrefabs:
-  - {fileID: 4866426099996191988, guid: c8c5d5b5d5e9acd488e29b5a4f512d16, type: 3}
-  - {fileID: 8602787878178409555, guid: 94cec5423ae62b542bd5b6dcb4110f18, type: 3}
+  - {fileID: 3307734462871879009, guid: f3dee69b9320f3a44b1c129b9f5527e4, type: 3}
+  - {fileID: 8627516566880176157, guid: 1f3ee8ee0cb50dd4cbd34be801afc0b4, type: 3}
 --- !u!114 &1334908334
 MonoBehaviour:
   m_ObjectHideFlags: 0

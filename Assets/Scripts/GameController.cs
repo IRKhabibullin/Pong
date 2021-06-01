@@ -240,7 +240,7 @@ public class GameController : NetworkBehaviour
         /*if (gameState != GameStates.Play)
             return;*/
         lastFender = platform;
-        /*GetComponent<PowerUpsManager>().TriggerPowerUp();*/
+        GetComponent<PowerUpsManager>().TriggerPowerUp();
     }
 
     [ServerRpc]

@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using MLAPI;
 using UnityEngine;
 
-public class AbstractPowerUp : MonoBehaviour {
+public class AbstractPowerUp : NetworkBehaviour {
 
 	public float buffDuration;
     protected float buffCurTime;
@@ -32,11 +31,11 @@ public class AbstractPowerUp : MonoBehaviour {
         
     }
 
-    protected virtual void OnTriggerEnter2D(Collider2D collider) {
-    	if (collider.gameObject.name == "Ball") {
+    protected virtual void OnTriggerEnter(Collider collider) {
+    	if (collider.gameObject.CompareTag("Ball")) {
     		ApplyBuff();
     		GetComponent<Renderer>().enabled = false;
-    		GetComponent<CircleCollider2D>().enabled = false;
+    		GetComponent<Collider>().enabled = false;
     	}
     }
 

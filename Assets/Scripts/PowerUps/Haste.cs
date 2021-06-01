@@ -1,30 +1,32 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Haste : AbstractPowerUp {
 
 	public float speedMultiplier;
+    public Material normal;
+    public Material hasted;
 
-    protected override void OnTriggerEnter2D(Collider2D collider) {
+    protected override void OnTriggerEnter(Collider collider)
+    {
         target = collider.gameObject;
-        base.OnTriggerEnter2D(collider);
+        base.OnTriggerEnter(collider);
     }
 
-    public override void ApplyBuff() {
-        target.GetComponent<SpriteRenderer>().color = new Color(255f, 0f, 0f);
-        Vector2 velocity = target.GetComponent<Rigidbody2D>().velocity;
-        Vector2 newVelocity = new Vector2(velocity.x * speedMultiplier, velocity.y * speedMultiplier);
-        target.GetComponent<Rigidbody2D>().velocity = newVelocity;
+    public override void ApplyBuff()
+    {
+        target.GetComponent<Renderer>().material = hasted;
+        Vector3 velocity = target.GetComponent<Rigidbody>().velocity;
+        Vector3 newVelocity = new Vector3(velocity.x * speedMultiplier, velocity.y * speedMultiplier, 0);
+        target.GetComponent<Rigidbody>().velocity = newVelocity;
         base.ApplyBuff();
     }
 
     public override void RemoveBuff() {
         if (target != null) {
-    	    target.GetComponent<SpriteRenderer>().color = new Color(248f, 236f, 88f);
-		    Vector2 velocity = target.GetComponent<Rigidbody2D>().velocity;
-		    Vector2 newVelocity = new Vector2(velocity.x / speedMultiplier, velocity.y / speedMultiplier);
-    	    target.GetComponent<Rigidbody2D>().velocity = newVelocity;
+    	    target.GetComponent<Renderer>().material = normal;
+		    Vector3 velocity = target.GetComponent<Rigidbody>().velocity;
+		    Vector3 newVelocity = new Vector3(velocity.x / speedMultiplier, velocity.y / speedMultiplier, 0);
+    	    target.GetComponent<Rigidbody>().velocity = newVelocity;
         }
         base.RemoveBuff();
     }
