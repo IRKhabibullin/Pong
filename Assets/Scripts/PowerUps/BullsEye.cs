@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
-using TMPro;
+using MLAPI.Messaging;
+using MLAPI;
 
 public class BullsEye : AbstractPowerUp {
 
     private GameController _gc;
-    private Rigidbody2D ball;
+    private Rigidbody ball;
     private LineRenderer aim_line;
     [SerializeField] private int _maxIterations = 3;
     private int _count;
@@ -14,14 +15,12 @@ public class BullsEye : AbstractPowerUp {
     private LayerMask platformLayer;
 
     private Vector2 testVelocity;
+    private bool thisPlayerBuffed;
 
 
     protected override void Start() {
         _gc = GameObject.Find("GameManager").GetComponent<GameController>();
-        ball = GameObject.Find("Ball").GetComponent<Rigidbody2D>();
-        aim_line = GetComponent<LineRenderer>();
-        backWallLayer = LayerMask.NameToLayer("BackWall");
-        platformLayer = LayerMask.NameToLayer("Platform");
+        thisPlayerBuffed = false;
         base.Start();
 
         if (_gc.testMode) {
@@ -31,20 +30,46 @@ public class BullsEye : AbstractPowerUp {
         }
     }
 
-    protected override void OnTriggerEnter(Collider collider) {
-        target = _gc.lastFender;
-        // GameObject.Find("CurrentAngle").GetComponent<TextMeshProUGUI>().text = $"{target}";
+    protected override void OnTriggerEnter(Collider collider)
+    {
+        if (!IsServer) return;
         base.OnTriggerEnter(collider);
+    }
+
+    public override void ApplyBuff()
+    {
+        var lastFenderClientId = _gc.lastFender.GetComponent<NetworkObject>().OwnerClientId;
+        ClientRpcParams clientRpcParams = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new ulong[] { lastFenderClientId }
+            }
+        };
+        Debug.Log($"ApplyBuff {lastFenderClientId}");
+        ApplyBuffClientRpc(clientRpcParams);
+    }
+
+    [ClientRpc]
+    public void ApplyBuffClientRpc(ClientRpcParams clientRpcParams)
+    {
+        Debug.Log("ApplyBuffClientRpc");
+        thisPlayerBuffed = true;
+        ball = _gc.ballController.GetComponent<Rigidbody>();
+        aim_line = GetComponent<LineRenderer>();
+        backWallLayer = LayerMask.NameToLayer("BackWall");
+        platformLayer = LayerMask.NameToLayer("Platform");
     }
 
     // Update is called once per frame
     protected override void Update() {
+        if (!thisPlayerBuffed) return;
     	base.Update();
         if (applied) {
             _count = 0;
             aim_line.positionCount = 1;
             aim_line.SetPosition(0, ball.position);
-            Vector2 velocity = _gc.testMode ? testVelocity : ball.velocity;
+            Vector2 velocity = _gc.testMode ? testVelocity : (Vector2)ball.velocity;
             RayCast(ball.position, velocity);
         }
     }

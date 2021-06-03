@@ -1,4 +1,5 @@
 ﻿using MLAPI;
+using MLAPI.Messaging;
 using UnityEngine;
 
 public class AbstractPowerUp : NetworkBehaviour {
@@ -32,11 +33,17 @@ public class AbstractPowerUp : NetworkBehaviour {
     }
 
     protected virtual void OnTriggerEnter(Collider collider) {
-    	if (collider.gameObject.CompareTag("Ball")) {
-    		ApplyBuff();
-    		GetComponent<Renderer>().enabled = false;
-    		GetComponent<Collider>().enabled = false;
-    	}
+        if (collider.gameObject.CompareTag("Ball")) {
+            ApplyBuff();
+            HideAfterTriggerClientRpc();
+        }
+    }
+
+    [ClientRpc]
+    public void HideAfterTriggerClientRpc()
+    {
+        GetComponent<Renderer>().enabled = false;
+        GetComponent<Collider>().enabled = false;
     }
 
     public virtual void ApplyBuff() {

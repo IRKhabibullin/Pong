@@ -48,7 +48,7 @@ public class GameController : NetworkBehaviour
     public UnityEvent OnReady;
 
     /*private PongNetworkDiscovery networkDiscovery;*/
-    private BallController ballController;
+    public BallController ballController;
     private List<NetworkObject> players;
     public PlatformController pitcher; // player who started round
     public GameObject lastFender; // player last reflected ball

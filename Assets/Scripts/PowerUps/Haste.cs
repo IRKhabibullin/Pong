@@ -8,6 +8,7 @@ public class Haste : AbstractPowerUp {
 
     protected override void OnTriggerEnter(Collider collider)
     {
+        if (!IsServer) return;
         target = collider.gameObject;
         base.OnTriggerEnter(collider);
     }
