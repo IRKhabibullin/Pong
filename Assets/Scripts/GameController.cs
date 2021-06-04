@@ -89,10 +89,15 @@ public class GameController : NetworkBehaviour
         var player_names = (from player in pongManager.ConnectedClientsList select player.PlayerObject.name).ToArray();
         scoreHandler.InitScore(player_names);
         pitcher = pongManager.ConnectedClientsList[0].PlayerObject.GetComponent<PlatformController>();
+        lastFender = pongManager.ConnectedClientsList[0].PlayerObject.gameObject;
         var ball = Instantiate(ballPrefab, pitcher.GetBallStartPosition(), Quaternion.identity);
         ballController = ball.GetComponent<BallController>();
         ball.Spawn();
         gameState.Value = GameStates.Prepare;
+
+        var pm = GetComponent<PowerUpsManager>();
+        var powerUp = Instantiate(pm.powerUpPrefabs[1], new Vector3(0, -28, 0), pm.powerUpPrefabs[1].transform.rotation);
+        powerUp.Spawn();
     }
 
     [ClientRpc]
