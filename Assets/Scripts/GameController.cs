@@ -67,6 +67,11 @@ public class GameController : NetworkBehaviour
         ball.Spawn();
         FindBallClientRpc();
         gameState.Value = GameStates.Prepare;
+        Debug.Log("Creating placebo");
+        var prefab = GetComponent<PowerUpsManager>().powerUpPrefabs[2];
+        var placebo = Instantiate(prefab, new Vector3(0, -28, 0), prefab.transform.rotation);
+        placebo.Spawn();
+        Debug.Log("placebo created");
     }
 
     [ClientRpc]

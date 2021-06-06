@@ -5328,6 +5328,8 @@ MonoBehaviour:
       PlayerPrefab: 0
     - Prefab: {fileID: 4645332811973843429, guid: 1f3ee8ee0cb50dd4cbd34be801afc0b4, type: 3}
       PlayerPrefab: 0
+    - Prefab: {fileID: 486786761528807304, guid: d3e6cf4fb744b1a4bb187f84495878ad, type: 3}
+      PlayerPrefab: 0
     PlayerPrefabHash:
       id: 0
     CreatePlayerPrefab: 1
@@ -7418,6 +7420,7 @@ MonoBehaviour:
   powerUpPrefabs:
   - {fileID: 3307734462871879009, guid: f3dee69b9320f3a44b1c129b9f5527e4, type: 3}
   - {fileID: 8627516566880176157, guid: 1f3ee8ee0cb50dd4cbd34be801afc0b4, type: 3}
+  - {fileID: 652757712842970605, guid: d3e6cf4fb744b1a4bb187f84495878ad, type: 3}
   powerUpInstances: []
 --- !u!114 &1334908334
 MonoBehaviour:

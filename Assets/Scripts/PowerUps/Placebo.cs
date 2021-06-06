@@ -1,10 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Placebo : MonoBehaviour {
-    void OnTriggerEnter2D(Collider2D collider) {
-        if (collider.gameObject.name == "Ball") {
+public class Placebo : AbstractPowerUp
+{
+    protected override void OnTriggerEnter(Collider collider)
+    {
+        if (!IsServer) return;
+        if (collider.gameObject.CompareTag("Ball"))
+        {
+            Debug.Log("Destroying placebo");
             Destroy(gameObject);
         }
     }

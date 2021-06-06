@@ -26,7 +26,8 @@ public class AbstractPowerUp : NetworkBehaviour {
             }
         }
         lifeTime += Time.deltaTime;
-        if (lifeTime > maxLifeTime && !applied) {
+        if (lifeTime > maxLifeTime && !applied)
+        {
             Destroy(gameObject);
         }
         
