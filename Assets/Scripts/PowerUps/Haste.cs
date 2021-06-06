@@ -18,7 +18,7 @@ public class Haste : AbstractPowerUp {
         target.GetComponent<Renderer>().material = hasted;
         Vector3 velocity = target.GetComponent<Rigidbody>().velocity;
         Vector3 newVelocity = new Vector3(velocity.x * speedMultiplier, velocity.y * speedMultiplier, 0);
-        target.GetComponent<Rigidbody>().velocity = newVelocity;
+        target.GetComponent<BallController>().Velocity.Value = newVelocity;
         base.ApplyBuff();
     }
 
@@ -27,7 +27,7 @@ public class Haste : AbstractPowerUp {
     	    target.GetComponent<Renderer>().material = normal;
 		    Vector3 velocity = target.GetComponent<Rigidbody>().velocity;
 		    Vector3 newVelocity = new Vector3(velocity.x / speedMultiplier, velocity.y / speedMultiplier, 0);
-    	    target.GetComponent<Rigidbody>().velocity = newVelocity;
+    	    target.GetComponent<BallController>().Velocity.Value = newVelocity;
         }
         base.RemoveBuff();
     }

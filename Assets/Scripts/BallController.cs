@@ -1,13 +1,15 @@
 ﻿using MLAPI;
+using MLAPI.NetworkVariable;
 using Networking;
 using System;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class BallController : MonoBehaviour {
+public class BallController : NetworkBehaviour {
     [SerializeField] private Rigidbody _rb;
     private LayerMask backWalls;
     public float speed;
+    public NetworkVariableVector3 Velocity = new NetworkVariableVector3();
 
     [Serializable]
     public class BallEvent : UnityEvent<GameObject> {}
@@ -24,6 +26,12 @@ public class BallController : MonoBehaviour {
     void Start() {
         backWalls = LayerMask.NameToLayer("BackWall");
         _rb = GetComponent<Rigidbody>();
+        Velocity.OnValueChanged += OnVelocityChanged;
+    }
+
+    private void OnVelocityChanged(Vector3 previousValue, Vector3 newValue)
+    {
+        _rb.velocity = newValue;
     }
 
     void OnCollisionEnter(Collision collision) {
@@ -37,14 +45,14 @@ public class BallController : MonoBehaviour {
     }
 
     public void ResetBall(Vector3 position) {
-        _rb.velocity = Vector3.zero;
+        Velocity.Value = Vector3.zero;
         transform.position = new Vector3(position.x, position.y, 0);
     }
 
     public void LaunchBall(int direction) {
         float x_axis_velocity = UnityEngine.Random.Range(-3*speed/4, 3*speed/4);
         float y_axis_velocity = Mathf.Sqrt(speed*speed - x_axis_velocity*x_axis_velocity) * direction;
-        _rb.velocity = new Vector3(x_axis_velocity, y_axis_velocity);
+        Velocity.Value = new Vector3(x_axis_velocity, y_axis_velocity);
     }
 
     public void MoveBall(Vector3 position) {
