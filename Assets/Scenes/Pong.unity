@@ -7388,10 +7388,6 @@ MonoBehaviour:
   lastFender: {fileID: 0}
   debugMode: 0
   testMode: 0
-  leftWallPosition: 0
-  rightWallPosition: 0
-  player1State: {fileID: 0}
-  player2State: {fileID: 0}
 --- !u!4 &1334908332
 Transform:
   m_ObjectHideFlags: 0
@@ -8257,7 +8253,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1334908331}
         m_TargetAssemblyTypeName: GameController, Assembly-CSharp
-        m_MethodName: StartServerRpc
+        m_MethodName: StartRoundServerRpc
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

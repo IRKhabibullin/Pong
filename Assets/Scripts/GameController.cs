@@ -64,33 +64,42 @@ public class GameController : NetworkBehaviour
         pitcher = pongManager.ConnectedClientsList[0].PlayerObject.GetComponent<PlatformController>();
         lastFender = pongManager.ConnectedClientsList[0].PlayerObject.gameObject;
         var ball = Instantiate(ballPrefab, pitcher.GetBallStartPosition(), Quaternion.identity);
-        ballController = ball.GetComponent<BallController>();
         ball.Spawn();
+        FindBallClientRpc();
         gameState.Value = GameStates.Prepare;
     }
 
     [ClientRpc]
-    public void ServerDisconnectedClientRpc(ClientRpcParams clientRpcParams)
+    public void FindBallClientRpc()
     {
-        connectionManager.Leave();
-        serverDisconnectedPanel.SetActive(true);
-        StopHostServerRpc();
+        ballController = GameObject.FindGameObjectWithTag("Ball").GetComponent<BallController>();
     }
 
-    public void OnReadyButtonClicked()
+    public void DestroyBall()
     {
-        var player = pongManager.ConnectedClients[NetworkManager.Singleton.LocalClientId]
-            .PlayerObject.GetComponent<PlayerController>();
-        readyButtonText.text = player.IsReady.Value ? "Ready" : "Not ready";
-        player.TogglePlayerReadyServerRpc();
+        if (ballController != null)
+        {
+            Destroy(ballController.gameObject);
+        }
     }
 
     [ServerRpc]
-    public void StartServerRpc()
+    public void StartRoundServerRpc()
     {
         if (!debugMode)
         {
             StartCoroutine(StartAfterCountdown());
+        }
+    }
+
+    private IEnumerator StartAfterCountdown()
+    {
+        StartRoundClientRpc();
+        yield return StartCoroutine(countdown.CountDown());
+        gameState.Value = GameStates.Play;
+        if (!testMode)
+        {
+            ballController.LaunchBall(pitcher.launchDirection);
         }
     }
 
@@ -104,25 +113,6 @@ public class GameController : NetworkBehaviour
     public void ReadyToStart(bool everyoneIsReady)
     {
         startButton.SetActive(everyoneIsReady);
-    }
-
-    public void DestroyBall()
-    {
-        if (ballController != null)
-        {
-            Destroy(ballController.gameObject);
-        }
-    }
-
-    private IEnumerator StartAfterCountdown()
-    {
-        StartRoundClientRpc();
-        yield return StartCoroutine(countdown.CountDown());
-        gameState.Value = GameStates.Play;
-        if (!testMode)
-        {
-            ballController.LaunchBall(pitcher.launchDirection);
-        }
     }
 
     public void FinishRound(GameObject winner)
@@ -181,12 +171,12 @@ public class GameController : NetworkBehaviour
         startButton.SetActive(true);
     }
 
-    public void PlatformTouchHandler(GameObject platform)
+    [ClientRpc]
+    public void ServerDisconnectedClientRpc(ClientRpcParams clientRpcParams)
     {
-        /*if (gameState != GameStates.Play)
-            return;*/
-        lastFender = platform;
-        GetComponent<PowerUpsManager>().TriggerPowerUp();
+        connectionManager.Leave();
+        serverDisconnectedPanel.SetActive(true);
+        StopHostServerRpc();
     }
 
     [ServerRpc]
@@ -195,6 +185,24 @@ public class GameController : NetworkBehaviour
         ResetGameObjectsServerRpc();
         pongManager.StopHost();
     }
+
+    #region handlers
+    public void PlatformTouchHandler(GameObject platform)
+    {
+        /*if (gameState != GameStates.Play)
+            return;*/
+        lastFender = platform;
+        GetComponent<PowerUpsManager>().TriggerPowerUp();
+    }
+
+    public void OnReadyButtonClicked()
+    {
+        var player = pongManager.ConnectedClients[NetworkManager.Singleton.LocalClientId]
+            .PlayerObject.GetComponent<PlayerController>();
+        readyButtonText.text = player.IsReady.Value ? "Ready" : "Not ready";
+        player.TogglePlayerReadyServerRpc();
+    }
+    #endregion
 
     private PongManager pnm;
 
