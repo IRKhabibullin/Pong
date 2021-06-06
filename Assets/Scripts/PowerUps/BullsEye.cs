@@ -46,14 +46,12 @@ public class BullsEye : AbstractPowerUp {
                 TargetClientIds = new ulong[] { lastFenderClientId }
             }
         };
-        Debug.Log($"ApplyBuff {lastFenderClientId}");
         ApplyBuffClientRpc(clientRpcParams);
     }
 
     [ClientRpc]
     public void ApplyBuffClientRpc(ClientRpcParams clientRpcParams)
     {
-        Debug.Log("ApplyBuffClientRpc");
         applied = true;
         thisPlayerBuffed = true;
         ball = _gc.ballController.GetComponent<Rigidbody>();
@@ -62,7 +60,6 @@ public class BullsEye : AbstractPowerUp {
         platformLayer = LayerMask.NameToLayer("Platform");
     }
 
-    // Update is called once per frame
     protected override void Update() {
         if (!thisPlayerBuffed) return;
     	base.Update();
@@ -76,8 +73,7 @@ public class BullsEye : AbstractPowerUp {
     }
 
     private void RayCast(Vector3 pos, Vector3 direction) {
-        RaycastHit hit;
-        Physics.Raycast(pos + direction * 0.001f, direction, out hit, Mathf.Infinity, aimLayers);
+        Physics.Raycast(pos + direction * 0.001f, direction, out RaycastHit hit, Mathf.Infinity, aimLayers);
         if (hit.collider != null && _count <= _maxIterations - 1) {
             _count++;
             Vector3 reflectAngle = Vector3.Reflect(direction, hit.normal);
@@ -86,9 +82,6 @@ public class BullsEye : AbstractPowerUp {
             if (hit.collider.gameObject.layer == backWallLayer) {
                 return;
             }
-            /*if (hit.collider.gameObject.layer == platformLayer && hit.collider.gameObject != target) {
-                return;
-            }*/
             RayCast(hit.point, reflectAngle);
         }
     }

@@ -63,7 +63,6 @@ public class ConnectionManager : MonoBehaviour
                     platform.mPosition.Value = gameController.playersPositions[i].position;
                     var player = client.PlayerObject.GetComponent<PlayerController>();
                     player.SetColorClientRpc(i);
-                    gameController.AddPlayer(client.PlayerObject);
                     if (pongManager.ConnectedClients.Count == 1)
                     {
                         player.IsLeader.Value = true;
@@ -125,6 +124,7 @@ public class ConnectionManager : MonoBehaviour
         }
         else if (pongManager.IsClient)
         {
+            gameController.ResetGameObjectsServerRpc();
             pongManager.StopClient();
         }
         menuPanel.SetActive(true);

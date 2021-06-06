@@ -2,7 +2,6 @@
 using UnityEngine;
 using Networking;
 using TMPro;
-using UnityEngine.Events;
 using MLAPI;
 using System.Collections.Generic;
 using MLAPI.Messaging;
@@ -45,40 +44,14 @@ public class GameController : NetworkBehaviour
     [SerializeField] private ConnectionManager connectionManager;
 
     [SerializeField] private TextMeshProUGUI debugText;
-    public UnityEvent OnReady;
 
     /*private PongNetworkDiscovery networkDiscovery;*/
     public BallController ballController;
-    private List<NetworkObject> players;
     public PlatformController pitcher; // player who started round
     public GameObject lastFender; // player last reflected ball
-    private GameObject gameCanvas;
-    private GameObject menuCanvas;
 
     public bool debugMode;
     public bool testMode;
-
-    public float leftWallPosition;
-    public float rightWallPosition;
-
-    public TextMeshProUGUI player1State;
-    public TextMeshProUGUI player2State;
-
-    private void Start()
-    {
-        leftWallPosition = GameObject.Find("LeftSideWall").transform.position.x;
-        rightWallPosition = GameObject.Find("RightSideWall").transform.position.x;
-
-        gameCanvas = GameObject.Find("Game");
-        menuCanvas = GameObject.Find("Menu");
-        players = new List<NetworkObject>();
-    }
-
-    public void EnterGame()
-    {
-        gameCanvas.SetActive(true);
-        menuCanvas.SetActive(false);
-    }
 
     public void BothPlayersConnected()
     {
@@ -94,10 +67,6 @@ public class GameController : NetworkBehaviour
         ballController = ball.GetComponent<BallController>();
         ball.Spawn();
         gameState.Value = GameStates.Prepare;
-
-        var pm = GetComponent<PowerUpsManager>();
-        var powerUp = Instantiate(pm.powerUpPrefabs[1], new Vector3(0, -28, 0), pm.powerUpPrefabs[1].transform.rotation);
-        powerUp.Spawn();
     }
 
     [ClientRpc]
@@ -106,36 +75,6 @@ public class GameController : NetworkBehaviour
         connectionManager.Leave();
         serverDisconnectedPanel.SetActive(true);
         StopHostServerRpc();
-    }
-
-    private void Update()
-    {
-        if (testMode)
-        {
-            CheckForDebugTouch();
-        }
-    }
-
-    public void AddPlayer(NetworkObject player)
-    {
-        players.Add(player);
-    }
-
-    /// <summary>
-    /// Check for touches in debug mode. Allows to place ball wherever on a board
-    /// </summary>
-    private void CheckForDebugTouch()
-    {
-        if (Input.touchCount != 1)
-            return;
-        var touch = Input.GetTouch(0);
-        if (Camera.main is null)
-            return;
-        var touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
-        if (!(touchPosition.x < rightWallPosition) || !(touchPosition.x > leftWallPosition))
-            return;
-        touchPosition.z = 0f;
-        ballController.MoveBall(touchPosition);
     }
 
     public void OnReadyButtonClicked()
@@ -190,8 +129,9 @@ public class GameController : NetworkBehaviour
     {
         if (!pongManager.IsServer) return;
 
-        foreach (NetworkObject player in players)
+        foreach (var _client in pongManager.ConnectedClientsList)
         {
+            NetworkObject player = _client.PlayerObject;
             if (!winner.CompareTag(player.tag))
             {
                 pitcher = player.GetComponent<PlatformController>();
@@ -207,7 +147,7 @@ public class GameController : NetworkBehaviour
 
         FinishRoundClientRpc(winner.tag);
 
-        ResetGameObjects();
+        ResetGameObjectsServerRpc();
         gameState.Value = GameStates.Prepare;
     }
 
@@ -228,11 +168,12 @@ public class GameController : NetworkBehaviour
     /// <summary>
     /// Called on the server in order to sync between clients
     /// </summary>
-    private void ResetGameObjects()
+    [ServerRpc]
+    public void ResetGameObjectsServerRpc()
     {
-        foreach (NetworkObject player in players)
+        foreach (var _client in pongManager.ConnectedClientsList)
         {
-            player.GetComponent<PlatformController>().ResetPlatform();
+            _client.PlayerObject.GetComponent<PlatformController>().ResetPlatform();
         }
 
         ballController.ResetBall(pitcher.GetBallStartPosition());
@@ -251,6 +192,7 @@ public class GameController : NetworkBehaviour
     [ServerRpc]
     public void StopHostServerRpc()
     {
+        ResetGameObjectsServerRpc();
         pongManager.StopHost();
     }
 

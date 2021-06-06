@@ -7,7 +7,7 @@ public class PowerUpsManager : MonoBehaviour {
 	[Range(0, 1)]
 	public float triggerChance;
 	public NetworkObject[] powerUpPrefabs;
-	private List<NetworkObject> powerUpInstances;
+	public List<NetworkObject> powerUpInstances;
 
     void Start() {
         powerUpInstances = new List<NetworkObject>();

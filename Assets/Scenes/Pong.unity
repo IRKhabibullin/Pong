@@ -7383,9 +7383,7 @@ MonoBehaviour:
   winnerPanel: {fileID: 1783691504}
   connectionManager: {fileID: 1466093575}
   debugText: {fileID: 0}
-  OnReady:
-    m_PersistentCalls:
-      m_Calls: []
+  ballController: {fileID: 0}
   pitcher: {fileID: 0}
   lastFender: {fileID: 0}
   debugMode: 0
@@ -7424,6 +7422,7 @@ MonoBehaviour:
   powerUpPrefabs:
   - {fileID: 3307734462871879009, guid: f3dee69b9320f3a44b1c129b9f5527e4, type: 3}
   - {fileID: 8627516566880176157, guid: 1f3ee8ee0cb50dd4cbd34be801afc0b4, type: 3}
+  powerUpInstances: []
 --- !u!114 &1334908334
 MonoBehaviour:
   m_ObjectHideFlags: 0
