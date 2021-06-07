@@ -3,7 +3,6 @@ using MLAPI.Messaging;
 using MLAPI.NetworkVariable;
 using System;
 using UnityEngine;
-using static GameController;
 
 public class PlatformController : NetworkBehaviour
 {
@@ -17,10 +16,17 @@ public class PlatformController : NetworkBehaviour
 
     public Vector3 mSpeed = Vector3.zero;  // current speed. Used only on server, position on client is synced from server
     public NetworkVariableVector3 mPosition = new NetworkVariableVector3();
+    public NetworkVariableQuaternion mRotation = new NetworkVariableQuaternion();
 
     private void Start()
     {
         _gc = GameObject.Find("GameManager").GetComponent<GameController>();
+        mRotation.OnValueChanged += OnRotationChanged;
+    }
+
+    private void OnRotationChanged(Quaternion previousValue, Quaternion newValue)
+    {
+        transform.rotation = mRotation.Value;
     }
 
     [ServerRpc]
@@ -47,15 +53,15 @@ public class PlatformController : NetworkBehaviour
         return ((transform.localRotation.eulerAngles.z + 180f) % 360f) - 180f;
     }
 
-    public void Rotate(float newAngle) {
+    [ServerRpc]
+    public void RotateServerRpc(float newAngle) {
         if (newAngle > 0) {
             newAngle = Math.Min(newAngle, maxRotateAngle);
         } else {
             newAngle = Math.Max(newAngle, -maxRotateAngle);
         }
-        transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, newAngle));
+        mRotation.Value = Quaternion.Euler(new Vector3(0f, 0f, newAngle));
     }
-
 
     /// <summary> Returns where the ball should be placed on a platform at start of the round </summary>
     public Vector2 GetBallStartPosition() {

@@ -90,14 +90,14 @@ public class InputController : MonoBehaviour
             }
             else if (firstTouch.phase.Equals(TouchPhase.Moved) || secondTouch.phase.Equals(TouchPhase.Moved))
             {
-                platform.Rotate(lastAngle + angleBetweenTouches - startAngle);
+                platform.RotateServerRpc(lastAngle + angleBetweenTouches - startAngle);
             }
         }
     }
 
     void CheckForKeyboard()
     {
-        if (gameController.gameState.Value == GameStates.Prepare)
+        if (gameController.gameState.Value == GameStates.Prepare && !gameController.debugMode)
         {
             return;
         }
@@ -105,6 +105,14 @@ public class InputController : MonoBehaviour
         if (direction != 0.0 || platform.mSpeed != Vector3.zero)
         {
             platform.MoveServerRpc(direction);
+        }
+        var angle = Input.GetAxis("Vertical");
+        if (angle != 0.0)
+        {
+            var currentAngle = platform.mRotation.Value.eulerAngles.y;
+            Debug.Log($"new angle {currentAngle} {angle}");
+            currentAngle += angle;
+            platform.RotateServerRpc(currentAngle);
         }
     }
 
