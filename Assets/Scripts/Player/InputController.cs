@@ -5,7 +5,6 @@ public class InputController : MonoBehaviour
 {
     private float leftWallPosition;
     private float rightWallPosition;
-    private float lastAngle;
     private float startAngle;
     private float angleBetweenTouches;
     private Camera mainCamera;
@@ -85,12 +84,11 @@ public class InputController : MonoBehaviour
             // todo maybe chech that player could make both touches on one side
             if (firstTouch.phase.Equals(TouchPhase.Began) || secondTouch.phase.Equals(TouchPhase.Began))
             {
-                lastAngle = platform.GetCurrentAngle();
                 startAngle = angleBetweenTouches;
             }
             else if (firstTouch.phase.Equals(TouchPhase.Moved) || secondTouch.phase.Equals(TouchPhase.Moved))
             {
-                platform.RotateServerRpc(lastAngle + angleBetweenTouches - startAngle);
+                platform.SetRotationServerRpc(angleBetweenTouches - startAngle);
             }
         }
     }
@@ -107,12 +105,9 @@ public class InputController : MonoBehaviour
             platform.MoveServerRpc(direction);
         }
         var angle = Input.GetAxis("Vertical");
-        if (angle != 0.0)
+        if (angle != 0.0 || platform.mAngle.Value != 0)
         {
-            var currentAngle = platform.mRotation.Value.eulerAngles.y;
-            Debug.Log($"new angle {currentAngle} {angle}");
-            currentAngle += angle;
-            platform.RotateServerRpc(currentAngle);
+            platform.SetRotationServerRpc(angle);
         }
     }
 

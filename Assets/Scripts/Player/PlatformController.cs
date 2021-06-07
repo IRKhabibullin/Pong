@@ -16,6 +16,7 @@ public class PlatformController : NetworkBehaviour
 
     public Vector3 mSpeed = Vector3.zero;  // current speed. Used only on server, position on client is synced from server
     public NetworkVariableVector3 mPosition = new NetworkVariableVector3();
+    public NetworkVariable<float> mAngle = new NetworkVariable<float>();
     public NetworkVariableQuaternion mRotation = new NetworkVariableQuaternion();
 
     private void Start()
@@ -45,6 +46,7 @@ public class PlatformController : NetworkBehaviour
         {
             if (!Physics.Raycast(transform.position, new Vector3(Math.Sign(mSpeed.x), 0, 0), width, LayerMask.GetMask("SideWall")))
                 mPosition.Value += mSpeed * Time.fixedDeltaTime;
+            Rotate();
         }
         transform.position = mPosition.Value;
     }
@@ -54,7 +56,14 @@ public class PlatformController : NetworkBehaviour
     }
 
     [ServerRpc]
-    public void RotateServerRpc(float newAngle) {
+    public void SetRotationServerRpc(float rotation)
+    {
+        mAngle.Value = rotation;
+    }
+
+    public void Rotate()
+    {
+        var newAngle = GetCurrentAngle() + mAngle.Value * rotateSpeed * Time.deltaTime;
         if (newAngle > 0) {
             newAngle = Math.Min(newAngle, maxRotateAngle);
         } else {
