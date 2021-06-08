@@ -43,9 +43,8 @@ public class PlatformController : NetworkBehaviour
 
     void FixedUpdate()
     {
-        if (IsServer)
+        if (IsServer && _gc.gameState.Value == GameStates.Play)
         {
-            if (_gc.gameState.Value != GameStates.Play) return;
             if (!Physics.Raycast(transform.position, new Vector3(Math.Sign(mSpeed.x), 0, 0), width, LayerMask.GetMask("SideWall")))
                 mPosition.Value += mSpeed * Time.fixedDeltaTime;
             Rotate();

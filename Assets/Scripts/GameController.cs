@@ -135,7 +135,7 @@ public class GameController : NetworkBehaviour
             WinnerNotificationClientRpc(winner.tag);
         }
 
-        FinishRoundClientRpc(winner.tag);
+        FinishRoundClientRpc();
 
         ResetGameObjectsServerRpc();
         gameState.Value = GameStates.Prepare;
@@ -148,7 +148,7 @@ public class GameController : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void FinishRoundClientRpc(string winnerName)
+    public void FinishRoundClientRpc()
     {
         readyButtonText.text = "Ready";
         readyButton.SetActive(true);
@@ -168,7 +168,7 @@ public class GameController : NetworkBehaviour
 
         ballController.ResetBall(pitcher.GetBallStartPosition());
         gameObject.GetComponent<PowerUpsManager>().clearPowerUps();
-        startButton.SetActive(true);
+        readyButton.SetActive(true);
     }
 
     [ClientRpc]
