@@ -3,6 +3,7 @@ using MLAPI.Messaging;
 using MLAPI.NetworkVariable;
 using System;
 using UnityEngine;
+using static GameController;
 
 public class PlatformController : NetworkBehaviour
 {
@@ -44,6 +45,7 @@ public class PlatformController : NetworkBehaviour
     {
         if (IsServer)
         {
+            if (_gc.gameState.Value != GameStates.Play) return;
             if (!Physics.Raycast(transform.position, new Vector3(Math.Sign(mSpeed.x), 0, 0), width, LayerMask.GetMask("SideWall")))
                 mPosition.Value += mSpeed * Time.fixedDeltaTime;
             Rotate();
