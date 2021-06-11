@@ -28,7 +28,10 @@ public class PowerUpsManager : MonoBehaviour {
             // todo should remove from list if powerUp destroyed due to life ending or any other case
             if (powerUp != null) {
                 powerUp.GetComponent<AbstractPowerUp>().RemoveBuff();
+                var powerUpName = powerUp.name;
+                Debug.Log($"Trying to destroy {powerUpName}");
                 Destroy(powerUp);
+                Debug.Log($"Destroyed {powerUpName}");
             }
     	}
     }

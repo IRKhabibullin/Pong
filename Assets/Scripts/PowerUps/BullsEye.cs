@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using MLAPI.Messaging;
 using MLAPI;
+using System.Collections.Generic;
 
 public class BullsEye : AbstractPowerUp {
 
@@ -9,18 +10,18 @@ public class BullsEye : AbstractPowerUp {
     private LineRenderer aim_line;
     [SerializeField] private int _maxIterations = 3;
     private int _count;
+    private List<Vector3> positions = new List<Vector3>();
 
     public LayerMask aimLayers;
     private LayerMask backWallLayer;
-    private LayerMask platformLayer;
 
     private Vector3 testVelocity;
-    private bool thisPlayerBuffed;
+
+    private ClientRpcParams triggeredClientRpcParams;
 
 
     protected override void Start() {
         _gc = GameObject.Find("GameManager").GetComponent<GameController>();
-        thisPlayerBuffed = false;
         base.Start();
 
         if (_gc.testMode) {
@@ -38,37 +39,47 @@ public class BullsEye : AbstractPowerUp {
 
     public override void ApplyBuff()
     {
+        applied = true;
+        ball = _gc.ballController.GetComponent<Rigidbody>();
+        backWallLayer = LayerMask.NameToLayer("BackWall");
         var lastFenderClientId = _gc.lastFender.GetComponent<NetworkObject>().OwnerClientId;
-        ClientRpcParams clientRpcParams = new ClientRpcParams
+        triggeredClientRpcParams = new ClientRpcParams
         {
             Send = new ClientRpcSendParams
             {
                 TargetClientIds = new ulong[] { lastFenderClientId }
             }
         };
-        ApplyBuffClientRpc(clientRpcParams);
+        ApplyBuffClientRpc(triggeredClientRpcParams);
     }
 
     [ClientRpc]
     public void ApplyBuffClientRpc(ClientRpcParams clientRpcParams)
     {
-        applied = true;
-        thisPlayerBuffed = true;
-        ball = _gc.ballController.GetComponent<Rigidbody>();
         aim_line = GetComponent<LineRenderer>();
-        backWallLayer = LayerMask.NameToLayer("BackWall");
-        platformLayer = LayerMask.NameToLayer("Platform");
+    }
+
+    [ClientRpc]
+    public void SetRayPositionsClientRpc(Vector3[] positions, ClientRpcParams clientRpcParams)
+    {
+        aim_line.positionCount = positions.Length;
+        aim_line.SetPositions(positions);
     }
 
     protected override void Update() {
-        if (!thisPlayerBuffed) return;
     	base.Update();
+        if (!IsServer) return;
         if (applied) {
             _count = 0;
-            aim_line.positionCount = 1;
-            aim_line.SetPosition(0, ball.position);
+            /*aim_line.positionCount = 1;
+            aim_line.SetPosition(0, ball.position);*/
+            positions.Clear();
+            positions.Add(ball.position);
             Vector3 velocity = _gc.testMode ? testVelocity : ball.velocity;
             RayCast(ball.position, velocity);
+            /*Vector3[] positions = new Vector3[aim_line.positionCount]; aim_line.GetPositions(positions);*/
+            /*aim_line.GetPositions(positions);*/
+            SetRayPositionsClientRpc(positions.ToArray(), triggeredClientRpcParams);
         }
     }
 
@@ -77,8 +88,9 @@ public class BullsEye : AbstractPowerUp {
         if (hit.collider != null && _count <= _maxIterations - 1) {
             _count++;
             Vector3 reflectAngle = Vector3.Reflect(direction, hit.normal);
-            aim_line.positionCount = _count + 1;
-            aim_line.SetPosition(_count, hit.point);
+            /*aim_line.positionCount = _count + 1;
+            aim_line.SetPosition(_count, hit.point);*/
+            positions.Add(hit.point);
             if (hit.collider.gameObject.layer == backWallLayer) {
                 return;
             }

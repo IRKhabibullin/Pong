@@ -82,5 +82,6 @@ public class PlatformController : NetworkBehaviour
     {
         transform.localRotation = Quaternion.identity;
     	mPosition.Value = new Vector3(0f, mPosition.Value.y, 0f);
+        mRotation.Value = Quaternion.identity;
     }
 }
