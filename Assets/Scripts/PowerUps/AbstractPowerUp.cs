@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class AbstractPowerUp : NetworkBehaviour {
 
-	public float buffDuration;
+	[SerializeField] private float buffDuration;
     protected float buffCurTime;
 
-    public float maxLifeTime;
+    [SerializeField] private float maxLifeTime;
 	protected float lifeTime;
 
 	protected bool applied;
@@ -33,7 +33,13 @@ public class AbstractPowerUp : NetworkBehaviour {
         
     }
 
-    protected virtual void OnTriggerEnter(Collider collider) {
+    /// <summary>
+    /// Collision with ball activates buff
+    /// </summary>
+    /// <param name="collider"></param>
+    protected virtual void OnTriggerEnter(Collider collider)
+    {
+        if (!IsServer) return;
         if (collider.gameObject.CompareTag("Ball")) {
             ApplyBuff();
             HideAfterTriggerClientRpc();
@@ -47,11 +53,18 @@ public class AbstractPowerUp : NetworkBehaviour {
         GetComponent<Collider>().enabled = false;
     }
 
+    /// <summary>
+    /// Buff applying must be called only on server
+    /// </summary>
     public virtual void ApplyBuff() {
 		buffCurTime = 0f;
 		applied = true;
     }
 
+
+    /// <summary>
+    /// Buff removing must be called only on server
+    /// </summary>
     public virtual void RemoveBuff() {
     	Destroy(gameObject);
     }
