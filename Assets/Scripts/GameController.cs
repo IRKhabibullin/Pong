@@ -51,7 +51,6 @@ public class GameController : NetworkBehaviour
     public GameObject lastFender; // player last reflected ball
 
     public bool debugMode;
-    public bool testMode;
 
     public void BothPlayersConnected()
     {
@@ -94,10 +93,11 @@ public class GameController : NetworkBehaviour
 
     private IEnumerator StartAfterCountdown()
     {
+        ResetGameObjectsServerRpc();
         StartRoundClientRpc();
         yield return StartCoroutine(countdown.CountDown());
         gameState.Value = GameStates.Play;
-        if (!testMode)
+        if (!debugMode)
         {
             ballController.LaunchBall(pitcher.launchDirection);
         }
@@ -119,6 +119,17 @@ public class GameController : NetworkBehaviour
     {
         if (!pongManager.IsServer) return;
 
+        FinishRoundClientRpc();
+        ballController.StopBall();
+        gameState.Value = GameStates.Prepare;
+
+        bool hasWinner = scoreHandler.UpdateScore(winner.tag);
+        if (hasWinner)
+        {
+            scoreHandler.ClearScores();
+            WinnerNotificationClientRpc(winner.tag);
+        }
+
         foreach (var _client in pongManager.ConnectedClientsList)
         {
             NetworkObject player = _client.PlayerObject;
@@ -128,17 +139,6 @@ public class GameController : NetworkBehaviour
             }
             player.GetComponent<PlayerController>().IsReady.Value = false;
         }
-        bool hasWinner = scoreHandler.UpdateScore(winner.tag);
-        if (hasWinner)
-        {
-            scoreHandler.ClearScores();
-            WinnerNotificationClientRpc(winner.tag);
-        }
-
-        FinishRoundClientRpc();
-
-        ResetGameObjectsServerRpc();
-        gameState.Value = GameStates.Prepare;
     }
 
     [ClientRpc]
@@ -167,7 +167,7 @@ public class GameController : NetworkBehaviour
         }
 
         ballController.ResetBall(pitcher.GetBallStartPosition());
-        gameObject.GetComponent<PowerUpsManager>().clearPowerUps();
+        gameObject.GetComponent<PowerUpsManager>().ClearPowerUps();
         readyButton.SetActive(true);
     }
 

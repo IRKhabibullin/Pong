@@ -1,4 +1,5 @@
 ﻿using MLAPI;
+using MLAPI.Messaging;
 using MLAPI.NetworkVariable;
 using Networking;
 using System;
@@ -15,6 +16,8 @@ public class BallController : NetworkBehaviour {
     public class BallEvent : UnityEvent<GameObject> {}
     public BallEvent touchdownEvent;
     public BallEvent platformTouchEvent;
+
+    [SerializeField] private Material[] materials = new Material[2];
 
     private void Awake()
     {
@@ -57,6 +60,17 @@ public class BallController : NetworkBehaviour {
 
     public void MoveBall(Vector3 position) {
         gameObject.transform.position = position;
+    }
+
+    public void StopBall()
+    {
+        Velocity.Value = Vector3.zero;
+    }
+
+    [ClientRpc]
+    public void ChangeMaterialClientRpc(int material_key)
+    {
+        GetComponent<Renderer>().material = materials[material_key];
     }
 
     private PongManager pnm;

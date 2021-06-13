@@ -7,7 +7,6 @@ public class Placebo : AbstractPowerUp
         if (!IsServer) return;
         if (collider.gameObject.CompareTag("Ball"))
         {
-            Debug.Log("Destroying placebo");
             Destroy(gameObject);
         }
     }

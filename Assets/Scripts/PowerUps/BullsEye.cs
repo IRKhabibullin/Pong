@@ -9,13 +9,13 @@ using System.Collections.Generic;
 public class BullsEye : AbstractPowerUp {
 
     [SerializeField] private int _maxIterations = 3;
+    [SerializeField] private LayerMask aimLayers;
+    [SerializeField] private LayerMask backWallLayer;
+
     private GameController _gc;
     private Rigidbody ball;
     private LineRenderer aim_line;
     private List<Vector3> positions = new List<Vector3>();
-
-    public LayerMask aimLayers;
-    private LayerMask backWallLayer;
 
     private ClientRpcParams triggeredClientRpcParams;
 
@@ -29,7 +29,6 @@ public class BullsEye : AbstractPowerUp {
     {
         base.ApplyBuff();
         ball = _gc.ballController.GetComponent<Rigidbody>();
-        backWallLayer = LayerMask.NameToLayer("BackWall");
         triggeredClientRpcParams = new ClientRpcParams
         {
             Send = new ClientRpcSendParams

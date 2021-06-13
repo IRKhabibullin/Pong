@@ -14,7 +14,7 @@ public class PowerUpsManager : MonoBehaviour {
     }
 
     public void TriggerPowerUp() {
-    	if (Random.Range(0f, 1f) < triggerChance) {
+    	if (Random.Range(0f, 1f) <= triggerChance) {
     		Vector3 powerUpPosition = new Vector3(Random.Range(-30f, 30f), Random.Range(-2f, 2f), 0);
             var prefab = powerUpPrefabs[Random.Range(0, powerUpPrefabs.Length)];
             var powerUp = Instantiate(prefab, powerUpPosition, prefab.transform.rotation);
@@ -23,15 +23,11 @@ public class PowerUpsManager : MonoBehaviour {
         }
     }
 
-    public void clearPowerUps() {
+    public void ClearPowerUps() {
     	foreach (NetworkObject powerUp in powerUpInstances) {
-            // todo should remove from list if powerUp destroyed due to life ending or any other case
             if (powerUp != null) {
                 powerUp.GetComponent<AbstractPowerUp>().RemoveBuff();
-                var powerUpName = powerUp.name;
-                Debug.Log($"Trying to destroy {powerUpName}");
                 Destroy(powerUp);
-                Debug.Log($"Destroyed {powerUpName}");
             }
     	}
     }

@@ -61,11 +61,10 @@ public class ConnectionManager : MonoBehaviour
                     var platform = client.PlayerObject.GetComponent<PlatformController>();
                     platform.launchDirection = i == 0 ? 1 : -1;
                     platform.mPosition.Value = gameController.playersPositions[i].position;
-                    var player = client.PlayerObject.GetComponent<PlayerController>();
-                    player.SetColorClientRpc(i);
+                    platform.SetColorClientRpc(i);
                     if (pongManager.ConnectedClients.Count == 1)
                     {
-                        player.IsLeader.Value = true;
+                        client.PlayerObject.GetComponent<PlayerController>().IsLeader.Value = true;
                     }
                     break;
                 }

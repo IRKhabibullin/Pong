@@ -135,6 +135,9 @@ MonoBehaviour:
   aimLayers:
     serializedVersion: 2
     m_Bits: 1984
+  backWallLayer:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!114 &8627516566880176157
 MonoBehaviour:
   m_ObjectHideFlags: 0

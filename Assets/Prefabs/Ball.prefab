@@ -195,9 +195,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rb: {fileID: 7168978363348635293}
   speed: 25
+  Velocity:
+    m_InternalValue: {x: 0, y: 0, z: 0}
   touchdownEvent:
     m_PersistentCalls:
       m_Calls: []
   platformTouchEvent:
     m_PersistentCalls:
       m_Calls: []
+  materials:
+  - {fileID: 2100000, guid: 40c0e9759ac62fb478ccd0bbcc1150df, type: 2}
+  - {fileID: 2100000, guid: 7129cc9d8c2fbf14189e24758b09d413, type: 2}

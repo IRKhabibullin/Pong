@@ -38,11 +38,9 @@ public class Haste : AbstractPowerUp {
 
     public override void RemoveBuff() {
         if (target != null) {
-    	    target.GetComponent<Renderer>().material = normal;
-		    Vector3 velocity = target.GetComponent<Rigidbody>().velocity;
-		    Vector3 newVelocity = new Vector3(velocity.x / speedMultiplier, velocity.y / speedMultiplier, 0);
-    	    target.GetComponent<BallController>().Velocity.Value = newVelocity;
-            RemoveBuffClientRpc();
+            /*RemoveBuffClientRpc();*/
+            target.GetComponent<BallController>().ChangeMaterialClientRpc(0);
+            target.GetComponent<BallController>().Velocity.Value = target.GetComponent<Rigidbody>().velocity / speedMultiplier;
         }
         base.RemoveBuff();
     }

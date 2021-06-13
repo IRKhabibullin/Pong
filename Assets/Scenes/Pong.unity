@@ -7389,7 +7389,6 @@ MonoBehaviour:
   pitcher: {fileID: 0}
   lastFender: {fileID: 0}
   debugMode: 0
-  testMode: 0
 --- !u!4 &1334908332
 Transform:
   m_ObjectHideFlags: 0
@@ -7450,7 +7449,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43632b2b103b96b4bb30e3e73f9f8c80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  winScore: 1
+  winScore: 15
 --- !u!1 &1371488157
 GameObject:
   m_ObjectHideFlags: 0
