@@ -7,8 +7,6 @@ using UnityEngine;
 public class Haste : AbstractPowerUp {
 
     [SerializeField] private float speedMultiplier;
-    [SerializeField] private Material normal;
-    [SerializeField] private Material hasted;
 
     private GameController _gc;
 
@@ -33,21 +31,14 @@ public class Haste : AbstractPowerUp {
     public void ApplyBuffClientRpc()
     {
         target = _gc.ballController.gameObject;
-        target.GetComponent<Renderer>().material = hasted;
+        target.GetComponent<BallController>().ChangeMaterialClientRpc("hasted");
     }
 
     public override void RemoveBuff() {
         if (target != null) {
-            /*RemoveBuffClientRpc();*/
-            target.GetComponent<BallController>().ChangeMaterialClientRpc(0);
+            target.GetComponent<BallController>().ChangeMaterialClientRpc("normal");
             target.GetComponent<BallController>().Velocity.Value = target.GetComponent<Rigidbody>().velocity / speedMultiplier;
         }
         base.RemoveBuff();
-    }
-
-    [ClientRpc]
-    public void RemoveBuffClientRpc()
-    {
-        target.GetComponent<Renderer>().material = normal;
     }
 }

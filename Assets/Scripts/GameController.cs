@@ -99,7 +99,7 @@ public class GameController : NetworkBehaviour
         gameState.Value = GameStates.Play;
         if (!debugMode)
         {
-            ballController.LaunchBall(pitcher.launchDirection);
+            ballController.LaunchBall();
         }
     }
 
@@ -166,7 +166,7 @@ public class GameController : NetworkBehaviour
             _client.PlayerObject.GetComponent<PlatformController>().ResetPlatform();
         }
 
-        ballController.ResetBall(pitcher.GetBallStartPosition());
+        ballController.ResetBall();
         gameObject.GetComponent<PowerUpsManager>().ClearPowerUps();
         readyButton.SetActive(true);
     }

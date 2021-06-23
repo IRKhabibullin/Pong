@@ -26,6 +26,9 @@ public class ConnectionManager : MonoBehaviour
         pongManager.OnClientDisconnectCallback -= HandleClientDisconnect;
     }
 
+    /// <summary>
+    /// This callback is invoked on a client when the server shuts down or a client disconnects. It is only run on the server and the local client that disconnects.
+    /// </summary>
     private void HandleClientDisconnect(ulong ClientId)
     {
         if (ClientId == pongManager.LocalClientId)
@@ -41,6 +44,9 @@ public class ConnectionManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// runs on the server and on the local client that connects
+    /// </summary>
     private void HandleClientConnected(ulong ClientId)
     {
         if (ClientId == pongManager.LocalClientId)
@@ -77,6 +83,9 @@ public class ConnectionManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Calling here OnClientConnectedCallback because host is server and client at the same time
+    /// </summary>
     private void HandleServerStarted()
     {
         if (pongManager.IsHost)
@@ -103,6 +112,7 @@ public class ConnectionManager : MonoBehaviour
             {
                 pongManager.StopHost();
             }
+            // if server is leaving, notify another client about it
             else if (pongManager.IsServer)
             {
                 foreach (var playerClientId in pongManager.ConnectedClients.Keys)
