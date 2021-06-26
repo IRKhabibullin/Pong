@@ -6,9 +6,8 @@ using MLAPI.NetworkVariable;
 
 public class CountdownHandler : NetworkBehaviour {
 	private int countDownTime = 3;
+    private NetworkVariable<string> currentCountdownText = new NetworkVariable<string>();
 	[SerializeField] private TextMeshProUGUI countDownText;
-
-    public NetworkVariable<string> currentCountdownText = new NetworkVariable<string>();
 
     void Start()
     {

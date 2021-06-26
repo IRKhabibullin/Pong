@@ -8,10 +8,12 @@ using MLAPI.NetworkVariable.Collections;
 public class ScoreHandler : NetworkBehaviour {
 
     private NetworkDictionary<string, int> scores = new NetworkDictionary<string, int>();
-
     private Dictionary<string, TextMeshProUGUI> scoreTexts = new Dictionary<string, TextMeshProUGUI>();
-    public int winScore;
+    [SerializeField] private int winScore;
 
+    /// <summary>
+    /// Inits synced score values on the server. Doesn't preserve players, if there were any
+    /// </summary>
     public void InitScore(string[] players_names)
     {
         scores.Clear();
@@ -22,14 +24,9 @@ public class ScoreHandler : NetworkBehaviour {
         InitScoreClientRpc(players_names);
     }
 
-    public void ClearScores()
-    {
-        foreach (var score in new List<string>(scores.Keys))
-        {
-            scores[score] = 0;
-        }
-    }
-
+    /// <summary>
+    /// Inits score related UI on a clients
+    /// </summary>
     [ClientRpc]
     public void InitScoreClientRpc(string[] players_names)
     {
@@ -41,14 +38,28 @@ public class ScoreHandler : NetworkBehaviour {
             scoreTexts.Add(player_name, scoreText);
         }
 
-        scores.OnDictionaryChanged += OnDictChanged;
+        scores.OnDictionaryChanged += OnScoreChanged;
     }
 
-    private void OnDictChanged(NetworkDictionaryEvent<string, int> changeEvent)
+    /// <summary>
+    /// Cleares scores, but preserves same players
+    /// </summary>
+    public void ClearScores()
+    {
+        foreach (var score in new List<string>(scores.Keys))
+        {
+            scores[score] = 0;
+        }
+    }
+
+    private void OnScoreChanged(NetworkDictionaryEvent<string, int> changeEvent)
     {
         RedrawScore();
     }
 
+    /// <summary>
+    /// Called when score has changed
+    /// </summary>
     public void RedrawScore()
     {
         foreach (var player in scores.Keys)
@@ -57,6 +68,9 @@ public class ScoreHandler : NetworkBehaviour {
         }
     }
 
+    /// <summary>
+    /// Increases score of passed player. Called only on the server
+    /// </summary>
     public bool UpdateScore(string player)
     {
         scores[player]++;

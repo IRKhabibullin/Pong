@@ -78,7 +78,7 @@ public class ConnectionManager : MonoBehaviour
             }
             if (pongManager.ConnectedClientsList.Count == 2)
             {
-                gameController.BothPlayersConnected();
+                gameController.OnBothPlayersConnected();
             }
         }
     }

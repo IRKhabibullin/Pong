@@ -33,38 +33,43 @@ public class GameController : NetworkBehaviour
 
     public List<Transform> playersPositions;
     public List<Material> playersMaterials;
-    [SerializeField] private CountdownHandler countdown;
+
+    public BallController ballController;
+    [SerializeField] private ConnectionManager connectionManager;
     [SerializeField] private ScoreHandler scoreHandler;
+    [SerializeField] private CountdownHandler countdownHandler;
+
+    [SerializeField] private GameObject serverDisconnectedPanel;
+    [SerializeField] private GameObject winnerPanel;
+
     [SerializeField] private GameObject readyButton;
     [SerializeField] TextMeshProUGUI readyButtonText;
     [SerializeField] private GameObject startButton;
+
     [SerializeField] private NetworkObject ballPrefab;
-    [SerializeField] private GameObject serverDisconnectedPanel;
-    [SerializeField] private GameObject winnerPanel;
-    [SerializeField] private ConnectionManager connectionManager;
 
-    [SerializeField] private TextMeshProUGUI debugText;
-
-    /*private PongNetworkDiscovery networkDiscovery;*/
-    public BallController ballController;
     public PlatformController pitcher; // player who started round
     public GameObject lastFender; // player last reflected ball
 
     public bool debugMode;
+    [SerializeField] private TextMeshProUGUI debugText;
 
-    public void BothPlayersConnected()
+    #region Connection handlers
+
+    public void OnBothPlayersConnected()
     {
-        if (!pongManager.IsServer)
-        {
-            return;
-        }
+        if (!pongManager.IsServer) return;
+
         var player_names = (from player in pongManager.ConnectedClientsList select player.PlayerObject.name).ToArray();
         scoreHandler.InitScore(player_names);
-        pitcher = pongManager.ConnectedClientsList[0].PlayerObject.GetComponent<PlatformController>();
         lastFender = pongManager.ConnectedClientsList[0].PlayerObject.gameObject;
+        pitcher = lastFender.GetComponent<PlatformController>();
+
+        // create network synced ball and find it on clients
         var ball = Instantiate(ballPrefab, pitcher.GetBallStartPosition(), Quaternion.identity);
         ball.Spawn();
         FindBallClientRpc();
+
         gameState.Value = GameStates.Prepare;
     }
 
@@ -74,12 +79,35 @@ public class GameController : NetworkBehaviour
         ballController = GameObject.FindGameObjectWithTag("Ball").GetComponent<BallController>();
     }
 
+    [ClientRpc]
+    public void ServerDisconnectedClientRpc(ClientRpcParams clientRpcParams)
+    {
+        connectionManager.Leave();
+        serverDisconnectedPanel.SetActive(true);
+        StopHostServerRpc();
+    }
+
+    [ServerRpc]
+    public void StopHostServerRpc()
+    {
+        ResetGameObjectsServerRpc();
+        pongManager.StopHost();
+    }
+
     public void DestroyBall()
     {
         if (ballController != null)
         {
             Destroy(ballController.gameObject);
         }
+    }
+    #endregion
+
+    #region Round handling
+
+    public void ReadyToStart(bool everyoneIsReady)
+    {
+        startButton.SetActive(everyoneIsReady);
     }
 
     [ServerRpc]
@@ -95,7 +123,7 @@ public class GameController : NetworkBehaviour
     {
         ResetGameObjectsServerRpc();
         StartRoundClientRpc();
-        yield return StartCoroutine(countdown.CountDown());
+        yield return StartCoroutine(countdownHandler.CountDown());
         gameState.Value = GameStates.Play;
         if (!debugMode)
         {
@@ -103,16 +131,27 @@ public class GameController : NetworkBehaviour
         }
     }
 
+    /// <summary>
+    /// Called on the server in order to sync between clients
+    /// </summary>
+    [ServerRpc]
+    public void ResetGameObjectsServerRpc()
+    {
+        foreach (var _client in pongManager.ConnectedClientsList)
+        {
+            _client.PlayerObject.GetComponent<PlatformController>().ResetPlatform();
+        }
+
+        ballController.ResetBall();
+        gameObject.GetComponent<PowerUpsManager>().ClearPowerUps();
+        readyButton.SetActive(true);
+    }
+
     [ClientRpc]
     private void StartRoundClientRpc()
     {
         readyButton.SetActive(false);
         startButton.SetActive(false);
-    }
-
-    public void ReadyToStart(bool everyoneIsReady)
-    {
-        startButton.SetActive(everyoneIsReady);
     }
 
     public void FinishRound(GameObject winner)
@@ -142,12 +181,6 @@ public class GameController : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void WinnerNotificationClientRpc(string winner) {
-        winnerPanel.GetComponentInChildren<TextMeshProUGUI>().text = $"{winner} won!";
-        winnerPanel.SetActive(true);
-    }
-
-    [ClientRpc]
     public void FinishRoundClientRpc()
     {
         readyButtonText.text = "Ready";
@@ -155,38 +188,14 @@ public class GameController : NetworkBehaviour
         startButton.SetActive(false);
     }
 
-    /// <summary>
-    /// Called on the server in order to sync between clients
-    /// </summary>
-    [ServerRpc]
-    public void ResetGameObjectsServerRpc()
-    {
-        foreach (var _client in pongManager.ConnectedClientsList)
-        {
-            _client.PlayerObject.GetComponent<PlatformController>().ResetPlatform();
-        }
-
-        ballController.ResetBall();
-        gameObject.GetComponent<PowerUpsManager>().ClearPowerUps();
-        readyButton.SetActive(true);
-    }
-
     [ClientRpc]
-    public void ServerDisconnectedClientRpc(ClientRpcParams clientRpcParams)
-    {
-        connectionManager.Leave();
-        serverDisconnectedPanel.SetActive(true);
-        StopHostServerRpc();
+    public void WinnerNotificationClientRpc(string winner) {
+        winnerPanel.GetComponentInChildren<TextMeshProUGUI>().text = $"{winner} won!";
+        winnerPanel.SetActive(true);
     }
+    #endregion
 
-    [ServerRpc]
-    public void StopHostServerRpc()
-    {
-        ResetGameObjectsServerRpc();
-        pongManager.StopHost();
-    }
-
-    #region handlers
+    #region Ingame handlers
     public void PlatformTouchHandler(GameObject platform)
     {
         /*if (gameState != GameStates.Play)
