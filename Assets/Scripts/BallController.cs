@@ -40,10 +40,10 @@ public class BallController : NetworkBehaviour
 
     void OnCollisionEnter(Collision collision) {
         if (!pongManager.IsServer) return;
-        if (LayerMask.Equals(collision.gameObject.layer, backWallsLayer)) {
+        if ((backWallsLayer.value & (1 << collision.gameObject.layer)) > 0) {
             touchdownEvent.Invoke(collision.gameObject);
         }
-        if (LayerMask.Equals(collision.gameObject.layer, platformLayer)) {
+        if ((platformLayer.value & (1 << collision.gameObject.layer)) > 0) {
             platformTouchEvent.Invoke(collision.gameObject);
         }
     }
