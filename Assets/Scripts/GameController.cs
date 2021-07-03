@@ -198,8 +198,7 @@ public class GameController : NetworkBehaviour
     #region Ingame handlers
     public void PlatformTouchHandler(GameObject platform)
     {
-        /*if (gameState != GameStates.Play)
-            return;*/
+        if (gameState.Value != GameStates.Play) return;
         lastFender = platform;
         GetComponent<PowerUpsManager>().TriggerPowerUp();
     }
