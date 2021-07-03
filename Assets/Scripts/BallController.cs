@@ -10,8 +10,8 @@ public class BallController : NetworkBehaviour
 {
     [Serializable]
     public class BallEvent : UnityEvent<GameObject> { }
-    private BallEvent touchdownEvent;
-    private BallEvent platformTouchEvent;
+    public BallEvent touchdownEvent;
+    public BallEvent platformTouchEvent;
 
     private GameController _gc;
 

@@ -193,6 +193,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7afa52c60a46cb4f97f7805b46813f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  touchdownEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  platformTouchEvent:
+    m_PersistentCalls:
+      m_Calls: []
   Velocity:
     m_InternalValue: {x: 0, y: 0, z: 0}
   _rb: {fileID: 7168978363348635293}
