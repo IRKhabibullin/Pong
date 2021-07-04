@@ -51,7 +51,7 @@ public class ConnectionManager : MonoBehaviour
     {
         if (ClientId == pongManager.LocalClientId)
         {
-            menuPanel.SetActive(false);
+            /*menuPanel.SetActive(false);*/
             leaveButton.SetActive(true);
             readyButton.SetActive(true);
         }
@@ -137,6 +137,7 @@ public class ConnectionManager : MonoBehaviour
             pongManager.StopClient();
         }
         menuPanel.SetActive(true);
+        readyButton.SetActive(false);
         leaveButton.SetActive(false);
     }
 

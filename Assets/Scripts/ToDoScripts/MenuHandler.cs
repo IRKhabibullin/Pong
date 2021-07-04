@@ -6,11 +6,16 @@ using UnityEngine.SceneManagement;
 
 public class MenuHandler : MonoBehaviour {
 
-    void Start() {
+    [SerializeField] private ConnectionManager connectionManager;
+    [SerializeField] private TextMeshProUGUI playerName;
+    [SerializeField] private GameObject nameNotSetWarning;
+
+    /*void Start() {
         string ipAddress = GetLocalIPv4();
         GameObject.Find("IPAddressText").GetComponent<TextMeshProUGUI>().text = ipAddress;
-    }
+    }*/
 
+    #region game modes
     public string GetLocalIPv4()
     {
         return Dns.GetHostEntry(Dns.GetHostName())
@@ -34,12 +39,37 @@ public class MenuHandler : MonoBehaviour {
     public void SelectAccuracyMode() {
         PlayerPrefs.SetInt("GameMode", (int)GameController.GameMode.Accuracy);
     }
-
-    public void StartGame() {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-    }
+    #endregion
 
     public void ExitGame() {
         Application.Quit();
+    }
+
+    public void Host()
+    {
+        if (NameIsSet())
+        {
+            gameObject.SetActive(false);
+            connectionManager.Host();
+        }
+    }
+
+    public void Join()
+    {
+        if (NameIsSet())
+        {
+            gameObject.SetActive(false);
+            connectionManager.Join();
+        }
+    }
+
+    private bool NameIsSet()
+    {
+        if (playerName.text == "​")
+        {
+            nameNotSetWarning.SetActive(true);
+            return false;
+        }
+        return true;
     }
 }
