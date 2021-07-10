@@ -52,7 +52,6 @@ public class GameController : NetworkBehaviour
     public GameObject lastFender; // player last reflected ball
 
     public bool debugMode;
-    [SerializeField] private TextMeshProUGUI debugText;
 
     #region Connection handlers
 
@@ -60,7 +59,7 @@ public class GameController : NetworkBehaviour
     {
         if (!pongManager.IsServer) return;
 
-        var player_names = (from player in pongManager.ConnectedClientsList select player.PlayerObject.name).ToArray();
+        var player_names = (from player in pongManager.ConnectedClientsList select player.PlayerObject.tag).ToArray();
         scoreHandler.InitScore(player_names);
         lastFender = pongManager.ConnectedClientsList[0].PlayerObject.gameObject;
         pitcher = lastFender.GetComponent<PlatformController>();
@@ -162,21 +161,25 @@ public class GameController : NetworkBehaviour
         ballController.StopBall();
         gameState.Value = GameStates.Prepare;
 
-        bool hasWinner = scoreHandler.UpdateScore(winner.tag);
-        if (hasWinner)
-        {
-            scoreHandler.ClearScores();
-            WinnerNotificationClientRpc(winner.tag);
-        }
-
+        string winner_player = "";
         foreach (var _client in pongManager.ConnectedClientsList)
         {
             NetworkObject player = _client.PlayerObject;
             if (!winner.CompareTag(player.tag))
             {
                 pitcher = player.GetComponent<PlatformController>();
+            } else
+            {
+                winner_player = player.GetComponent<PlayerController>().Name.Value;
             }
             player.GetComponent<PlayerController>().IsReady.Value = false;
+        }
+
+        bool hasWinner = scoreHandler.UpdateScore(winner.tag);
+        if (hasWinner)
+        {
+            scoreHandler.ClearScores();
+            WinnerNotificationClientRpc(winner_player);
         }
     }
 

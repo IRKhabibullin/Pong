@@ -4,17 +4,22 @@ using MLAPI.NetworkVariable;
 using Networking;
 using UnityEngine;
 
-public class PlayerController : NetworkBehaviour {
+public class PlayerController : NetworkBehaviour
+{
 
     private GameController gameController;
 
-    public string _name = "";
-
+    public NetworkVariableString Name = new NetworkVariableString(new NetworkVariableSettings { WritePermission = NetworkVariablePermission.OwnerOnly });
     public NetworkVariableBool IsReady = new NetworkVariableBool();
     public NetworkVariableBool IsLeader = new NetworkVariableBool();
 
-    void Start() {
+    void Start()
+    {
         gameController = GameObject.Find("GameManager").GetComponent<GameController>();
+        if (IsOwner)
+        {
+            Name.Value = gameController.GetComponent<ConnectionManager>().playerName;
+        }
     }
 
     [ServerRpc]

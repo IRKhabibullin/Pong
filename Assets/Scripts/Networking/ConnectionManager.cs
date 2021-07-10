@@ -11,6 +11,8 @@ public class ConnectionManager : MonoBehaviour
     [SerializeField] private GameObject readyButton;
     [SerializeField] private GameController gameController;
 
+    public string playerName = "";
+
     private void Start()
     {
         pongManager.OnServerStarted += HandleServerStarted;
@@ -63,7 +65,6 @@ public class ConnectionManager : MonoBehaviour
                 if (client.ClientId == ClientId)
                 {
                     client.PlayerObject.tag = $"Player{i + 1}";
-                    client.PlayerObject.name = $"Player{i + 1}";
                     var platform = client.PlayerObject.GetComponent<PlatformController>();
                     platform.launchDirection = i == 0 ? 1 : -1;
                     platform.mPosition.Value = gameController.playersPositions[i].position;
@@ -94,14 +95,16 @@ public class ConnectionManager : MonoBehaviour
         }
     }
 
-    public void Host()
+    public void Host(string playerName)
     {
         pongManager.StartHost();
+        this.playerName = playerName;
     }
 
-    public void Join()
+    public void Join(string playerName)
     {
         pongManager.StartClient();
+        this.playerName = playerName;
     }
 
     public void Leave()

@@ -50,7 +50,7 @@ public class MenuHandler : MonoBehaviour {
         if (NameIsSet())
         {
             gameObject.SetActive(false);
-            connectionManager.Host();
+            connectionManager.Host(playerName.text);
         }
     }
 
@@ -59,7 +59,7 @@ public class MenuHandler : MonoBehaviour {
         if (NameIsSet())
         {
             gameObject.SetActive(false);
-            connectionManager.Join();
+            connectionManager.Join(playerName.text);
         }
     }
 
