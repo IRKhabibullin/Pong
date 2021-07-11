@@ -142,7 +142,6 @@ public class GameController : NetworkBehaviour
         }
 
         ballController.ResetBall();
-        gameObject.GetComponent<PowerUpsManager>().ClearPowerUps();
         readyButton.SetActive(true);
     }
 
@@ -159,6 +158,7 @@ public class GameController : NetworkBehaviour
 
         FinishRoundClientRpc();
         ballController.StopBall();
+        gameObject.GetComponent<PowerUpsManager>().ClearPowerUps();
         gameState.Value = GameStates.Prepare;
 
         string winner_player = "";
