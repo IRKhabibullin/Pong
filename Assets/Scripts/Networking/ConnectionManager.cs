@@ -30,16 +30,16 @@ public class ConnectionManager : MonoBehaviour
     /// </summary>
     private void HandleClientDisconnect(ulong ClientId)
     {
-        // Case when server disconnected
+        // Case when server disconnected and we are client
         if (ClientId == pongManager.LocalClientId)
         {
             serverDisconnectedPanel.SetActive(true);
             gameController.QuitToMenu();
         }
-        // Case when other client disconnected
+        // Case when other client disconnected and we are host
         if (pongManager.IsHost)
         {
-            gameController.DestroyBall();
+            gameController.BeforeStopHost();
         }
     }
 

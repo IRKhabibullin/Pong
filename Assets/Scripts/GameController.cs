@@ -55,7 +55,7 @@ public class GameController : NetworkBehaviour
     public GameObject lastFender; // player last reflected ball
 
     public bool debugMode;
-    private IEnumerator countdownEnumerator;
+    private Coroutine countdownCoroutine;
 
     #region Connection handlers
     public void OnBothPlayersConnected()
@@ -66,6 +66,7 @@ public class GameController : NetworkBehaviour
         scoreHandler.InitScore(player_names);
         lastFender = pongManager.ConnectedClientsList[0].PlayerObject.gameObject;
         pitcher = lastFender.GetComponent<PlatformController>();
+        readyButton.SetActive(true);
 
         // create network synced ball and find it on clients
         var ball = Instantiate(ballPrefab, pitcher.GetBallStartPosition(), Quaternion.identity);
@@ -88,28 +89,21 @@ public class GameController : NetworkBehaviour
         readyButton.SetActive(true);
     }
 
-    /// <summary>
-    /// Called when client or server disconnects
-    /// </summary>
     public void QuitToMenu()
     {
         menuPanel.SetActive(true);
         leaveButton.SetActive(false);
         readyButton.SetActive(false);
         readyButtonText.text = ReadyText;
+        countdownHandler.ResetCountdown();
         pongManager.ConnectedClients[pongManager.LocalClientId].PlayerObject.GetComponent<PlayerController>().IsReady.Value = false;
     }
 
     public void BeforeStopHost()
     {
-        Debug.Log($"Stop host {countdownEnumerator} {countdownEnumerator != null}");
-        countdownHandler.StopCountdown();
-        if (countdownEnumerator != null)
-        {
-            StopCoroutine(countdownEnumerator);
-        }
+        StopCoroutine(countdownCoroutine);
+        countdownHandler.ResetCountdown();
         DestroyBall();
-        ResetGameObjectsServerRpc();
     }
 
     public void DestroyBall()
@@ -122,7 +116,6 @@ public class GameController : NetworkBehaviour
     #endregion
 
     #region Round handling
-
     public void ReadyToStart(bool everyoneIsReady)
     {
         startButton.SetActive(everyoneIsReady);
@@ -133,8 +126,7 @@ public class GameController : NetworkBehaviour
     {
         if (!debugMode)
         {
-            countdownEnumerator = StartAfterCountdown();
-            StartCoroutine(countdownEnumerator);
+            StartCoroutine(StartAfterCountdown());
         }
     }
 
@@ -142,7 +134,9 @@ public class GameController : NetworkBehaviour
     {
         ResetGameObjectsServerRpc();
         StartRoundClientRpc();
-        yield return StartCoroutine(countdownHandler.CountDown());
+        countdownCoroutine = StartCoroutine(countdownHandler.CountDown());
+        yield return countdownCoroutine;
+        Debug.Log("Still working");
         gameState.Value = GameStates.Play;
         if (!debugMode)
         {
