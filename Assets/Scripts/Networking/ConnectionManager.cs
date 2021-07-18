@@ -5,9 +5,6 @@ using Networking;
 
 public class ConnectionManager : MonoBehaviour
 {
-    [SerializeField] private GameObject menuPanel;
-    [SerializeField] private GameObject leaveButton;
-    [SerializeField] private GameObject readyButton;
     [SerializeField] private GameController gameController;
     [SerializeField] private GameObject serverDisconnectedPanel;
 
@@ -37,10 +34,7 @@ public class ConnectionManager : MonoBehaviour
         if (ClientId == pongManager.LocalClientId)
         {
             serverDisconnectedPanel.SetActive(true);
-            menuPanel.SetActive(true);
-            leaveButton.SetActive(false);
-            readyButton.SetActive(false);
-            pongManager.ConnectedClients[pongManager.LocalClientId].PlayerObject.GetComponent<PlayerController>().IsReady.Value = false;
+            gameController.QuitToMenu();
         }
         // Case when other client disconnected
         if (pongManager.IsHost)
@@ -56,8 +50,7 @@ public class ConnectionManager : MonoBehaviour
     {
         if (ClientId == pongManager.LocalClientId)
         {
-            leaveButton.SetActive(true);
-            readyButton.SetActive(true);
+            gameController.EnterTheGame();
         }
         if (pongManager.IsServer)
         {
@@ -67,10 +60,7 @@ public class ConnectionManager : MonoBehaviour
                 if (client.ClientId == ClientId)
                 {
                     client.PlayerObject.tag = $"Player{i + 1}";
-                    var platform = client.PlayerObject.GetComponent<PlatformController>();
-                    platform.launchDirection = i == 0 ? 1 : -1;
-                    platform.mPosition.Value = gameController.playersPositions[i].position;
-                    platform.SetColorClientRpc(i);
+                    client.PlayerObject.GetComponent<PlatformController>().SetUp(i);
                     if (pongManager.ConnectedClients.Count == 1)
                     {
                         client.PlayerObject.GetComponent<PlayerController>().IsLeader.Value = true;
@@ -111,9 +101,7 @@ public class ConnectionManager : MonoBehaviour
 
     public void Leave()
     {
-        menuPanel.SetActive(true);
-        leaveButton.SetActive(false);
-        readyButton.SetActive(false);
+        gameController.QuitToMenu();
 
         if (pongManager.IsServer)
         {

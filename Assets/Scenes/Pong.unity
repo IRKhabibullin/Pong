@@ -7287,9 +7287,11 @@ MonoBehaviour:
   scoreHandler: {fileID: 1334908335}
   countdownHandler: {fileID: 1651516987}
   winnerPanel: {fileID: 1783691504}
+  menuPanel: {fileID: 1985579817}
+  leaveButton: {fileID: 1441479612}
+  startButton: {fileID: 1539719513}
   readyButton: {fileID: 1089641019}
   readyButtonText: {fileID: 1632813827}
-  startButton: {fileID: 1539719513}
   ballPrefab: {fileID: 7168978363348635292, guid: 5f53ba0f401affb40835a0a91b9c1401, type: 3}
   pitcher: {fileID: 0}
   lastFender: {fileID: 0}

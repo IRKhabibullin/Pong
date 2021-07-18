@@ -40,10 +40,14 @@ public class GameController : NetworkBehaviour
     [SerializeField] private CountdownHandler countdownHandler;
 
     [SerializeField] private GameObject winnerPanel;
+    [SerializeField] private GameObject menuPanel;
 
+    [SerializeField] private GameObject leaveButton;
+    [SerializeField] private GameObject startButton;
     [SerializeField] private GameObject readyButton;
     [SerializeField] TextMeshProUGUI readyButtonText;
-    [SerializeField] private GameObject startButton;
+    private const string ReadyText = "Ready";
+    private const string NotReadyText = "Not ready";
 
     [SerializeField] private NetworkObject ballPrefab;
 
@@ -77,6 +81,25 @@ public class GameController : NetworkBehaviour
         ballController = GameObject.FindGameObjectWithTag("Ball").GetComponent<BallController>();
     }
 
+    public void EnterTheGame()
+    {
+        menuPanel.SetActive(false);
+        leaveButton.SetActive(true);
+        readyButton.SetActive(true);
+    }
+
+    /// <summary>
+    /// Called when client or server disconnects
+    /// </summary>
+    public void QuitToMenu()
+    {
+        menuPanel.SetActive(true);
+        leaveButton.SetActive(false);
+        readyButton.SetActive(false);
+        readyButtonText.text = ReadyText;
+        pongManager.ConnectedClients[pongManager.LocalClientId].PlayerObject.GetComponent<PlayerController>().IsReady.Value = false;
+    }
+
     public void BeforeStopHost()
     {
         Debug.Log($"Stop host {countdownEnumerator} {countdownEnumerator != null}");
@@ -85,6 +108,7 @@ public class GameController : NetworkBehaviour
         {
             StopCoroutine(countdownEnumerator);
         }
+        DestroyBall();
         ResetGameObjectsServerRpc();
     }
 
@@ -182,7 +206,7 @@ public class GameController : NetworkBehaviour
     [ClientRpc]
     public void FinishRoundClientRpc()
     {
-        readyButtonText.text = "Ready";
+        readyButtonText.text = ReadyText;
         readyButton.SetActive(true);
         startButton.SetActive(false);
     }
@@ -206,7 +230,7 @@ public class GameController : NetworkBehaviour
     {
         var player = pongManager.ConnectedClients[NetworkManager.Singleton.LocalClientId]
             .PlayerObject.GetComponent<PlayerController>();
-        readyButtonText.text = player.IsReady.Value ? "Ready" : "Not ready";
+        readyButtonText.text = player.IsReady.Value ? ReadyText : NotReadyText;
         player.TogglePlayerReadyServerRpc();
     }
     #endregion

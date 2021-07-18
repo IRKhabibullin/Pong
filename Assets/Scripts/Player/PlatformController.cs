@@ -23,7 +23,7 @@ public class PlatformController : NetworkBehaviour
     public float mAngle = 0;  // current rotation speed. Used only on server. Rotation on client is synced from server
     public NetworkVariableQuaternion mRotation = new NetworkVariableQuaternion();  // synced variable for platform rotation
 
-    private void Start()
+    private void Awake()
     {
         _gc = GameObject.Find("GameManager").GetComponent<GameController>();
     }
@@ -43,6 +43,13 @@ public class PlatformController : NetworkBehaviour
         // sync position on clients
         transform.position = mPosition.Value;
         transform.rotation = mRotation.Value;
+    }
+
+    public void SetUp(int side)
+    {
+        launchDirection = side == 0 ? 1 : -1;
+        mPosition.Value = _gc.playersPositions[side].position;
+        SetColorClientRpc(side);
     }
 
     [ServerRpc]
