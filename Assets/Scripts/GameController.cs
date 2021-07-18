@@ -39,7 +39,6 @@ public class GameController : NetworkBehaviour
     [SerializeField] private ScoreHandler scoreHandler;
     [SerializeField] private CountdownHandler countdownHandler;
 
-    [SerializeField] private GameObject serverDisconnectedPanel;
     [SerializeField] private GameObject winnerPanel;
 
     [SerializeField] private GameObject readyButton;
@@ -52,9 +51,9 @@ public class GameController : NetworkBehaviour
     public GameObject lastFender; // player last reflected ball
 
     public bool debugMode;
+    private IEnumerator countdownEnumerator;
 
     #region Connection handlers
-
     public void OnBothPlayersConnected()
     {
         if (!pongManager.IsServer) return;
@@ -78,19 +77,15 @@ public class GameController : NetworkBehaviour
         ballController = GameObject.FindGameObjectWithTag("Ball").GetComponent<BallController>();
     }
 
-    [ClientRpc]
-    public void ServerDisconnectedClientRpc(ClientRpcParams clientRpcParams)
+    public void BeforeStopHost()
     {
-        connectionManager.Leave();
-        serverDisconnectedPanel.SetActive(true);
-        StopHostServerRpc();
-    }
-
-    [ServerRpc]
-    public void StopHostServerRpc()
-    {
+        Debug.Log($"Stop host {countdownEnumerator} {countdownEnumerator != null}");
+        countdownHandler.StopCountdown();
+        if (countdownEnumerator != null)
+        {
+            StopCoroutine(countdownEnumerator);
+        }
         ResetGameObjectsServerRpc();
-        pongManager.StopHost();
     }
 
     public void DestroyBall()
@@ -114,7 +109,8 @@ public class GameController : NetworkBehaviour
     {
         if (!debugMode)
         {
-            StartCoroutine(StartAfterCountdown());
+            countdownEnumerator = StartAfterCountdown();
+            StartCoroutine(countdownEnumerator);
         }
     }
 

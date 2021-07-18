@@ -2,7 +2,6 @@ using UnityEngine;
 using MLAPI;
 using MLAPI.Connection;
 using Networking;
-using MLAPI.Messaging;
 
 public class ConnectionManager : MonoBehaviour
 {
@@ -10,6 +9,7 @@ public class ConnectionManager : MonoBehaviour
     [SerializeField] private GameObject leaveButton;
     [SerializeField] private GameObject readyButton;
     [SerializeField] private GameController gameController;
+    [SerializeField] private GameObject serverDisconnectedPanel;
 
     public string playerName = "";
 
@@ -29,17 +29,20 @@ public class ConnectionManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This callback is invoked on a client when the server shuts down or a client disconnects. It is only run on the server and the local client that disconnects.
+    /// This callback is invoked on a client when the server shuts down and invoked on a server when other client disconnects.
     /// </summary>
     private void HandleClientDisconnect(ulong ClientId)
     {
+        // Case when server disconnected
         if (ClientId == pongManager.LocalClientId)
         {
+            serverDisconnectedPanel.SetActive(true);
             menuPanel.SetActive(true);
             leaveButton.SetActive(false);
             readyButton.SetActive(false);
             pongManager.ConnectedClients[pongManager.LocalClientId].PlayerObject.GetComponent<PlayerController>().IsReady.Value = false;
         }
+        // Case when other client disconnected
         if (pongManager.IsHost)
         {
             gameController.DestroyBall();
@@ -53,7 +56,6 @@ public class ConnectionManager : MonoBehaviour
     {
         if (ClientId == pongManager.LocalClientId)
         {
-            /*menuPanel.SetActive(false);*/
             leaveButton.SetActive(true);
             readyButton.SetActive(true);
         }
@@ -97,51 +99,40 @@ public class ConnectionManager : MonoBehaviour
 
     public void Host(string playerName)
     {
-        pongManager.StartHost();
         this.playerName = playerName;
+        pongManager.StartHost();
     }
 
     public void Join(string playerName)
     {
-        pongManager.StartClient();
         this.playerName = playerName;
+        pongManager.StartClient();
     }
 
     public void Leave()
     {
-        if (pongManager.IsHost)
+        menuPanel.SetActive(true);
+        leaveButton.SetActive(false);
+        readyButton.SetActive(false);
+
+        if (pongManager.IsServer)
         {
-            if (pongManager.ConnectedClientsList.Count < 2)
+            // if server is leaving, disconnect another player
+            foreach (var playerClientId in pongManager.ConnectedClients.Keys)
             {
-                pongManager.StopHost();
-            }
-            // if server is leaving, notify another client about it
-            else if (pongManager.IsServer)
-            {
-                foreach (var playerClientId in pongManager.ConnectedClients.Keys)
+                if (playerClientId != pongManager.LocalClientId)
                 {
-                    if (playerClientId != pongManager.LocalClientId)
-                    {
-                        ClientRpcParams clientRpcParams = new ClientRpcParams
-                        {
-                            Send = new ClientRpcSendParams
-                            {
-                                TargetClientIds = new ulong[] { playerClientId }
-                            }
-                        };
-                        gameController.ServerDisconnectedClientRpc(clientRpcParams);
-                    }
+                    pongManager.DisconnectClient(playerClientId);
+                    break;
                 }
             }
+            gameController.BeforeStopHost();
+            pongManager.StopHost();
         }
-        else if (pongManager.IsClient)
+        else
         {
-            gameController.ResetGameObjectsServerRpc();
             pongManager.StopClient();
         }
-        menuPanel.SetActive(true);
-        readyButton.SetActive(false);
-        leaveButton.SetActive(false);
     }
 
     private PongManager pnm;
