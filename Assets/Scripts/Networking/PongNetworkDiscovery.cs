@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using Mirror;
 using Mirror.Discovery;
@@ -53,12 +54,18 @@ namespace Networking
 
             try
             {
+
+                string ipAddress = Dns.GetHostEntry(Dns.GetHostName())
+                     .AddressList.First(
+                         f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                     .ToString();
                 //string hostName = GameObject.Find("NameText").GetComponent<TextMeshProUGUI>().text;
                 string hostName = "qwerfv";
+                transport.ConnectAddress = ipAddress;
                 return new DiscoveryResponse
                 {
                     ServerId = ServerId,
-                    RoomUri = transport.ConnectAddress,
+                    RoomUri = ipAddress,
                     HostName = hostName
                 };
             }
@@ -67,7 +74,7 @@ namespace Networking
                 Debug.LogError($"Transport {transport} does not support network discovery");
                 throw;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 throw;
             }
@@ -99,7 +106,6 @@ namespace Networking
         /// <param name="response">Response that came from the server</param>
         /// <param name="endpoint">Address of the server that replied</param>
         protected override void ProcessResponse(DiscoveryResponse response, IPEndPoint endpoint) {
-
             response.EndPoint = endpoint;
             OnServerFound.Invoke(response);
         }
