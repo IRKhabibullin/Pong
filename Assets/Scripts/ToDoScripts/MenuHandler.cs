@@ -2,7 +2,6 @@
 using System.Net;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class MenuHandler : MonoBehaviour {
 
@@ -53,11 +52,11 @@ public class MenuHandler : MonoBehaviour {
         }
     }
 
-    public void Join()
+    public void Find()
     {
         if (NameIsSet())
         {
-            connectionManager.Join(playerName.text);
+            connectionManager.Find(playerName.text);
         }
     }
 

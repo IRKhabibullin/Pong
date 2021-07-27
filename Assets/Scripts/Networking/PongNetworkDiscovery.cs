@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Net;
-/*using Mirror;
-using Mirror.Discovery;*/
+using Mirror;
+using Mirror.Discovery;
+using MLAPI.Transports.UNET;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Networking
 {
-    /*public class DiscoveryRequest : MessageBase { }
+    public class DiscoveryRequest : NetworkMessage { }
 
-    public class DiscoveryResponse : MessageBase
+    public class DiscoveryResponse : NetworkMessage
     {
         // Add properties for whatever information you want the server to return to
         // clients for them to display or consume for establishing a connection.
         public long ServerId;
         public string HostName;
-        public int PlayersInRoom;
-        public Uri RoomUri;
+        public string RoomUri;
         public IPEndPoint EndPoint { get; set; }
     }
 
@@ -28,18 +28,12 @@ namespace Networking
         #region Server
 
         public long ServerId { get; private set; }
-        public Transport transport;
+        public UNetTransport transport;
         public ServerFoundUnityEvent OnServerFound;
 
         public override void Start()
         {
             ServerId = RandomLong();
-
-            // active transport gets initialized in awake
-            // so make sure we set it here in Start()  (after awakes)
-            // Or just let the user assign it in the inspector
-            if (transport == null)
-                transport = Transport.activeTransport;
 
             base.Start();
         }
@@ -59,18 +53,13 @@ namespace Networking
 
             try
             {
-                Debug.Log("Entered");
-                Debug.Log($"Processing client request: {request}");
                 //string hostName = GameObject.Find("NameText").GetComponent<TextMeshProUGUI>().text;
-                int playersCount = GameObject.Find("NetworkManager").GetComponent<PongNetworkManager>().numPlayers;
                 string hostName = "qwerfv";
-                Debug.Log($"playersCount {playersCount}; hostName: {hostName}");
                 return new DiscoveryResponse
                 {
                     ServerId = ServerId,
-                    RoomUri = transport.ServerUri(),
-                    HostName = hostName,
-                    PlayersInRoom = playersCount
+                    RoomUri = transport.ConnectAddress,
+                    HostName = hostName
                 };
             }
             catch (NotImplementedException)
@@ -78,14 +67,9 @@ namespace Networking
                 Debug.LogError($"Transport {transport} does not support network discovery");
                 throw;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Debug.Log($"Catched {e}");
                 throw;
-            }
-            finally
-            {
-                Debug.Log("Finnaly");
             }
         }
 
@@ -102,8 +86,6 @@ namespace Networking
         /// <returns>An instance of ServerRequest with data to be broadcasted</returns>
         protected override DiscoveryRequest GetRequest()
         {
-            Console.WriteLine("Sending client request");
-            //Debug.Log("Sending client request");
             return new DiscoveryRequest();
         }
 
@@ -118,22 +100,9 @@ namespace Networking
         /// <param name="endpoint">Address of the server that replied</param>
         protected override void ProcessResponse(DiscoveryResponse response, IPEndPoint endpoint) {
 
-            Debug.Log($"Processing server response: {response}");
             response.EndPoint = endpoint;
-
-            // although we got a supposedly valid url, we may not be able to resolve
-            // the provided host
-            // However we know the real ip address of the server because we just
-            // received a packet from it,  so use that as host.
-            UriBuilder realUri = new UriBuilder(response.RoomUri)
-            {
-                Host = response.EndPoint.Address.ToString()
-            };
-            response.RoomUri = realUri.Uri;
-            Debug.Log("Processing of server response finished. Invoking events handlers...");
-
             OnServerFound.Invoke(response);
         }
         #endregion
-    }*/
+    }
 }

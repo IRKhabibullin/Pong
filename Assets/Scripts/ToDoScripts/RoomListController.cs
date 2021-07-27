@@ -9,15 +9,10 @@ public class RoomListController : MonoBehaviour
     [SerializeField]
     private GameObject panelsList;
 
-    private GameController _gc;
+    [SerializeField] private ConnectionManager connectionManager;
 
-    /*private readonly Dictionary<long, DiscoveryResponse> rooms = new Dictionary<long, DiscoveryResponse>();*/
+    private readonly Dictionary<long, DiscoveryResponse> rooms = new Dictionary<long, DiscoveryResponse>();
     public List<string> roomsNames = new List<string>();
-
-    private void Awake()
-    {
-        _gc = GameObject.Find("GameManager").GetComponent<GameController>();
-    }
 
     private void UpdateRoomsList()
     {
@@ -25,14 +20,14 @@ public class RoomListController : MonoBehaviour
         {
             Destroy(item.gameObject);
         }
-        /*foreach (DiscoveryResponse room in rooms.Values)
+        foreach (DiscoveryResponse room in rooms.Values)
         {
             GameObject gamePanel = Instantiate(gamePanelPrefab, panelsList.transform, false);
-            gamePanel.GetComponent<RoomPanelHandler>().SetRoomData(room, _gc);
-        }*/
+            gamePanel.GetComponent<RoomPanelHandler>().SetRoomData(room, connectionManager);
+        }
     }
 
-    /*public void AddRoomData(DiscoveryResponse room)
+    public void AddRoomData(DiscoveryResponse room)
     {
         Debug.Log("Adding room data");
         if (!rooms.ContainsKey(room.ServerId))
@@ -48,5 +43,5 @@ public class RoomListController : MonoBehaviour
         rooms.Clear();
         roomsNames.Clear();
         UpdateRoomsList();
-    }*/
+    }
 }

@@ -101,7 +101,8 @@ public class GameController : NetworkBehaviour
 
     public void BeforeStopHost()
     {
-        StopCoroutine(countdownCoroutine);
+        if (countdownCoroutine != null)
+            StopCoroutine(countdownCoroutine);
         countdownHandler.ResetCountdown();
         DestroyBall();
     }

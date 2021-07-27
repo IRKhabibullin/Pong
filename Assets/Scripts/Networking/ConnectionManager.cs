@@ -7,6 +7,7 @@ public class ConnectionManager : MonoBehaviour
 {
     [SerializeField] private GameController gameController;
     [SerializeField] private GameObject serverDisconnectedPanel;
+    [SerializeField] private PongNetworkDiscovery discovery;
 
     public string playerName = "";
 
@@ -71,6 +72,7 @@ public class ConnectionManager : MonoBehaviour
             }
             if (pongManager.ConnectedClientsList.Count == 2)
             {
+                discovery.StopDiscovery();
                 gameController.OnBothPlayersConnected();
             }
         }
@@ -93,9 +95,16 @@ public class ConnectionManager : MonoBehaviour
         pongManager.StartHost();
     }
 
-    public void Join(string playerName)
+    public void Find(string playerName)
     {
         this.playerName = playerName;
+        discovery.StartDiscovery();
+    }
+
+    public void Join(string hostAddress)
+    {
+        discovery.StopDiscovery();
+        discovery.transport.ConnectAddress = hostAddress;
         pongManager.StartClient();
     }
 
