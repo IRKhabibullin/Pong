@@ -54,13 +54,8 @@ namespace Networking
 
             try
             {
-
-                string ipAddress = Dns.GetHostEntry(Dns.GetHostName())
-                     .AddressList.First(
-                         f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                     .ToString();
-                //string hostName = GameObject.Find("NameText").GetComponent<TextMeshProUGUI>().text;
-                string hostName = "qwerfv";
+                string ipAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList.First(f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).ToString();
+                string hostName = GameObject.Find("GameManager").GetComponent<ConnectionManager>().playerName;
                 transport.ConnectAddress = ipAddress;
                 return new DiscoveryResponse
                 {

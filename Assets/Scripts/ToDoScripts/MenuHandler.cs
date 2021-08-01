@@ -9,11 +9,6 @@ public class MenuHandler : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI playerName;
     [SerializeField] private GameObject nameNotSetWarning;
 
-    /*void Start() {
-        string ipAddress = GetLocalIPv4();
-        GameObject.Find("IPAddressText").GetComponent<TextMeshProUGUI>().text = ipAddress;
-    }*/
-
     #region game modes
     public string GetLocalIPv4()
     {
