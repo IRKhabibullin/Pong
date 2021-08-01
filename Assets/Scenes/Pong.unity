@@ -327,6 +327,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7991354135141414320, guid: 0fc15d86e11c2654ea41405f53c788de, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7991354135141414320, guid: 0fc15d86e11c2654ea41405f53c788de, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7991354135141414320, guid: 0fc15d86e11c2654ea41405f53c788de, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 175
       objectReference: {fileID: 0}
@@ -345,6 +353,10 @@ PrefabInstance:
     - target: {fileID: 7991354135141414325, guid: 0fc15d86e11c2654ea41405f53c788de, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7991354135141414326, guid: 0fc15d86e11c2654ea41405f53c788de, type: 3}
+      propertyPath: m_Padding.m_Top
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0fc15d86e11c2654ea41405f53c788de, type: 3}
@@ -7437,6 +7449,9 @@ MonoBehaviour:
   gameController: {fileID: 1334908331}
   serverDisconnectedPanel: {fileID: 1605268938}
   discovery: {fileID: 972649138}
+  onLeave:
+    m_PersistentCalls:
+      m_Calls: []
   playerName: 
 --- !u!1 &1375822162
 GameObject:

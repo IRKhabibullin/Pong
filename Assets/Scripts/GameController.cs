@@ -10,6 +10,9 @@ using MLAPI.NetworkVariable;
 
 public class GameController : NetworkBehaviour
 {
+    private const string ReadyText = "Ready";
+    private const string NotReadyText = "Not ready";
+
     public enum GameStates
     {
         Initial,                // state of the game at the very start
@@ -46,8 +49,6 @@ public class GameController : NetworkBehaviour
     [SerializeField] private GameObject startButton;
     [SerializeField] private GameObject readyButton;
     [SerializeField] TextMeshProUGUI readyButtonText;
-    private const string ReadyText = "Ready";
-    private const string NotReadyText = "Not ready";
 
     [SerializeField] private NetworkObject ballPrefab;
 

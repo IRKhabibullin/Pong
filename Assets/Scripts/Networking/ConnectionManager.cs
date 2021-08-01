@@ -2,12 +2,15 @@ using UnityEngine;
 using MLAPI;
 using MLAPI.Connection;
 using Networking;
+using UnityEngine.Events;
 
 public class ConnectionManager : MonoBehaviour
 {
     [SerializeField] private GameController gameController;
     [SerializeField] private GameObject serverDisconnectedPanel;
     [SerializeField] private PongNetworkDiscovery discovery;
+
+    public UnityEvent onLeave;
 
     public string playerName = "";
 
@@ -110,6 +113,7 @@ public class ConnectionManager : MonoBehaviour
 
     public void Leave()
     {
+        onLeave.Invoke();
         gameController.QuitToMenu();
 
         if (pongManager.IsServer)

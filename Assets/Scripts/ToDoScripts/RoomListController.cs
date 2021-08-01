@@ -24,12 +24,12 @@ public class RoomListController : MonoBehaviour
         {
             GameObject gamePanel = Instantiate(gamePanelPrefab, panelsList.transform, false);
             gamePanel.GetComponent<RoomPanelHandler>().SetRoomData(room, connectionManager);
+            connectionManager.onLeave.AddListener(ClearRooms);
         }
     }
 
     public void AddRoomData(DiscoveryResponse room)
     {
-        Debug.Log("Adding room data");
         if (!rooms.ContainsKey(room.ServerId))
         {
             roomsNames.Add(room.HostName);
