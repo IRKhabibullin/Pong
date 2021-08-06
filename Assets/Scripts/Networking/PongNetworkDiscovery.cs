@@ -18,6 +18,7 @@ namespace Networking
         public long ServerId;
         public string HostName;
         public string RoomUri;
+        public int gameMode;
         public IPEndPoint EndPoint { get; set; }
     }
 
@@ -51,7 +52,6 @@ namespace Networking
         /// <returns>A message containing information about this server</returns>
         protected override DiscoveryResponse ProcessRequest(DiscoveryRequest request, IPEndPoint endpoint)
         {
-
             try
             {
                 string ipAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList.First(f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).ToString();
@@ -61,7 +61,8 @@ namespace Networking
                 {
                     ServerId = ServerId,
                     RoomUri = ipAddress,
-                    HostName = hostName
+                    HostName = hostName,
+                    gameMode = PlayerPrefs.GetInt("GameMode")
                 };
             }
             catch (NotImplementedException)
@@ -101,6 +102,7 @@ namespace Networking
         /// <param name="response">Response that came from the server</param>
         /// <param name="endpoint">Address of the server that replied</param>
         protected override void ProcessResponse(DiscoveryResponse response, IPEndPoint endpoint) {
+            Debug.Log($"Got response {response.gameMode}; {response.HostName}");
             response.EndPoint = endpoint;
             OnServerFound.Invoke(response);
         }

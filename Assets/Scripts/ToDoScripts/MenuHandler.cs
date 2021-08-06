@@ -26,12 +26,9 @@ public class MenuHandler : MonoBehaviour {
   		PlayerPrefs.SetInt("PlayerMode", (int)GameController.PlayerMode.Multiplayer);
     }
 
-    public void SelectClassicMode() {
-        PlayerPrefs.SetInt("GameMode", (int)GameController.GameMode.Classic);
-    }
-
-    public void SelectAccuracyMode() {
-        PlayerPrefs.SetInt("GameMode", (int)GameController.GameMode.Accuracy);
+    public void SelectGameMode(int modeIndex)
+    {
+        PlayerPrefs.SetInt("GameMode", modeIndex);
     }
     #endregion
 
