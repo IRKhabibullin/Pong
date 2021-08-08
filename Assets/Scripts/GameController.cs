@@ -13,7 +13,7 @@ public class GameController : NetworkBehaviour
     private const string ReadyText = "Ready";
     private const string NotReadyText = "Not ready";
 
-    public enum GameStates
+    public enum GameState
     {
         Initial,                // state of the game at the very start
         Prepare,                // when players need to press "start" button
@@ -32,7 +32,7 @@ public class GameController : NetworkBehaviour
         Accuracy = 1
     }
 
-    public NetworkVariable<GameStates> gameState = new NetworkVariable<GameStates>(GameStates.Initial);
+    public NetworkVariable<GameState> gameState = new NetworkVariable<GameState>(GameState.Initial);
 
     public List<Transform> playersPositions;
     public List<Material> playersMaterials;
@@ -65,6 +65,7 @@ public class GameController : NetworkBehaviour
 
         var player_names = (from player in pongManager.ConnectedClientsList select player.PlayerObject.tag).ToArray();
         scoreHandler.InitScore(player_names);
+        GetComponent<PowerUpsManager>().SetUpPowerUps();
         lastFender = pongManager.ConnectedClientsList[0].PlayerObject.gameObject;
         pitcher = lastFender.GetComponent<PlatformController>();
         readyButton.SetActive(true);
@@ -74,7 +75,7 @@ public class GameController : NetworkBehaviour
         ball.Spawn();
         FindBallClientRpc();
 
-        gameState.Value = GameStates.Prepare;
+        gameState.Value = GameState.Prepare;
     }
 
     public void ToggleDebugMode(bool newValue)
@@ -143,8 +144,7 @@ public class GameController : NetworkBehaviour
         StartRoundClientRpc();
         countdownCoroutine = StartCoroutine(countdownHandler.CountDown());
         yield return countdownCoroutine;
-        Debug.Log("Still working");
-        gameState.Value = GameStates.Play;
+        gameState.Value = GameState.Play;
         if (!debugMode)
         {
             ballController.LaunchBall();
@@ -180,7 +180,7 @@ public class GameController : NetworkBehaviour
         FinishRoundClientRpc();
         ballController.StopBall();
         gameObject.GetComponent<PowerUpsManager>().ClearPowerUps();
-        gameState.Value = GameStates.Prepare;
+        gameState.Value = GameState.Prepare;
 
         string winner_player = "";
         foreach (var _client in pongManager.ConnectedClientsList)
@@ -222,7 +222,7 @@ public class GameController : NetworkBehaviour
     #region Ingame handlers
     public void PlatformTouchHandler(GameObject platform)
     {
-        if (gameState.Value != GameStates.Play) return;
+        if (gameState.Value != GameState.Play) return;
         lastFender = platform;
         GetComponent<PowerUpsManager>().TriggerPowerUp();
     }

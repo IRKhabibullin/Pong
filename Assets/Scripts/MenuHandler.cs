@@ -15,6 +15,7 @@ public class MenuHandler : MonoBehaviour {
         {
             playerName.text = PlayerPrefs.GetString("PlayerName");
         }
+        GameObject.Find("GameModeDropdown").GetComponent<TMP_Dropdown>().value = PlayerPrefs.GetInt("GameMode");
     }
 
     #region game modes

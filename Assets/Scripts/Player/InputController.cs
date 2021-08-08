@@ -96,7 +96,7 @@ public class InputController : MonoBehaviour
     /// </summary>
     void CheckForKeyboard()
     {
-        if (gameController.gameState.Value == GameStates.Prepare && !gameController.debugMode)
+        if (gameController.gameState.Value == GameState.Prepare && !gameController.debugMode)
         {
             return;
         }

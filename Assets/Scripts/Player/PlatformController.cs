@@ -28,7 +28,7 @@ public class PlatformController : NetworkBehaviour
 
     void FixedUpdate()
     {
-        if ((IsServer && _gc.gameState.Value == GameStates.Play) || _gc.debugMode)
+        if ((IsServer && _gc.gameState.Value == GameState.Play) || _gc.debugMode)
         {
             // move
             if (!Physics.Raycast(transform.position, new Vector3(Math.Sign(mSpeed.x), 0, 0), width, LayerMask.GetMask("SideWall")))
