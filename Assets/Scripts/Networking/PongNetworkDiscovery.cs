@@ -55,13 +55,12 @@ namespace Networking
             try
             {
                 string ipAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList.First(f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).ToString();
-                string hostName = GameObject.Find("GameManager").GetComponent<ConnectionManager>().playerName;
                 transport.ConnectAddress = ipAddress;
                 return new DiscoveryResponse
                 {
                     ServerId = ServerId,
                     RoomUri = ipAddress,
-                    HostName = hostName,
+                    HostName = PlayerPrefs.GetString("PlayerName"),
                     gameMode = PlayerPrefs.GetInt("GameMode")
                 };
             }
@@ -70,7 +69,7 @@ namespace Networking
                 Debug.LogError($"Transport {transport} does not support network discovery");
                 throw;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw;
             }

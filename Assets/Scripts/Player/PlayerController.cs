@@ -18,7 +18,7 @@ public class PlayerController : NetworkBehaviour
         gameController = GameObject.Find("GameManager").GetComponent<GameController>();
         if (IsOwner)
         {
-            Name.Value = gameController.GetComponent<ConnectionManager>().playerName;
+            Name.Value = PlayerPrefs.GetString("PlayerName");
         }
     }
 

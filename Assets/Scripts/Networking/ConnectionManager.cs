@@ -12,8 +12,6 @@ public class ConnectionManager : MonoBehaviour
 
     public UnityEvent onLeave;
 
-    public string playerName = "";
-
     private void Start()
     {
         pongManager.OnServerStarted += HandleServerStarted;
@@ -92,15 +90,13 @@ public class ConnectionManager : MonoBehaviour
         }
     }
 
-    public void Host(string playerName)
+    public void Host()
     {
-        this.playerName = playerName;
         pongManager.StartHost();
     }
 
-    public void Find(string playerName)
+    public void Find()
     {
-        this.playerName = playerName;
         discovery.StartDiscovery();
     }
 

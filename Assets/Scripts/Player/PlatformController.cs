@@ -11,8 +11,6 @@ public class PlatformController : NetworkBehaviour
 
     [SerializeField] private float width = 5f;
     [SerializeField] private float maxSpeed = 30f;
-    [SerializeField] private float maxRotationAngle = 45f;
-    [SerializeField] private float maxRotationSpeed = 100f;
 
 	[SerializeField] private Vector3 ballPosition;  // where ball must be placed when player is pitcher
     private GameController _gc;
@@ -30,15 +28,11 @@ public class PlatformController : NetworkBehaviour
 
     void FixedUpdate()
     {
-        if (IsServer && _gc.gameState.Value == GameStates.Play)
+        if ((IsServer && _gc.gameState.Value == GameStates.Play) || _gc.debugMode)
         {
             // move
             if (!Physics.Raycast(transform.position, new Vector3(Math.Sign(mSpeed.x), 0, 0), width, LayerMask.GetMask("SideWall")))
                 mPosition.Value += mSpeed * Time.fixedDeltaTime;
-            // rotate
-            var newAngle = GetCurrentAngle() + mAngle * maxRotationSpeed * Time.deltaTime;
-            newAngle = newAngle > 0 ? Math.Min(newAngle, maxRotationAngle) : Math.Max(newAngle, -maxRotationAngle);
-            mRotation.Value = Quaternion.Euler(new Vector3(0f, 0f, newAngle));
         }
         // sync position on clients
         transform.position = mPosition.Value;
@@ -55,7 +49,7 @@ public class PlatformController : NetworkBehaviour
     [ServerRpc]
     public void SetRotationServerRpc(float rotation)
     {
-        mAngle = rotation;
+        mRotation.Value = Quaternion.Euler(Vector3.forward * rotation);
     }
 
     [ServerRpc]

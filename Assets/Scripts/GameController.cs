@@ -77,6 +77,11 @@ public class GameController : NetworkBehaviour
         gameState.Value = GameStates.Prepare;
     }
 
+    public void ToggleDebugMode(bool newValue)
+    {
+        debugMode = newValue;
+    }
+
     [ClientRpc]
     public void FindBallClientRpc()
     {

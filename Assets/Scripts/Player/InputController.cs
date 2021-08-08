@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using static GameController;
 
@@ -77,7 +78,7 @@ public class InputController : MonoBehaviour
                 (firstTouchPosition.x > rightWallPosition && secondTouchPosition.x > rightWallPosition)) return;
 
             angleBetweenTouches = CalcCurrentAngle(firstTouchPosition, secondTouchPosition);
-            // if player just put a finger on any side, we dont rotate, otherwise platform can immediately "jump" for a bug angle
+            // if player just put a finger on any side, we dont rotate, otherwise platform can immediately "jump" for a big angle
             if (firstTouch.phase.Equals(TouchPhase.Began) || secondTouch.phase.Equals(TouchPhase.Began))
             {
                 startAngle = angleBetweenTouches;
@@ -107,7 +108,9 @@ public class InputController : MonoBehaviour
         var angle = Input.GetAxis("Vertical");
         if (angle != 0.0 || platform.mAngle != 0)
         {
-            platform.SetRotationServerRpc(angle);
+            var newAngle = platform.GetCurrentAngle() + angle;
+            newAngle = newAngle > 0 ? Math.Min(newAngle, 45f) : Math.Max(newAngle, -45f);
+            platform.SetRotationServerRpc(newAngle);
         }
     }
 

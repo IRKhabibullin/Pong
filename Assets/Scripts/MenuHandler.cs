@@ -6,8 +6,16 @@ using UnityEngine;
 public class MenuHandler : MonoBehaviour {
 
     [SerializeField] private ConnectionManager connectionManager;
-    [SerializeField] private TextMeshProUGUI playerName;
+    [SerializeField] private TMP_InputField playerName;
     [SerializeField] private GameObject nameNotSetWarning;
+
+    public void Start()
+    {
+        if (PlayerPrefs.GetString("PlayerName") != "")
+        {
+            playerName.text = PlayerPrefs.GetString("PlayerName");
+        }
+    }
 
     #region game modes
     public string GetLocalIPv4()
@@ -40,7 +48,7 @@ public class MenuHandler : MonoBehaviour {
     {
         if (NameIsSet())
         {
-            connectionManager.Host(playerName.text);
+            connectionManager.Host();
         }
     }
 
@@ -48,7 +56,7 @@ public class MenuHandler : MonoBehaviour {
     {
         if (NameIsSet())
         {
-            connectionManager.Find(playerName.text);
+            connectionManager.Find();
         }
     }
 
@@ -59,6 +67,7 @@ public class MenuHandler : MonoBehaviour {
             nameNotSetWarning.SetActive(true);
             return false;
         }
+        PlayerPrefs.SetString("PlayerName", playerName.text);
         return true;
     }
 }
