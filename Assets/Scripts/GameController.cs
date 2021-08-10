@@ -33,6 +33,7 @@ public class GameController : NetworkBehaviour
     }
 
     public NetworkVariable<GameState> gameState = new NetworkVariable<GameState>(GameState.Initial);
+    public GameMode gameMode;
 
     public List<Transform> playersPositions;
     public List<Material> playersMaterials;
@@ -69,11 +70,16 @@ public class GameController : NetworkBehaviour
         lastFender = pongManager.ConnectedClientsList[0].PlayerObject.gameObject;
         pitcher = lastFender.GetComponent<PlatformController>();
         readyButton.SetActive(true);
+        gameMode = (GameMode)PlayerPrefs.GetInt("GameMode");
 
         // create network synced ball and find it on clients
         var ball = Instantiate(ballPrefab, pitcher.GetBallStartPosition(), Quaternion.identity);
         ball.Spawn();
         FindBallClientRpc();
+        if (gameMode == GameMode.Accuracy)
+        {
+            ball.GetComponent<BallController>().ChangeMaterialClientRpc(lastFender.tag);
+        }
 
         gameState.Value = GameState.Prepare;
     }
@@ -173,7 +179,7 @@ public class GameController : NetworkBehaviour
         startButton.SetActive(false);
     }
 
-    public void FinishRound(GameObject winner)
+    public void FinishRound(string winnerTag)
     {
         if (!pongManager.IsServer) return;
 
@@ -186,7 +192,7 @@ public class GameController : NetworkBehaviour
         foreach (var _client in pongManager.ConnectedClientsList)
         {
             NetworkObject player = _client.PlayerObject;
-            if (!winner.CompareTag(player.tag))
+            if (!player.gameObject.CompareTag(winnerTag))
             {
                 pitcher = player.GetComponent<PlatformController>();
             } else
@@ -196,7 +202,7 @@ public class GameController : NetworkBehaviour
             player.GetComponent<PlayerController>().IsReady.Value = false;
         }
 
-        bool hasWinner = scoreHandler.UpdateScore(winner.tag);
+        bool hasWinner = scoreHandler.UpdateScore(winnerTag);
         if (hasWinner)
         {
             scoreHandler.ClearScores();
@@ -224,7 +230,29 @@ public class GameController : NetworkBehaviour
     {
         if (gameState.Value != GameState.Play) return;
         lastFender = platform;
+        ballController.ChangeMaterialClientRpc(lastFender.tag);
         GetComponent<PowerUpsManager>().TriggerPowerUp();
+    }
+
+    public void BackWallTouchHandler(GameObject backWall)
+    {
+        if (gameMode == GameMode.Classic)
+        {
+            FinishRound(backWall.tag);
+        }
+        else if (gameMode == GameMode.Accuracy)
+        {
+            foreach (var _client in pongManager.ConnectedClientsList)
+            {
+                NetworkObject player = _client.PlayerObject;
+                if (!player.gameObject.CompareTag(backWall.tag))
+                {
+                    lastFender = player.gameObject;
+                    break;
+                }
+            }
+            ballController.ChangeMaterialClientRpc(backWall.tag);
+        }
     }
 
     public void OnReadyButtonClicked()

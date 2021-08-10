@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using Mirror;
 using Mirror.Discovery;
 using MLAPI.Transports.UNET;
@@ -32,6 +33,7 @@ namespace Networking
         public long ServerId { get; private set; }
         public UNetTransport transport;
         public ServerFoundUnityEvent OnServerFound;
+        public RoomListController roomListController;
 
         public override void Start()
         {

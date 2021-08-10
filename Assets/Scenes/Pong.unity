@@ -5306,6 +5306,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  roomListController: {fileID: 19101067}
 --- !u!1 &977957657
 GameObject:
   m_ObjectHideFlags: 0
@@ -7523,6 +7524,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameState:
     m_InternalValue: 0
+  gameMode: 0
   playersPositions:
   - {fileID: 1161228369}
   - {fileID: 2046555317}

@@ -23,11 +23,13 @@ public class BallController : NetworkBehaviour
     [SerializeField] private float speed;
     [SerializeField] private Material normalMaterial;
     [SerializeField] private Material hastedMaterial;
+    [SerializeField] private Material player1Material;
+    [SerializeField] private Material player2Material;
 
     void Start()
     {
         _gc = GameObject.Find("GameManager").GetComponent<GameController>();
-        touchdownEvent.AddListener(_gc.FinishRound);
+        touchdownEvent.AddListener(_gc.BackWallTouchHandler);
         platformTouchEvent.AddListener(_gc.PlatformTouchHandler);
         _rb = GetComponent<Rigidbody>();
         Velocity.OnValueChanged += OnVelocityChanged;
@@ -81,11 +83,19 @@ public class BallController : NetworkBehaviour
     {
         switch (material_key)
         {
+            // for classic game mode
             case "normal":
                 GetComponent<Renderer>().material = normalMaterial;
                 break;
             case "hasted":
                 GetComponent<Renderer>().material = hastedMaterial;
+                break;
+            // for accuracy game mode
+            case "Player1":
+                GetComponent<Renderer>().material = player1Material;
+                break;
+            case "Player2":
+                GetComponent<Renderer>().material = player2Material;
                 break;
         }
     }
