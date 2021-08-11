@@ -117,6 +117,9 @@ public class GameController : NetworkBehaviour
         if (countdownCoroutine != null)
             StopCoroutine(countdownCoroutine);
         countdownHandler.ResetCountdown();
+        startButton.SetActive(false);
+        readyButtonText.text = NotReadyText;
+        readyButton.SetActive(false);
         DestroyBall();
     }
 
@@ -234,24 +237,50 @@ public class GameController : NetworkBehaviour
         GetComponent<PowerUpsManager>().TriggerPowerUp();
     }
 
-    public void BackWallTouchHandler(GameObject backWall)
+    public void BackWallTouchHandler(string playerTag)
     {
         if (gameMode == GameMode.Classic)
         {
-            FinishRound(backWall.tag);
+            FinishRound(playerTag);
         }
         else if (gameMode == GameMode.Accuracy)
         {
             foreach (var _client in pongManager.ConnectedClientsList)
             {
                 NetworkObject player = _client.PlayerObject;
-                if (!player.gameObject.CompareTag(backWall.tag))
+                if (!player.gameObject.CompareTag(playerTag))
                 {
                     lastFender = player.gameObject;
                     break;
                 }
             }
-            ballController.ChangeMaterialClientRpc(backWall.tag);
+            ballController.ChangeMaterialClientRpc(playerTag);
+        }
+    }
+
+    public void PowerUpTouchHandler(string winnerTag)
+    {
+        if (gameMode != GameMode.Accuracy) return;
+        bool hasWinner = scoreHandler.UpdateScore(winnerTag);
+        if (hasWinner)
+        {
+            string winnerName = "";
+            foreach (var _client in pongManager.ConnectedClientsList)
+            {
+                NetworkObject player = _client.PlayerObject;
+                if (player.gameObject.CompareTag(winnerTag))
+                {
+                    winnerName = player.GetComponent<PlayerController>().Name.Value;
+                    break;
+                }
+            }
+            scoreHandler.ClearScores();
+            WinnerNotificationClientRpc(winnerName);
+
+            FinishRoundClientRpc();
+            ballController.StopBall();
+            gameObject.GetComponent<PowerUpsManager>().ClearPowerUps();
+            gameState.Value = GameState.Prepare;
         }
     }
 

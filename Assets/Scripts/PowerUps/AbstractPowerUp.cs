@@ -19,6 +19,7 @@ public class AbstractPowerUp : NetworkBehaviour {
     }
 
     protected virtual void Update() {
+        if (!IsServer) return;
         if (applied) {
             buffCurTime += Time.deltaTime;
             if (buffCurTime > buffDuration) {

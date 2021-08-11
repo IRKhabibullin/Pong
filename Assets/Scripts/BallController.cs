@@ -8,10 +8,8 @@ using UnityEngine.Events;
 
 public class BallController : NetworkBehaviour
 {
-    [Serializable]
-    public class BallEvent : UnityEvent<GameObject> { }
-    public BallEvent touchdownEvent;
-    public BallEvent platformTouchEvent;
+    public UnityEvent<string> touchdownEvent;
+    public UnityEvent<GameObject> platformTouchEvent;
 
     private GameController _gc;
 
@@ -43,7 +41,7 @@ public class BallController : NetworkBehaviour
     void OnCollisionEnter(Collision collision) {
         if (!pongManager.IsServer) return;
         if ((backWallsLayer.value & (1 << collision.gameObject.layer)) > 0) {
-            touchdownEvent.Invoke(collision.gameObject);
+            touchdownEvent.Invoke(collision.gameObject.tag);
         }
         if ((platformLayer.value & (1 << collision.gameObject.layer)) > 0) {
             platformTouchEvent.Invoke(collision.gameObject);
