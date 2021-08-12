@@ -14,17 +14,17 @@ public class ConnectionManager : MonoBehaviour
 
     private void Start()
     {
-        pongManager.OnServerStarted += HandleServerStarted;
-        pongManager.OnClientConnectedCallback += HandleClientConnected;
-        pongManager.OnClientDisconnectCallback += HandleClientDisconnect;
+        NetworkManager.Singleton.OnServerStarted += HandleServerStarted;
+        NetworkManager.Singleton.OnClientConnectedCallback += HandleClientConnected;
+        NetworkManager.Singleton.OnClientDisconnectCallback += HandleClientDisconnect;
     }
 
     private void OnDestroy()
     {
-        if (pongManager == null) { return; }
-        pongManager.OnServerStarted -= HandleServerStarted;
-        pongManager.OnClientConnectedCallback -= HandleClientConnected;
-        pongManager.OnClientDisconnectCallback -= HandleClientDisconnect;
+        if (NetworkManager.Singleton == null) { return; }
+        NetworkManager.Singleton.OnServerStarted -= HandleServerStarted;
+        NetworkManager.Singleton.OnClientConnectedCallback -= HandleClientConnected;
+        NetworkManager.Singleton.OnClientDisconnectCallback -= HandleClientDisconnect;
     }
 
     /// <summary>
@@ -33,13 +33,13 @@ public class ConnectionManager : MonoBehaviour
     private void HandleClientDisconnect(ulong ClientId)
     {
         // Case when server disconnected and we are client
-        if (ClientId == pongManager.LocalClientId)
+        if (ClientId == NetworkManager.Singleton.LocalClientId)
         {
             serverDisconnectedPanel.SetActive(true);
             gameController.QuitToMenu();
         }
         // Case when other client disconnected and we are host
-        if (pongManager.IsHost)
+        if (NetworkManager.Singleton.IsHost)
         {
             gameController.BeforeStopHost();
         }
@@ -50,28 +50,28 @@ public class ConnectionManager : MonoBehaviour
     /// </summary>
     private void HandleClientConnected(ulong ClientId)
     {
-        if (ClientId == pongManager.LocalClientId)
+        if (ClientId == NetworkManager.Singleton.LocalClientId)
         {
             gameController.EnterTheGame();
         }
-        if (pongManager.IsServer)
+        if (NetworkManager.Singleton.IsServer)
         {
-            int i = 0;
-            foreach (NetworkClient client in pongManager.ConnectedClientsList)
+            int sideId = 0;
+            foreach (NetworkClient client in NetworkManager.Singleton.ConnectedClientsList)
             {
                 if (client.ClientId == ClientId)
                 {
-                    client.PlayerObject.tag = $"Player{i + 1}";
-                    client.PlayerObject.GetComponent<PlatformController>().SetUp(i);
-                    if (pongManager.ConnectedClients.Count == 1)
+                    client.PlayerObject.tag = $"Player{sideId + 1}";
+                    client.PlayerObject.GetComponent<PlatformController>().SetUp(sideId);
+                    if (NetworkManager.Singleton.ConnectedClients.Count == 1)
                     {
                         client.PlayerObject.GetComponent<PlayerController>().IsLeader.Value = true;
                     }
                     break;
                 }
-                i++;
+                sideId++;
             }
-            if (pongManager.ConnectedClientsList.Count == 2)
+            if (NetworkManager.Singleton.ConnectedClientsList.Count == 2)
             {
                 discovery.StopDiscovery();
                 gameController.OnBothPlayersConnected();
@@ -84,15 +84,15 @@ public class ConnectionManager : MonoBehaviour
     /// </summary>
     private void HandleServerStarted()
     {
-        if (pongManager.IsHost)
+        if (NetworkManager.Singleton.IsHost)
         {
-            HandleClientConnected(pongManager.LocalClientId);
+            HandleClientConnected(NetworkManager.Singleton.LocalClientId);
         }
     }
 
     public void Host()
     {
-        pongManager.StartHost();
+        NetworkManager.Singleton.StartHost();
     }
 
     public void Find()
@@ -104,7 +104,7 @@ public class ConnectionManager : MonoBehaviour
     {
         discovery.StopDiscovery();
         discovery.transport.ConnectAddress = hostAddress;
-        pongManager.StartClient();
+        NetworkManager.Singleton.StartClient();
     }
 
     public void Leave()
@@ -112,34 +112,23 @@ public class ConnectionManager : MonoBehaviour
         onLeave.Invoke();
         gameController.QuitToMenu();
 
-        if (pongManager.IsServer)
+        if (NetworkManager.Singleton.IsServer)
         {
             // if server is leaving, disconnect another player
-            foreach (var playerClientId in pongManager.ConnectedClients.Keys)
+            foreach (var playerClientId in NetworkManager.Singleton.ConnectedClients.Keys)
             {
-                if (playerClientId != pongManager.LocalClientId)
+                if (playerClientId != NetworkManager.Singleton.LocalClientId)
                 {
-                    pongManager.DisconnectClient(playerClientId);
+                    NetworkManager.Singleton.DisconnectClient(playerClientId);
                     break;
                 }
             }
             gameController.BeforeStopHost();
-            pongManager.StopHost();
+            NetworkManager.Singleton.StopHost();
         }
         else
         {
-            pongManager.StopClient();
-        }
-    }
-
-    private PongManager pnm;
-
-    private PongManager pongManager
-    {
-        get
-        {
-            if (pnm != null) { return pnm; }
-            return pnm = NetworkManager.Singleton as PongManager;
+            NetworkManager.Singleton.StopClient();
         }
     }
 }

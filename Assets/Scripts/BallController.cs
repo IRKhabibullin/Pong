@@ -1,24 +1,23 @@
 ﻿using MLAPI;
 using MLAPI.Messaging;
 using MLAPI.NetworkVariable;
-using Networking;
-using System;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class BallController : NetworkBehaviour
 {
-    public UnityEvent<string> touchdownEvent;
+    public UnityEvent<string> backWallTouchEvent;
     public UnityEvent<GameObject> platformTouchEvent;
 
     private GameController _gc;
 
     public NetworkVariableVector3 Velocity = new NetworkVariableVector3();
 
+    [SerializeField] private float speed;
     [SerializeField] private Rigidbody _rb;
     [SerializeField] private LayerMask backWallsLayer;
     [SerializeField] private LayerMask platformLayer;
-    [SerializeField] private float speed;
+
     [SerializeField] private Material normalMaterial;
     [SerializeField] private Material hastedMaterial;
     [SerializeField] private Material player1Material;
@@ -27,7 +26,7 @@ public class BallController : NetworkBehaviour
     void Start()
     {
         _gc = GameObject.Find("GameManager").GetComponent<GameController>();
-        touchdownEvent.AddListener(_gc.BackWallTouchHandler);
+        backWallTouchEvent.AddListener(_gc.BackWallTouchHandler);
         platformTouchEvent.AddListener(_gc.PlatformTouchHandler);
         _rb = GetComponent<Rigidbody>();
         Velocity.OnValueChanged += OnVelocityChanged;
@@ -39,9 +38,9 @@ public class BallController : NetworkBehaviour
     }
 
     void OnCollisionEnter(Collision collision) {
-        if (!pongManager.IsServer) return;
+        if (!NetworkManager.Singleton.IsServer) return;
         if ((backWallsLayer.value & (1 << collision.gameObject.layer)) > 0) {
-            touchdownEvent.Invoke(collision.gameObject.tag);
+            backWallTouchEvent.Invoke(collision.gameObject.tag);
         }
         if ((platformLayer.value & (1 << collision.gameObject.layer)) > 0) {
             platformTouchEvent.Invoke(collision.gameObject);
@@ -61,7 +60,7 @@ public class BallController : NetworkBehaviour
     /// Launches ball in random direction away from pitcher
     /// </summary>
     public void LaunchBall() {
-        float x_axis_velocity = UnityEngine.Random.Range(-3*speed/4, 3*speed/4);
+        float x_axis_velocity = Random.Range(-3*speed/4, 3*speed/4);
         float y_axis_velocity = Mathf.Sqrt(speed*speed - x_axis_velocity*x_axis_velocity) * _gc.pitcher.launchDirection;
         Velocity.Value = new Vector3(x_axis_velocity, y_axis_velocity);
     }
@@ -74,6 +73,8 @@ public class BallController : NetworkBehaviour
     {
         Velocity.Value = Vector3.zero;
     }
+
+
     #endregion
 
     [ClientRpc]
@@ -95,17 +96,6 @@ public class BallController : NetworkBehaviour
             case "Player2":
                 GetComponent<Renderer>().material = player2Material;
                 break;
-        }
-    }
-
-    private PongManager pnm;
-
-    private PongManager pongManager
-    {
-        get
-        {
-            if (pnm != null) { return pnm; }
-            return pnm = NetworkManager.Singleton as PongManager;
         }
     }
 }

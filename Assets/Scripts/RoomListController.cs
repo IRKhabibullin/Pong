@@ -24,7 +24,6 @@ public class RoomListController : MonoBehaviour
         {
             GameObject gamePanel = Instantiate(gamePanelPrefab, panelsList.transform, false);
             gamePanel.GetComponent<RoomPanelHandler>().SetRoomData(room, connectionManager);
-            connectionManager.onLeave.AddListener(ClearRooms);
         }
     }
 

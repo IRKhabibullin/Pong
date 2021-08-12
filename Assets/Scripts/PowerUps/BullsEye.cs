@@ -33,7 +33,7 @@ public class BullsEye : AbstractPowerUp {
         {
             Send = new ClientRpcSendParams
             {
-                TargetClientIds = new ulong[] { _gc.lastFender.GetComponent<NetworkObject>().OwnerClientId }
+                TargetClientIds = new ulong[] { _gc.lastTouched.GetComponent<NetworkObject>().OwnerClientId }
             }
         };
         ApplyBuffClientRpc(triggeredClientRpcParams);

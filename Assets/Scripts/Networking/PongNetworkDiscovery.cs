@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using Mirror;
 using Mirror.Discovery;
 using MLAPI.Transports.UNET;
@@ -14,8 +13,6 @@ namespace Networking
 
     public class DiscoveryResponse : NetworkMessage
     {
-        // Add properties for whatever information you want the server to return to
-        // clients for them to display or consume for establishing a connection.
         public long ServerId;
         public string HostName;
         public string RoomUri;
@@ -56,7 +53,8 @@ namespace Networking
         {
             try
             {
-                string ipAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList.First(f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).ToString();
+                string ipAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList.First(
+                    f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).ToString();
                 transport.ConnectAddress = ipAddress;
                 return new DiscoveryResponse
                 {
@@ -103,7 +101,6 @@ namespace Networking
         /// <param name="response">Response that came from the server</param>
         /// <param name="endpoint">Address of the server that replied</param>
         protected override void ProcessResponse(DiscoveryResponse response, IPEndPoint endpoint) {
-            Debug.Log($"Got response {response.gameMode}; {response.HostName}");
             response.EndPoint = endpoint;
             OnServerFound.Invoke(response);
         }

@@ -7,8 +7,7 @@ public class AccuracyPoint : AbstractPowerUp
         if (!IsServer) return;
         if (collider.gameObject.CompareTag("Ball"))
         {
-            var player_name = GameObject.Find("GameManager").GetComponent<GameController>().lastFender.tag;
-            GameObject.Find("GameManager").GetComponent<GameController>().PowerUpTouchHandler(player_name);
+            GameObject.Find("GameManager").GetComponent<GameController>().PowerUpTouchHandler();
             Destroy(gameObject);
         }
     }

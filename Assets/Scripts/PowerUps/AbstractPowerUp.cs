@@ -37,7 +37,6 @@ public class AbstractPowerUp : NetworkBehaviour {
     /// <summary>
     /// Collision with ball activates buff
     /// </summary>
-    /// <param name="collider"></param>
     protected virtual void OnTriggerEnter(Collider collider)
     {
         if (!IsServer) return;

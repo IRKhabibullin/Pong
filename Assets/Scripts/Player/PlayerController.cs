@@ -1,7 +1,6 @@
 ﻿using MLAPI;
 using MLAPI.Messaging;
 using MLAPI.NetworkVariable;
-using Networking;
 using UnityEngine;
 
 public class PlayerController : NetworkBehaviour
@@ -28,28 +27,17 @@ public class PlayerController : NetworkBehaviour
         IsReady.Value = !IsReady.Value;
         bool everyoneIsReady = true;
         // if everyone except host is ready, then host can start a round
-        foreach (var client in pongManager.ConnectedClientsList)
+        foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
         {
-            if (client.ClientId != pongManager.LocalClientId && !client.PlayerObject.GetComponent<PlayerController>().IsReady.Value)
+            if (client.ClientId != NetworkManager.Singleton.LocalClientId && !client.PlayerObject.GetComponent<PlayerController>().IsReady.Value)
             {
                 everyoneIsReady = false;
                 break;
             }
         }
-        if (pongManager.ConnectedClientsList.Count == 2)
+        if (NetworkManager.Singleton.ConnectedClientsList.Count == 2)
         {
             gameController.ReadyToStart(everyoneIsReady);
-        }
-    }
-
-    private PongManager pnm;
-
-    private PongManager pongManager
-    {
-        get
-        {
-            if (pnm != null) { return pnm; }
-            return pnm = NetworkManager.Singleton as PongManager;
         }
     }
 }
