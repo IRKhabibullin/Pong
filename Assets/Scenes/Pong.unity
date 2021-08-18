@@ -268,11 +268,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7991354134288836957, guid: 0fc15d86e11c2654ea41405f53c788de, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7991354134288836957, guid: 0fc15d86e11c2654ea41405f53c788de, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7991354134288836957, guid: 0fc15d86e11c2654ea41405f53c788de, type: 3}
       propertyPath: m_AnchorMin.y
@@ -328,7 +328,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7991354135141414320, guid: 0fc15d86e11c2654ea41405f53c788de, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7991354135141414320, guid: 0fc15d86e11c2654ea41405f53c788de, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -1409,12 +1409,12 @@ GameObject:
   - component: {fileID: 163651322}
   - component: {fileID: 163651321}
   m_Layer: 5
-  m_Name: IPAddressText
+  m_Name: DebugText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &163651320
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1426,13 +1426,13 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 649.12494}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1630170519}
-  m_RootOrder: 1
+  m_Father: {fileID: 635311068}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -380, y: -140}
-  m_SizeDelta: {x: 345.56995, y: 50}
+  m_AnchoredPosition: {x: 744.33704, y: 0.000030517578}
+  m_SizeDelta: {x: 226.233, y: 50}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &163651321
 MonoBehaviour:
@@ -1454,7 +1454,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'IP Address:'
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1481,8 +1481,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 24
+  m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3597,6 +3597,7 @@ RectTransform:
   - {fileID: 1576054078}
   - {fileID: 1985579818}
   - {fileID: 1428968519}
+  - {fileID: 163651320}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5735,10 +5736,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1999845067}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 1985579819}
+        m_TargetAssemblyTypeName: MenuHandler, Assembly-CSharp
+        m_MethodName: ToLobby
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -5747,10 +5748,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1834787250}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 1334908331}
+        m_TargetAssemblyTypeName: GameController, Assembly-CSharp
+        m_MethodName: LoadGameMode
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -6383,7 +6384,7 @@ RectTransform:
   - {fileID: 733629512}
   - {fileID: 622695836}
   m_Father: {fileID: 1630170519}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -7621,8 +7622,9 @@ MonoBehaviour:
   readyButton: {fileID: 1089641019}
   readyButtonText: {fileID: 1632813827}
   ballPrefab: {fileID: 7168978363348635292, guid: 5f53ba0f401affb40835a0a91b9c1401, type: 3}
+  debugText: {fileID: 163651321}
   pitcher: {fileID: 0}
-  lastFender: {fileID: 0}
+  lastTouched: {fileID: 0}
   debugMode: 0
 --- !u!4 &1334908332
 Transform:
@@ -9644,7 +9646,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 140504017}
-  - {fileID: 163651320}
   - {fileID: 1112190033}
   m_Father: {fileID: 1985579818}
   m_RootOrder: 2
@@ -10980,7 +10981,7 @@ Transform:
   m_GameObject: {fileID: 1696408639}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 40, y: 20, z: 1}
+  m_LocalScale: {x: 50, y: 30, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
@@ -11874,12 +11875,12 @@ GameObject:
   m_Component:
   - component: {fileID: 1834787251}
   m_Layer: 5
-  m_Name: MenuPanel
+  m_Name: LobbyPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1834787251
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12488,6 +12489,8 @@ MonoBehaviour:
   connectionManager: {fileID: 1334908336}
   playerName: {fileID: 2028187389}
   nameNotSetWarning: {fileID: 168604687}
+  mainMenu: {fileID: 1999845067}
+  lobbyPanel: {fileID: 1834787250}
 --- !u!1 &1994057749
 GameObject:
   m_ObjectHideFlags: 0
@@ -12590,7 +12593,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1999845069
 RectTransform:
   m_ObjectHideFlags: 0

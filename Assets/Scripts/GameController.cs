@@ -48,6 +48,8 @@ public class GameController : NetworkBehaviour
 
     [SerializeField] private NetworkObject ballPrefab;
 
+    [SerializeField] private TextMeshProUGUI debugText;
+
     public PlatformController pitcher; // player who started round
     public GameObject lastTouched; // player last reflected ball
 
@@ -60,7 +62,16 @@ public class GameController : NetworkBehaviour
         debugMode = newValue;
     }
 
+    public void SetDebugText(string text)
+    {
+        debugText.text = text;
+    }
+
     #region Connection handlers
+    public void LoadGameMode()
+    {
+        GameObject.Find("GameModeDropdown").GetComponent<TMP_Dropdown>().value = PlayerPrefs.GetInt("GameMode");
+    }
     public void EnterTheGame()
     {
         menuPanel.SetActive(false);
