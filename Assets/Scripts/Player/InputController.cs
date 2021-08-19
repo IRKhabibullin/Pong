@@ -30,7 +30,10 @@ public class InputController : MonoBehaviour
             CheckForDebugTouch();
         if (platform.IsLocalPlayer)
         {
-            CheckForKeyboard();
+            if (Application.platform == RuntimePlatform.WindowsEditor)
+            {
+                CheckForKeyboard();
+            }
             CheckForTouch();
         }
     }
@@ -56,10 +59,15 @@ public class InputController : MonoBehaviour
     {
         if (Input.touchCount == 1)
         {
+            Touch touch = Input.GetTouch(0);
             // we're moving
-            Vector2 touchPosition = mainCamera.ScreenToWorldPoint(Input.GetTouch(0).position);
+            Vector2 touchPosition = mainCamera.ScreenToWorldPoint(touch.position);
             if (Mathf.Abs(touchPosition.x) < rightWallPosition)
             {
+                return;
+            }
+            if (touch.phase.Equals(TouchPhase.Ended)) {
+                platform.SetSpeedServerRpc(0);
                 return;
             }
             platform.SetSpeedServerRpc(touchPosition.x < leftWallPosition ? -1 : 1);
@@ -88,6 +96,9 @@ public class InputController : MonoBehaviour
             {
                 platform.SetRotationServerRpc(angleBetweenTouches - startAngle);
             }
+
+            // Can't move while rotating
+            platform.SetSpeedServerRpc(0);
         }
     }
 

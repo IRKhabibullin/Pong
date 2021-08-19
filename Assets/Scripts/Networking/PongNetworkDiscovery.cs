@@ -56,6 +56,7 @@ namespace Networking
                 string ipAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList.First(
                     f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).ToString();
                 transport.ConnectAddress = ipAddress;
+                GameObject.Find("GameManager").GetComponent<GameController>().SetDebugText(ipAddress);
                 return new DiscoveryResponse
                 {
                     ServerId = ServerId,
@@ -88,6 +89,11 @@ namespace Networking
         /// <returns>An instance of ServerRequest with data to be broadcasted</returns>
         protected override DiscoveryRequest GetRequest()
         {
+            string ipAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList.First(
+                    f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).ToString();
+            Debug.Log($"Ip {ipAddress}");
+            transport.ConnectAddress = ipAddress;
+            GameObject.Find("GameManager").GetComponent<GameController>().SetDebugText(ipAddress);
             return new DiscoveryRequest();
         }
 
