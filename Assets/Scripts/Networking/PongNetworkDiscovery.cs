@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using Mirror;
 using Mirror.Discovery;
 using MLAPI.Transports.UNET;
@@ -39,6 +41,24 @@ namespace Networking
             base.Start();
         }
 
+        public static IPAddress GetSubnetMask(IPAddress address)
+        {
+            foreach (NetworkInterface adapter in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                foreach (UnicastIPAddressInformation unicastIPAddressInformation in adapter.GetIPProperties().UnicastAddresses)
+                {
+                    if (unicastIPAddressInformation.Address.AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        if (address.Equals(unicastIPAddressInformation.Address))
+                        {
+                            return unicastIPAddressInformation.IPv4Mask;
+                        }
+                    }
+                }
+            }
+            throw new ArgumentException(string.Format("Can't find subnetmask for IP address '{0}'", address));
+        }
+
         /// <summary>
         /// Process the request from a client
         /// </summary>
@@ -54,7 +74,7 @@ namespace Networking
             try
             {
                 string ipAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList.First(
-                    f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).ToString();
+                    f => f.AddressFamily == AddressFamily.InterNetwork).ToString();
                 transport.ConnectAddress = ipAddress;
                 GameObject.Find("GameManager").GetComponent<GameController>().SetDebugText(ipAddress);
                 return new DiscoveryResponse
@@ -89,11 +109,11 @@ namespace Networking
         /// <returns>An instance of ServerRequest with data to be broadcasted</returns>
         protected override DiscoveryRequest GetRequest()
         {
-            string ipAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList.First(
-                    f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).ToString();
-            Debug.Log($"Ip {ipAddress}");
-            transport.ConnectAddress = ipAddress;
-            GameObject.Find("GameManager").GetComponent<GameController>().SetDebugText(ipAddress);
+            IPAddress ipAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList.First(
+                    f => f.AddressFamily == AddressFamily.InterNetwork);
+            Debug.Log($"Ip {ipAddress.ToString()} {GetSubnetMask(ipAddress)}");
+            transport.ConnectAddress = ipAddress.ToString();
+            GameObject.Find("GameManager").GetComponent<GameController>().SetDebugText($"{ipAddress.ToString()} {GetSubnetMask(ipAddress)}");
             return new DiscoveryRequest();
         }
 

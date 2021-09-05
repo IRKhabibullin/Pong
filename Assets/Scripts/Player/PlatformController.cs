@@ -28,7 +28,7 @@ public class PlatformController : NetworkBehaviour
 
     void FixedUpdate()
     {
-        if ((IsServer && _gc.gameState.Value == GameState.Play) || _gc.debugMode)
+        if (((IsServer || _gc.playWithBot) && _gc.gameState.Value == GameState.Play) || _gc.debugMode)
         {
             // move
             if (!Physics.Raycast(transform.position, new Vector3(Math.Sign(mSpeed.x), 0, 0), width, LayerMask.GetMask("SideWall")))
@@ -39,21 +39,35 @@ public class PlatformController : NetworkBehaviour
         transform.rotation = mRotation.Value;
     }
 
-    public void SetUp(int side)
+    public void SetUp(int side, bool playWithBots = false)
     {
         launchDirection = side == 0 ? 1 : -1;
         mPosition.Value = _gc.playersPositions[side].position;
-        SetColorClientRpc(side);
+        if (playWithBots)
+            GetComponent<MeshRenderer>().material = _gc.playersMaterials[side];
+        else
+            SetColorClientRpc(side);
+        
     }
 
     [ServerRpc]
     public void SetRotationServerRpc(float rotation)
+    {
+        SetRotation(rotation);
+    }
+
+    public void SetRotation(float rotation)
     {
         mRotation.Value = Quaternion.Euler(Vector3.forward * rotation);
     }
 
     [ServerRpc]
     public void SetSpeedServerRpc(float direction)
+    {
+        SetSpeed(direction);
+    }
+
+    public void SetSpeed(float direction)
     {
         if (Math.Abs(direction) < 0.1)
         {

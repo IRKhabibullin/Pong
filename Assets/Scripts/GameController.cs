@@ -28,6 +28,7 @@ public class GameController : NetworkBehaviour
 
     public NetworkVariable<GameState> gameState = new NetworkVariable<GameState>(GameState.Initial);
     public GameMode gameMode;
+    public bool playWithBot = false;
 
     public List<Transform> playersPositions;
     public List<Material> playersMaterials;
@@ -46,12 +47,17 @@ public class GameController : NetworkBehaviour
     [SerializeField] private GameObject readyButton;
     [SerializeField] TextMeshProUGUI readyButtonText;
 
-    [SerializeField] private NetworkObject ballPrefab;
+    [SerializeField] private GameObject ballPrefab;
+    [SerializeField] private GameObject playerPrefab;
+    [SerializeField] private GameObject aiPlayerPrefab;
 
     [SerializeField] private TextMeshProUGUI debugText;
 
     public PlatformController pitcher; // player who started round
     public GameObject lastTouched; // player last reflected ball
+
+    public PlatformController playerPlatform; // player in game with bots
+    public PlatformController botPlatform;
 
     public bool debugMode;
     private Coroutine countdownCoroutine;
@@ -72,26 +78,56 @@ public class GameController : NetworkBehaviour
     {
         GameObject.Find("GameModeDropdown").GetComponent<TMP_Dropdown>().value = PlayerPrefs.GetInt("GameMode");
     }
+
+    public void PlayWithBots() {
+        playWithBot = true;
+    }
+
     public void EnterTheGame()
     {
         menuPanel.SetActive(false);
         leaveButton.SetActive(true);
-        if (IsServer)
+        if (playWithBot)
         {
-            waitingForOpponentPanel.SetActive(true);
             gameMode = (GameMode)PlayerPrefs.GetInt("GameMode");
-            gameState.Value = GameState.Initial;
+            startButton.SetActive(true);
+
+            lastTouched = Instantiate(playerPrefab, playerPrefab.transform.position, playerPrefab.transform.rotation);
+            lastTouched.tag = "Player1";
+            playerPlatform = lastTouched.GetComponent<PlatformController>();
+            playerPlatform.SetUp(0, playWithBot);
+            pitcher = playerPlatform;
+            var bot = Instantiate(aiPlayerPrefab, aiPlayerPrefab.transform.position, aiPlayerPrefab.transform.rotation);
+            bot.tag = "Player2";
+            botPlatform = bot.GetComponent<PlatformController>();
+            botPlatform.SetUp(1, playWithBot);
+
+            scoreHandler.InitScore(playWithBot);
+            GetComponent<PowerUpsManager>().SetUpPowerUpsTrigger();
+
+            var ball = Instantiate(ballPrefab, pitcher.GetBallStartPosition(), Quaternion.identity);
+            ballController = ball.GetComponent<BallController>();
+
+            gameState.Value = GameState.Prepare;
         }
-        if (!IsServer)
-            ResetReadyState();
+        else
+        {
+            if (IsServer)
+            {
+                waitingForOpponentPanel.SetActive(true);
+                gameMode = (GameMode)PlayerPrefs.GetInt("GameMode");
+                gameState.Value = GameState.Initial;
+            }
+            if (!IsServer)
+                ResetReadyState();
+        }
     }
 
     public void OnBothPlayersConnected()
     {
         if (!NetworkManager.Singleton.IsServer) return;
 
-        var player_names = (from player in NetworkManager.Singleton.ConnectedClientsList select player.PlayerObject.tag).ToArray();
-        scoreHandler.InitScore(player_names);
+        scoreHandler.InitScore(playWithBot);
         GetComponent<PowerUpsManager>().SetUpPowerUpsTrigger();
         lastTouched = NetworkManager.Singleton.ConnectedClientsList[0].PlayerObject.gameObject;
         pitcher = lastTouched.GetComponent<PlatformController>();
@@ -99,7 +135,7 @@ public class GameController : NetworkBehaviour
         ResetReadyState();
 
         // create network synced ball and find it on clients
-        var ball = Instantiate(ballPrefab, pitcher.GetBallStartPosition(), Quaternion.identity);
+        var ball = Instantiate(ballPrefab.GetComponent<NetworkObject>(), pitcher.GetBallStartPosition(), Quaternion.identity);
         ball.Spawn();
         FindBallClientRpc();
         if (gameMode == GameMode.Accuracy)
@@ -115,6 +151,7 @@ public class GameController : NetworkBehaviour
         menuPanel.SetActive(true);
         leaveButton.SetActive(false);
         readyButton.SetActive(false);
+        startButton.SetActive(false);
         countdownHandler.ResetCountdown();
     }
 
@@ -148,18 +185,23 @@ public class GameController : NetworkBehaviour
         startButton.SetActive(everyoneIsReady);
     }
 
-    [ServerRpc]
-    public void StartRoundServerRpc()
+    /// <summary>
+    /// Called on the server
+    /// </summary>
+    public void StartRound()
     {
-        if (!debugMode)
-        {
+        if (debugMode)
+            return;
+        if (!playWithBot)
             foreach (var _client in NetworkManager.Singleton.ConnectedClientsList)
-            {
                 _client.PlayerObject.GetComponent<PlatformController>().ResetPlatform();
-            }
-            ballController.ResetBall();
-            StartCoroutine(StartAfterCountdown());
+        else {
+            playerPlatform.ResetPlatform();
+            botPlatform.ResetPlatform();
+            startButton.SetActive(false);
         }
+        ballController.ResetBall();
+        StartCoroutine(StartAfterCountdown());
     }
 
     private IEnumerator StartAfterCountdown()

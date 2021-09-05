@@ -5,56 +5,57 @@ using MLAPI;
 using MLAPI.Messaging;
 using MLAPI.NetworkVariable.Collections;
 
+/// <summary>
+/// Game score handling. Player objects must be tagged as "Player1" and "Player2".
+/// </summary>
 public class ScoreHandler : NetworkBehaviour {
 
     private NetworkDictionary<string, int> scores = new NetworkDictionary<string, int>();
     private Dictionary<string, TextMeshProUGUI> scoreTexts = new Dictionary<string, TextMeshProUGUI>();
     [SerializeField] private int winScore;
 
-    /// <summary>
-    /// Inits synced score values on the server. Doesn't preserve players, if there were any
-    /// </summary>
-    public void InitScore(string[] players_names)
+    public void InitScore(bool playWithBot)
     {
         scores.Clear();
-        foreach (var player_name in players_names)
-        {
-            scores.Add(player_name, 0);
-        }
-        InitScoreClientRpc(players_names);
+        scores.Add("Player1", 0);
+        scores.Add("Player2", 0);
+        if (playWithBot)
+            InitScoreTexts();
+        else
+            InitScoreClientRpc();
     }
 
     /// <summary>
     /// Inits score related UI on a clients
     /// </summary>
     [ClientRpc]
-    public void InitScoreClientRpc(string[] players_names)
+    public void InitScoreClientRpc()
+    {
+        InitScoreTexts();
+        scores.OnDictionaryChanged += OnScoreChanged;
+    }
+
+    public void InitScoreTexts()
     {
         scoreTexts.Clear();
-        foreach (var player_name in players_names)
+        foreach (var player_name in scores.Keys)
         {
             TextMeshProUGUI scoreText = GameObject.Find(player_name + "Score").GetComponent<TextMeshProUGUI>();
             scoreText.text = scores[player_name].ToString();
             scoreTexts.Add(player_name, scoreText);
-        }
-
-        scores.OnDictionaryChanged += OnScoreChanged;
-    }
-
-    /// <summary>
-    /// Cleares scores, but preserves same players
-    /// </summary>
-    public void ClearScores()
-    {
-        foreach (var score in new List<string>(scores.Keys))
-        {
-            scores[score] = 0;
         }
     }
 
     private void OnScoreChanged(NetworkDictionaryEvent<string, int> changeEvent)
     {
         RedrawScore();
+    }
+    public void ClearScores()
+    {
+        foreach (var score in new List<string>(scores.Keys))
+        {
+            scores[score] = 0;
+        }
     }
 
     /// <summary>

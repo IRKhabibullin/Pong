@@ -28,7 +28,7 @@ public class InputController : MonoBehaviour
     {
         if (gameController.debugMode)
             CheckForDebugTouch();
-        if (platform.IsLocalPlayer)
+        if (platform.IsLocalPlayer || gameController.playWithBot)
         {
             if (Application.platform == RuntimePlatform.WindowsEditor)
             {
@@ -114,14 +114,20 @@ public class InputController : MonoBehaviour
         var direction = Input.GetAxis("Horizontal");
         if (direction != 0.0 || platform.mSpeed != Vector3.zero)
         {
-            platform.SetSpeedServerRpc(direction);
+            if (gameController.playWithBot)
+                platform.SetSpeed(direction);
+            else
+                platform.SetSpeedServerRpc(direction);
         }
         var angle = Input.GetAxis("Vertical");
         if (angle != 0.0 || platform.mAngle != 0)
         {
             var newAngle = platform.GetCurrentAngle() + angle;
             newAngle = newAngle > 0 ? Math.Min(newAngle, 45f) : Math.Max(newAngle, -45f);
-            platform.SetRotationServerRpc(newAngle);
+            if (gameController.playWithBot)
+                platform.SetRotation(newAngle);
+            else
+                platform.SetRotationServerRpc(newAngle);
         }
     }
 
