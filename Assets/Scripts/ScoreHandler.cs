@@ -10,19 +10,25 @@ using MLAPI.NetworkVariable.Collections;
 /// </summary>
 public class ScoreHandler : NetworkBehaviour {
 
-    private NetworkDictionary<string, int> scores = new NetworkDictionary<string, int>();
+    private Dictionary<string, int> scores = new Dictionary<string, int>();
+    private NetworkDictionary<string, int> networkScores = new NetworkDictionary<string, int>();
     private Dictionary<string, TextMeshProUGUI> scoreTexts = new Dictionary<string, TextMeshProUGUI>();
-    [SerializeField] private int winScore;
+    [SerializeField] private int winScore = 10;
 
-    public void InitScore(bool playWithBot)
+    public void InitScore()
     {
         scores.Clear();
         scores.Add("Player1", 0);
         scores.Add("Player2", 0);
-        if (playWithBot)
-            InitScoreTexts();
-        else
-            InitScoreClientRpc();
+        InitScoreTexts();
+    }
+
+    public void InitScoreServer()
+    {
+        networkScores.Clear();
+        networkScores.Add("Player1", 0);
+        networkScores.Add("Player2", 0);
+        InitScoreClientRpc();
     }
 
     /// <summary>
@@ -32,7 +38,7 @@ public class ScoreHandler : NetworkBehaviour {
     public void InitScoreClientRpc()
     {
         InitScoreTexts();
-        scores.OnDictionaryChanged += OnScoreChanged;
+        networkScores.OnDictionaryChanged += OnScoreChanged;
     }
 
     public void InitScoreTexts()
@@ -42,6 +48,13 @@ public class ScoreHandler : NetworkBehaviour {
         {
             TextMeshProUGUI scoreText = GameObject.Find(player_name + "Score").GetComponent<TextMeshProUGUI>();
             scoreText.text = scores[player_name].ToString();
+            scoreTexts.Add(player_name, scoreText);
+        }
+
+        foreach (var player_name in networkScores.Keys)
+        {
+            TextMeshProUGUI scoreText = GameObject.Find(player_name + "Score").GetComponent<TextMeshProUGUI>();
+            scoreText.text = networkScores[player_name].ToString();
             scoreTexts.Add(player_name, scoreText);
         }
     }
@@ -56,6 +69,11 @@ public class ScoreHandler : NetworkBehaviour {
         {
             scores[score] = 0;
         }
+        foreach (var score in new List<string>(networkScores.Keys))
+        {
+            networkScores[score] = 0;
+        }
+        RedrawScore();
     }
 
     /// <summary>
@@ -67,14 +85,28 @@ public class ScoreHandler : NetworkBehaviour {
         {
             scoreTexts[player].text = scores[player].ToString();
         }
+        foreach (var player in networkScores.Keys)
+        {
+            scoreTexts[player].text = networkScores[player].ToString();
+        }
     }
 
     /// <summary>
     /// Increases score of passed player. Called only on the server
     /// </summary>
-    public bool UpdateScore(string player)
+    public bool MUpdateScore(string player)
+    {
+        networkScores[player]++;
+        return networkScores.Values.Contains(winScore);
+    }
+
+    /// <summary>
+    /// Increases score of passed player. For singleplayer
+    /// </summary>
+    public bool SUpdateScore(string player)
     {
         scores[player]++;
-        return scores.Values.Contains(winScore);
+        RedrawScore();
+        return scores.ContainsValue(winScore);
     }
 }

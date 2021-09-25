@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 3090496524604522784}
   - component: {fileID: 7646342521918748838}
   - component: {fileID: 5659806138924125058}
-  - component: {fileID: 5195091083280367933}
   - component: {fileID: 5781035804179918042}
   - component: {fileID: 1477769602183302819}
   m_Layer: 8
@@ -99,28 +98,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5195091083280367933
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4069495652264336089}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e77d387702f9a724ab48104b05b81fa3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  launchDirection: 0
-  width: 5
-  maxSpeed: 30
-  ballPosition: {x: 0, y: 2.05, z: 0}
-  mSpeed: {x: 0, y: 0, z: 0}
-  mPosition:
-    m_InternalValue: {x: 0, y: 0, z: 0}
-  mAngle: 0
-  mRotation:
-    m_InternalValue: {x: 0, y: 0, z: 0, w: 0}
 --- !u!54 &5781035804179918042
 Rigidbody:
   m_ObjectHideFlags: 0

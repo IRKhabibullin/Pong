@@ -1134,7 +1134,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 4
-  m_Range: 500
+  m_Range: 110
   m_SpotAngle: 179
   m_InnerSpotAngle: 1
   m_CookieSize: 10
@@ -1731,7 +1731,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 4
-  m_Range: 500
+  m_Range: 110
   m_SpotAngle: 179
   m_InnerSpotAngle: 1
   m_CookieSize: 10
@@ -2342,7 +2342,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 4
-  m_Range: 500
+  m_Range: 110
   m_SpotAngle: 179
   m_InnerSpotAngle: 1
   m_CookieSize: 10
@@ -3305,7 +3305,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 1
+  orthographic: 0
   orthographic size: 40
   m_Depth: -1
   m_CullingMask:
@@ -3329,8 +3329,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.085080296, y: -0.039164335, z: -69.826164}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -5651,7 +5651,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 4
-  m_Range: 500
+  m_Range: 110
   m_SpotAngle: 179
   m_InnerSpotAngle: 1
   m_CookieSize: 10
@@ -7513,6 +7513,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1334908331}
+        m_TargetAssemblyTypeName: GameController, Assembly-CSharp
+        m_MethodName: SetUpNetworkMatchController
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1985579819}
         m_TargetAssemblyTypeName: MenuHandler, Assembly-CSharp
         m_MethodName: Host
@@ -7526,7 +7538,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 972649138}
-        m_TargetAssemblyTypeName: Mirror.Discovery.NetworkDiscoveryBase`2[[Networking.DiscoveryRequest,
+        m_TargetAssemblyTypeName: Mirror.Discovery.NetworkDiscoveryBase`2[[Multiplayer.DiscoveryRequest,
           Assembly-CSharp
         m_MethodName: AdvertiseServer
         m_Mode: 1
@@ -8122,7 +8134,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1334908332}
   - component: {fileID: 1334908331}
-  - component: {fileID: 1334908333}
   - component: {fileID: 1334908334}
   - component: {fileID: 1334908335}
   - component: {fileID: 1334908336}
@@ -8145,17 +8156,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a57787d7009520b4eb649d1ca83d8f5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameState:
-    m_InternalValue: 0
   gameMode: 0
-  playWithBot: 0
   playersPositions:
   - {fileID: 1161228369}
   - {fileID: 2046555317}
   playersMaterials:
   - {fileID: 2100000, guid: 7129cc9d8c2fbf14189e24758b09d413, type: 2}
   - {fileID: 2100000, guid: 7e7e01ad85f95c74bbd6709f7b66a82d, type: 2}
-  ballController: {fileID: 0}
   connectionManager: {fileID: 1334908336}
   scoreHandler: {fileID: 1334908335}
   countdownHandler: {fileID: 1651516987}
@@ -8166,14 +8173,19 @@ MonoBehaviour:
   startButton: {fileID: 1539719513}
   readyButton: {fileID: 1089641019}
   readyButtonText: {fileID: 1632813827}
-  ballPrefab: {fileID: 7168978363348635289, guid: 5f53ba0f401affb40835a0a91b9c1401, type: 3}
+  ballPrefab: {fileID: 7974532195507512831, guid: 6feffab476e5fcb4fbc5900d0aaec628, type: 3}
+  networkBallPrefab: {fileID: 7168978363348635289, guid: 5f53ba0f401affb40835a0a91b9c1401, type: 3}
   playerPrefab: {fileID: 4069495652264336089, guid: f48e4467ed7e7824997e481c2c69d3b0, type: 3}
   aiPlayerPrefab: {fileID: 4069495652264336089, guid: 46944f3a8c5d990419cf4cf76deeefbb, type: 3}
+  networkClassicModePrefabs:
+  - {fileID: 8627516566880176157, guid: 1f3ee8ee0cb50dd4cbd34be801afc0b4, type: 3}
+  - {fileID: 3307734462871879009, guid: f3dee69b9320f3a44b1c129b9f5527e4, type: 3}
+  networkAccuracyModePrefab: {fileID: 652757712842970605, guid: 631fc2a48bf8ac0438b0b19db4d87802, type: 3}
+  classicModePrefabs:
+  - {fileID: 4745759567585529162, guid: 318b8b414f3eca54aba5cf71ad23d7ab, type: 3}
+  - {fileID: 3622317946494136624, guid: d90114ecb0ebe794991c4828571a6e57, type: 3}
+  accuracyModePrefab: {fileID: 8936864652801081335, guid: 8ea0e4d4987295a419682f499daa1246, type: 3}
   debugText: {fileID: 163651321}
-  pitcher: {fileID: 0}
-  lastTouched: {fileID: 0}
-  playerPlatform: {fileID: 0}
-  botPlatform: {fileID: 0}
   debugMode: 0
 --- !u!4 &1334908332
 Transform:
@@ -8189,24 +8201,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1334908333
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1334908330}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db5dc56fb6346634385d9e6b3a563cbe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  triggerChance: 0.6
-  classicModePrefabs:
-  - {fileID: 8627516566880176157, guid: 1f3ee8ee0cb50dd4cbd34be801afc0b4, type: 3}
-  - {fileID: 3307734462871879009, guid: f3dee69b9320f3a44b1c129b9f5527e4, type: 3}
-  accuracyModePrefab: {fileID: 652757712842970605, guid: 631fc2a48bf8ac0438b0b19db4d87802, type: 3}
-  powerUpInstances: []
 --- !u!114 &1334908334
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8250,8 +8244,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameController: {fileID: 1334908331}
+  matchController: {fileID: 0}
   serverDisconnectedPanel: {fileID: 1605268938}
   discovery: {fileID: 972649138}
+  leaveButton: {fileID: 0}
   onLeave:
     m_PersistentCalls:
       m_Calls:
@@ -8580,7 +8576,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 4
-  m_Range: 500
+  m_Range: 110
   m_SpotAngle: 179
   m_InnerSpotAngle: 1
   m_CookieSize: 10
@@ -8712,9 +8708,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1334908336}
-        m_TargetAssemblyTypeName: ConnectionManager, Assembly-CSharp
-        m_MethodName: Leave
+      - m_Target: {fileID: 1334908331}
+        m_TargetAssemblyTypeName: GameController, Assembly-CSharp
+        m_MethodName: QuitToMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9048,7 +9044,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 4
-  m_Range: 500
+  m_Range: 110
   m_SpotAngle: 179
   m_InnerSpotAngle: 1
   m_CookieSize: 10
@@ -9275,7 +9271,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 4
-  m_Range: 500
+  m_Range: 110
   m_SpotAngle: 179
   m_InnerSpotAngle: 1
   m_CookieSize: 10
@@ -11571,7 +11567,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1334908331}
         m_TargetAssemblyTypeName: GameController, Assembly-CSharp
-        m_MethodName: PlayWithBots
+        m_MethodName: SetUpAIMatchController
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -12114,7 +12110,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 4
-  m_Range: 500
+  m_Range: 110
   m_SpotAngle: 179
   m_InnerSpotAngle: 1
   m_CookieSize: 10
