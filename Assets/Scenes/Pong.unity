@@ -268,11 +268,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7991354134288836957, guid: 0fc15d86e11c2654ea41405f53c788de, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7991354134288836957, guid: 0fc15d86e11c2654ea41405f53c788de, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7991354134288836957, guid: 0fc15d86e11c2654ea41405f53c788de, type: 3}
       propertyPath: m_AnchorMin.y
@@ -328,7 +328,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7991354135141414320, guid: 0fc15d86e11c2654ea41405f53c788de, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7991354135141414320, guid: 0fc15d86e11c2654ea41405f53c788de, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -1516,7 +1516,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 163651319}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 649.12494}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 635311068}
@@ -1524,7 +1524,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 744.33704, y: 0.000030517578}
+  m_AnchoredPosition: {x: 744.33704, y: 0}
   m_SizeDelta: {x: 226.233, y: 50}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &163651321
@@ -5855,7 +5855,7 @@ MonoBehaviour:
     - Pong
     AllowRuntimeSceneChanges: 0
     NetworkPrefabs:
-    - Prefab: {fileID: 4069495652264336089, guid: f48e4467ed7e7824997e481c2c69d3b0, type: 3}
+    - Prefab: {fileID: 1056021013507831244, guid: 3aa567681c1f5984b8921c2889c987ba, type: 3}
       PlayerPrefab: 1
     - Prefab: {fileID: 7168978363348635289, guid: 5f53ba0f401affb40835a0a91b9c1401, type: 3}
       PlayerPrefab: 0
@@ -5896,7 +5896,7 @@ MonoBehaviour:
     00000000:
       type: {class: NullableBoolSerializable, ns: MLAPI.Configuration, asm: Unity.Multiplayer.MLAPI.Runtime}
       data:
-        Value: 1897319656204293034
+        Value: 12678914256364931730
 --- !u!114 &972649138
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8247,7 +8247,7 @@ MonoBehaviour:
   matchController: {fileID: 0}
   serverDisconnectedPanel: {fileID: 1605268938}
   discovery: {fileID: 972649138}
-  leaveButton: {fileID: 0}
+  leaveButton: {fileID: 1441479614}
   onLeave:
     m_PersistentCalls:
       m_Calls:
@@ -12185,7 +12185,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1731466922}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -649.12494}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1999845069}
@@ -12957,7 +12957,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1834787251
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13201,6 +13201,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1334908331}
+        m_TargetAssemblyTypeName: GameController, Assembly-CSharp
+        m_MethodName: SetUpNetworkMatchController
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1985579819}
         m_TargetAssemblyTypeName: MenuHandler, Assembly-CSharp
         m_MethodName: Find
@@ -13670,7 +13682,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1999845069
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13679,7 +13691,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1999845067}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 649.12494}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1731466923}

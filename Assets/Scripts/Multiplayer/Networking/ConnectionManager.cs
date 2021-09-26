@@ -67,7 +67,6 @@ namespace Multiplayer
                 {
                     if (client.ClientId == ClientId)
                     {
-                        client.PlayerObject.gameObject.AddComponent<PlatformController>();
                         client.PlayerObject.tag = $"Player{sideId + 1}";
                         client.PlayerObject.GetComponent<PlatformController>().SetUp(sideId);
                         if (NetworkManager.Singleton.ConnectedClients.Count == 1)

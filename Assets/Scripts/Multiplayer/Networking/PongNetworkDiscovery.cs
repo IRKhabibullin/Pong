@@ -111,9 +111,9 @@ namespace Multiplayer
         {
             IPAddress ipAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList.First(
                     f => f.AddressFamily == AddressFamily.InterNetwork);
-            Debug.Log($"Ip {ipAddress.ToString()} {GetSubnetMask(ipAddress)}");
+            Debug.Log($"Ip {ipAddress} {GetSubnetMask(ipAddress)}");
             transport.ConnectAddress = ipAddress.ToString();
-            GameObject.Find("GameManager").GetComponent<GameController>().SetDebugText($"{ipAddress.ToString()} {GetSubnetMask(ipAddress)}");
+            GameObject.Find("GameManager").GetComponent<GameController>().SetDebugText($"{ipAddress} {GetSubnetMask(ipAddress)}");
             return new DiscoveryRequest();
         }
 
@@ -126,7 +126,8 @@ namespace Multiplayer
         /// </remarks>
         /// <param name="response">Response that came from the server</param>
         /// <param name="endpoint">Address of the server that replied</param>
-        protected override void ProcessResponse(DiscoveryResponse response, IPEndPoint endpoint) {
+        protected override void ProcessResponse(DiscoveryResponse response, IPEndPoint endpoint)
+        {
             response.EndPoint = endpoint;
             OnServerFound.Invoke(response);
         }

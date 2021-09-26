@@ -9,7 +9,7 @@ namespace Multiplayer
     public class PlatformController : NetworkBehaviour, IPlatformController
     {
         public NetworkVariableString Name = new NetworkVariableString(new NetworkVariableSettings { WritePermission = NetworkVariablePermission.OwnerOnly });
-        public NetworkVariableBool IsReady = new NetworkVariableBool();
+        public NetworkVariableBool IsReady = new NetworkVariableBool(new NetworkVariableSettings { WritePermission = NetworkVariablePermission.OwnerOnly });
         public NetworkVariableBool IsLeader = new NetworkVariableBool();
 
         private readonly float width = 5f;
@@ -51,6 +51,7 @@ namespace Multiplayer
         {
             LaunchDirection = side == 0 ? 1 : -1;
             mPosition.Value = _gc.playersPositions[side].position;
+            SetColorClientRpc(side);
         }
 
         public void SetColor(int playerNumber)

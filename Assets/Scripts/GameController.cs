@@ -123,4 +123,9 @@ public class GameController : MonoBehaviour
         readyButton.SetActive(false);
         startButton.SetActive(false);
     }
+
+    public void OnReadyButtonClicked()
+    {
+        (matchController as NetworkMatchController).OnReadyButtonClicked();
+    }
 }

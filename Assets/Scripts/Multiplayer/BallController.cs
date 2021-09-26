@@ -8,8 +8,8 @@ namespace Multiplayer
 {
     public class BallController : NetworkBehaviour, IBallController
     {
-        public UnityEvent<string> backWallTouchEvent = new UnityEvent<string>();
-        public UnityEvent<GameObject> platformTouchEvent = new UnityEvent<GameObject>();
+        public UnityEvent<string> backWallTouchEvent;
+        public UnityEvent<GameObject> platformTouchEvent;
 
         private IMatchController _mc;
 
@@ -35,7 +35,9 @@ namespace Multiplayer
             player2Material = (Material)Resources.Load("Blue", typeof(Material));
 
             _mc = GameObject.Find("GameManager").GetComponent<GameController>().matchController;
+            backWallTouchEvent = new UnityEvent<string>();
             backWallTouchEvent.AddListener(_mc.BackWallTouchHandler);
+            platformTouchEvent = new UnityEvent<GameObject>();
             platformTouchEvent.AddListener(_mc.PlatformTouchHandler);
             Rb = GetComponent<Rigidbody>();
             Velocity.OnValueChanged += OnVelocityChanged;
@@ -49,11 +51,11 @@ namespace Multiplayer
         void OnCollisionEnter(Collision collision)
         {
             if (!NetworkManager.Singleton.IsServer) return;
-            if ((backWallsLayer.value & (1 << collision.gameObject.layer)) > 0)
+            if (backWallsLayer.value == collision.gameObject.layer)
             {
                 backWallTouchEvent.Invoke(collision.gameObject.tag);
             }
-            if ((platformLayer.value & (1 << collision.gameObject.layer)) > 0)
+            if (platformLayer.value == collision.gameObject.layer)
             {
                 platformTouchEvent.Invoke(collision.gameObject);
             }
