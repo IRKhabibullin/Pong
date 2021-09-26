@@ -34,7 +34,7 @@ namespace Multiplayer
                 CheckForDebugTouch();
             if (platform.IsLocalPlayer)
             {
-                if (Application.platform == RuntimePlatform.WindowsEditor)
+                if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer)
                 {
                     CheckForKeyboard();
                 }
