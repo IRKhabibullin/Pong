@@ -203,6 +203,10 @@ MonoBehaviour:
   Velocity:
     m_InternalValue: {x: 0, y: 0, z: 0}
   speed: 25
+  normalMaterial: {fileID: 2100000, guid: 40c0e9759ac62fb478ccd0bbcc1150df, type: 2}
+  hastedMaterial: {fileID: 2100000, guid: 7129cc9d8c2fbf14189e24758b09d413, type: 2}
+  player1Material: {fileID: 2100000, guid: 7129cc9d8c2fbf14189e24758b09d413, type: 2}
+  player2Material: {fileID: 2100000, guid: 7e7e01ad85f95c74bbd6709f7b66a82d, type: 2}
 --- !u!96 &673460750411595945
 TrailRenderer:
   serializedVersion: 2
@@ -310,4 +314,4 @@ TrailRenderer:
     generateLightingData: 0
   m_MinVertexDistance: 1
   m_Autodestruct: 0
-  m_Emitting: 1
+  m_Emitting: 0

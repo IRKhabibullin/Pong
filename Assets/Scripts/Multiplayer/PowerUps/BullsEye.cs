@@ -63,7 +63,7 @@ namespace Multiplayer
             Physics.Raycast(pos + direction * 0.001f, direction, out RaycastHit hit, Mathf.Infinity, aimLayers);
             if (hit.collider != null && positions.Count <= _maxIterations - 1)
             {
-                positions.Add(hit.point);
+                positions.Add(hit.point - Vector3.forward);
                 if (hit.collider.gameObject.layer == backWallLayer) return;
                 RayCast(hit.point, Vector3.Reflect(direction, hit.normal));
             }

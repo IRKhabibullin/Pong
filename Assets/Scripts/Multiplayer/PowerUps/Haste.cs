@@ -34,6 +34,7 @@ namespace Multiplayer
         public void ApplyBuffClientRpc()
         {
             target = _gc.ballController.gameObject;
+            target.GetComponent<TrailRenderer>().emitting = true;
             target.GetComponent<BallController>().ChangeMaterialClientRpc("hasted");
         }
 
@@ -41,6 +42,7 @@ namespace Multiplayer
         {
             if (target != null)
             {
+                target.GetComponent<TrailRenderer>().emitting = false;
                 target.GetComponent<BallController>().ChangeMaterialClientRpc("normal");
                 target.GetComponent<BallController>().Velocity.Value = target.GetComponent<Rigidbody>().velocity / speedMultiplier;
             }

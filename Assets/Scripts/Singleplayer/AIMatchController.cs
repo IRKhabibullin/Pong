@@ -44,24 +44,24 @@ namespace Singleplayer
             playerPlatform.SetColor(0);
             player.AddComponent<InputController>();
 
+            LastTouched = player;
+            Pitcher = playerPlatform;
+
+            var ball = Instantiate(_gc.ballPrefab, Pitcher.GetBallStartPosition(), Quaternion.identity);
+            _gc.ballController = ball.GetComponent<BallController>();
+            if (gameMode == GameMode.Accuracy)
+            {
+                _gc.ballController.ChangeMaterial(LastTouched.tag);
+            }
+
             var bot = Instantiate(_gc.aiPlayerPrefab, _gc.aiPlayerPrefab.transform.position, _gc.aiPlayerPrefab.transform.rotation);
             bot.tag = "Player2";
             botPlatform = bot.AddComponent<PlatformController>();
             botPlatform.SetUp(1);
             botPlatform.SetColor(1);
 
-            LastTouched = player;
-            Pitcher = playerPlatform;
-
             _gc.scoreHandler.InitScore();
             GetComponent<PowerUpsManager>().SetUpPowerUpsTrigger();
-
-            var ball = Instantiate(_gc.ballPrefab, Pitcher.GetBallStartPosition(), Quaternion.identity);
-            _gc.ballController = ball.AddComponent<BallController>();
-            if (gameMode == GameMode.Accuracy)
-            {
-                _gc.ballController.ChangeMaterial(LastTouched.tag);
-            }
 
             gameState = GameState.Prepare;
         }
@@ -136,11 +136,13 @@ namespace Singleplayer
         /// </summary>
         public void PlatformTouchHandler(GameObject platform)
         {
-            if (gameMode != GameMode.Accuracy || gameState != GameState.Play) return;
+            if (gameState != GameState.Play) return;
 
             LastTouched = platform;
-            _gc.ballController.ChangeMaterial(LastTouched.tag);
-            GetComponent<PowerUpsManager>().TriggerPowerUp();
+            if (_gc.gameMode == GameMode.Accuracy)
+                _gc.ballController.ChangeMaterial(LastTouched.tag);
+            else if (_gc.gameMode == GameMode.Classic)
+                GetComponent<PowerUpsManager>().TriggerPowerUp();
         }
 
         public void BackWallTouchHandler(string playerTag)

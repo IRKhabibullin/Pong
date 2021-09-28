@@ -4,42 +4,71 @@ public class AIController : MonoBehaviour {
 
 	private IPlatformController _pc;
 	private int ballLayer;
-	private float lastSeenDirection;
+	private float lastSetSpeed;
 	private (Vector2 left, Vector2 right) rayHits;
+    private GameController _gc;
+    private IBallController ballController;
 
     void Start() {
+        _gc = GameObject.Find("GameManager").GetComponent<GameController>();
         _pc = gameObject.GetComponent<IPlatformController>();
+        ballController = _gc.ballController;
         ballLayer = LayerMask.GetMask("Ball");
-        lastSeenDirection = 0f;
+        lastSetSpeed = 0f;
     }
 
 
     void Update() {
-    	СastObserverRay();
+    	// СastObserverRay();
+        FollowTheBall();
     }
 
     private void СastObserverRay() {
-    	RaycastHit2D leftRay = Physics2D.Raycast(transform.position + new Vector3(-0.75f, -1.5f, 0f), Vector2.down, 70f, ballLayer);
-    	RaycastHit2D rightRay = Physics2D.Raycast(transform.position + new Vector3(0.75f, -1.5f, 0f), Vector2.down, 70f, ballLayer);
+        RaycastHit leftRay;
+        RaycastHit rightRay;
+        bool leftHit;
+        bool rightHit;
+        leftHit = Physics.Raycast(transform.position + new Vector3(-0.75f, -1.5f, 0), Vector3.down, out leftRay, 100f, ballLayer);
+    	rightHit = Physics.Raycast(transform.position + new Vector3(0.75f, -1.5f, 0), Vector3.down, out rightRay, 100f, ballLayer);
     	rayHits = (leftRay.point, rightRay.point);
-    	bool leftHit = leftRay.collider != null;
-    	bool rightHit = rightRay.collider != null;
         if (leftHit && rightHit) {
-        	lastSeenDirection = 0f;
+            if (lastSetSpeed > 0)
+            {
+                lastSetSpeed = Mathf.Max(lastSetSpeed - 0.01f, 0);
+            }
+            else if (lastSetSpeed < 0)
+            {
+                lastSetSpeed = Mathf.Min(lastSetSpeed + 0.01f, 0);
+            }
+            else
+        	    lastSetSpeed = 0f;
         	return;
         }
         if (leftHit) {
-        	lastSeenDirection = -1f;
+        	lastSetSpeed = Mathf.Max(lastSetSpeed - 0.01f, -1f);
         }
         if (rightHit) {
-        	lastSeenDirection = 1f;
+        	lastSetSpeed = Mathf.Min(lastSetSpeed + 0.01f, 1f);
         }
-        /*_pc.Move(lastSeenDirection);*/
+        _pc.SetSpeed(lastSetSpeed);
+    }
+
+    private void FollowTheBall()
+    {
+        var direction = ballController.gameObject.transform.position.x - transform.position.x;
+        if (Mathf.Abs(direction) < 2)
+        {
+            _pc.SetSpeed(0);
+        }
+        else
+        {
+            _pc.SetSpeed(Mathf.Sign(direction));
+        }
     }
 
     void OnDrawGizmosSelected() {
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position + new Vector3(-0.75f, -1.5f, 0f), rayHits.left);
-        Gizmos.DrawLine(transform.position + new Vector3(0.75f, -1.5f, 0f), rayHits.right);
+        Gizmos.DrawLine(transform.position + new Vector3(-0.75f, -1.5f, 0), rayHits.left);
+        Gizmos.DrawLine(transform.position + new Vector3(0.75f, -1.5f, 0), rayHits.right);
     }
 }

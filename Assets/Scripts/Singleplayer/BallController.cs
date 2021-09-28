@@ -15,19 +15,15 @@ namespace Singleplayer
         private LayerMask backWallsLayer;
         private LayerMask platformLayer;
 
-        private Material normalMaterial;
-        private Material hastedMaterial;
-        private Material player1Material;
-        private Material player2Material;
+        [SerializeField] private Material normalMaterial;
+        [SerializeField] private Material hastedMaterial;
+        [SerializeField] private Material player1Material;
+        [SerializeField] private Material player2Material;
 
         void Start()
         {
             backWallsLayer = LayerMask.NameToLayer("BackWall");
             platformLayer = LayerMask.NameToLayer("Platform");
-            normalMaterial = (Material)Resources.Load("Yellow", typeof(Material));
-            hastedMaterial = (Material)Resources.Load("Red", typeof(Material));
-            player1Material = (Material)Resources.Load("Red", typeof(Material));
-            player2Material = (Material)Resources.Load("Blue", typeof(Material));
 
             _mc = GameObject.Find("GameManager").GetComponent<GameController>().matchController;
             backWallTouchEvent = new UnityEvent<string>();

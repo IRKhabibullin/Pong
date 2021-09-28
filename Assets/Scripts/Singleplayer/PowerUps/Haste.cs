@@ -25,6 +25,7 @@ namespace Singleplayer
         {
             base.ApplyBuff();
             target = _gc.ballController.gameObject;
+            target.GetComponent<TrailRenderer>().emitting = true;
             target.GetComponent<Rigidbody>().velocity = target.GetComponent<Rigidbody>().velocity * speedMultiplier;
             target.GetComponent<BallController>().ChangeMaterial("hasted");
         }
@@ -33,6 +34,7 @@ namespace Singleplayer
         {
             if (target != null)
             {
+                target.GetComponent<TrailRenderer>().emitting = false;
                 target.GetComponent<BallController>().ChangeMaterial("normal");
                 target.GetComponent<Rigidbody>().velocity = target.GetComponent<Rigidbody>().velocity / speedMultiplier;
             }

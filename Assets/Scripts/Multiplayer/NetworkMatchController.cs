@@ -170,11 +170,13 @@ namespace Multiplayer
         /// </summary>
         public void PlatformTouchHandler(GameObject platform)
         {
-            if (_gc.gameMode != GameMode.Accuracy || gameState.Value != GameState.Play) return;
+            if (gameState.Value != GameState.Play) return;
 
             LastTouched = platform;
-            _gc.ballController.ChangeMaterial(LastTouched.tag);
-            GetComponent<PowerUpsManager>().TriggerPowerUp();
+            if (_gc.gameMode == GameMode.Accuracy)
+                _gc.ballController.ChangeMaterial(LastTouched.tag);
+            else if (_gc.gameMode == GameMode.Classic)
+                GetComponent<PowerUpsManager>().TriggerPowerUp();
         }
 
         public void BackWallTouchHandler(string playerTag)
