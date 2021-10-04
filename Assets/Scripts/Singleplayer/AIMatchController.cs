@@ -72,6 +72,8 @@ namespace Singleplayer
                 StopCoroutine(countdownCoroutine);
             if (_gc.ballController != null)
                 Destroy(_gc.ballController.gameObject);
+            Destroy(playerPlatform.gameObject);
+            Destroy(botPlatform.gameObject);
         }
         #endregion
 

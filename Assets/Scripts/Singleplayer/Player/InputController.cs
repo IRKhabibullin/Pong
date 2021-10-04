@@ -64,7 +64,7 @@ namespace Singleplayer
             {
                 Touch touch = Input.GetTouch(0);
                 // we're moving
-                Vector2 touchPosition = mainCamera.ScreenToWorldPoint(touch.position);
+                Vector3 touchPosition = mainCamera.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, -mainCamera.transform.position.z));
                 if (Mathf.Abs(touchPosition.x) < rightWallPosition)
                 {
                     return;
@@ -81,8 +81,8 @@ namespace Singleplayer
                 // we're rotating
                 Touch firstTouch = Input.GetTouch(0);
                 Touch secondTouch = Input.GetTouch(1);
-                Vector2 firstTouchPosition = mainCamera.ScreenToWorldPoint(firstTouch.position);
-                Vector2 secondTouchPosition = mainCamera.ScreenToWorldPoint(secondTouch.position);
+                Vector2 firstTouchPosition = mainCamera.ScreenToWorldPoint(new Vector3(firstTouch.position.x, firstTouch.position.y, -mainCamera.transform.position.z));
+                Vector2 secondTouchPosition = mainCamera.ScreenToWorldPoint(new Vector3(secondTouch.position.x, secondTouch.position.y, -mainCamera.transform.position.z));
                 if (Mathf.Abs(firstTouchPosition.x) < rightWallPosition || Mathf.Abs(secondTouchPosition.x) < rightWallPosition) return;
 
                 // if both touches on one side
