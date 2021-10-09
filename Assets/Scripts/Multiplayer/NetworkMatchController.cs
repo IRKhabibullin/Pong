@@ -82,12 +82,11 @@ namespace Multiplayer
         public void ExitMatch()
         {
             if (!IsServer) return;
+            GetComponent<PowerUpsManager>().ClearPowerUps();
             if (countdownCoroutine != null)
                 StopCoroutine(countdownCoroutine);
             _gc.waitingForOpponentPanel.SetActive(false);
             _gc.startButton.SetActive(false);
-            if (_gc.ballController != null)
-                Destroy(_gc.ballController.gameObject);
         }
         #endregion
 
@@ -175,8 +174,7 @@ namespace Multiplayer
             LastTouched = platform;
             if (_gc.gameMode == GameMode.Accuracy)
                 _gc.ballController.ChangeMaterial(LastTouched.tag);
-            else if (_gc.gameMode == GameMode.Classic)
-                GetComponent<PowerUpsManager>().TriggerPowerUp();
+            GetComponent<PowerUpsManager>().TriggerPowerUp();
         }
 
         public void BackWallTouchHandler(string playerTag)

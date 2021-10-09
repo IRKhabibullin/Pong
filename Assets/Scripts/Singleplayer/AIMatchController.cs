@@ -57,6 +57,7 @@ namespace Singleplayer
             var bot = Instantiate(_gc.aiPlayerPrefab, _gc.aiPlayerPrefab.transform.position, _gc.aiPlayerPrefab.transform.rotation);
             bot.tag = "Player2";
             botPlatform = bot.AddComponent<PlatformController>();
+            botPlatform.Name = "Benjamin Bot";
             botPlatform.SetUp(1);
             botPlatform.SetColor(1);
 
@@ -68,6 +69,7 @@ namespace Singleplayer
 
         public void ExitMatch()
         {
+            GetComponent<PowerUpsManager>().ClearPowerUps();
             if (countdownCoroutine != null)
                 StopCoroutine(countdownCoroutine);
             if (_gc.ballController != null)
@@ -121,6 +123,7 @@ namespace Singleplayer
 
         public void FinishMatch(string winnerName)
         {
+            GetComponent<PowerUpsManager>().ClearPowerUps();
             _gc.scoreHandler.ClearScores();
             WinnerNotification(winnerName);
         }
@@ -143,8 +146,7 @@ namespace Singleplayer
             LastTouched = platform;
             if (_gc.gameMode == GameMode.Accuracy)
                 _gc.ballController.ChangeMaterial(LastTouched.tag);
-            else if (_gc.gameMode == GameMode.Classic)
-                GetComponent<PowerUpsManager>().TriggerPowerUp();
+            GetComponent<PowerUpsManager>().TriggerPowerUp();
         }
 
         public void BackWallTouchHandler(string playerTag)

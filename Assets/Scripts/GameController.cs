@@ -12,6 +12,7 @@ public class GameController : MonoBehaviour
     public const string NotReadyText = "Not ready";
 
     public IMatchController matchController;
+    public Component powerUpManager;
 
     public enum GameState
     {
@@ -77,6 +78,7 @@ public class GameController : MonoBehaviour
         var pum = gameObject.AddComponent<Singleplayer.PowerUpsManager>();
         pum.classicModePrefabs = classicModePrefabs;
         pum.accuracyModePrefab = accuracyModePrefab;
+        powerUpManager = pum;
     }
 
     public void SetUpNetworkMatchController()
@@ -85,6 +87,7 @@ public class GameController : MonoBehaviour
         var pum = gameObject.AddComponent<Multiplayer.PowerUpsManager>();
         pum.classicModePrefabs = networkClassicModePrefabs;
         pum.accuracyModePrefab = networkAccuracyModePrefab;
+        powerUpManager = pum;
     }
 
     public void EnterTheGame()
@@ -111,6 +114,8 @@ public class GameController : MonoBehaviour
         startButton.SetActive(false);
         countdownHandler.ResetCountdown();
         matchController.ExitMatch();
+        Destroy(matchController as Component);
+        Destroy(powerUpManager);
     }
 
     public void StartRound()
@@ -126,6 +131,7 @@ public class GameController : MonoBehaviour
 
     public void OnReadyButtonClicked()
     {
+        Debug.Log($"OnReadyButtonClicked {matchController}");
         (matchController as NetworkMatchController).OnReadyButtonClicked();
     }
 }
