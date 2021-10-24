@@ -8120,6 +8120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a57787d7009520b4eb649d1ca83d8f5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  powerUpManager: {fileID: 0}
   gameMode: 0
   playersPositions:
   - {fileID: 1161228369}

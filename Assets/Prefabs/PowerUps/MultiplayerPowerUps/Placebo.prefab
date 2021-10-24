@@ -130,7 +130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buffDuration: 5
-  maxLifeTime: 5
+  maxLifeTime: 8
 --- !u!54 &9147318326431622659
 Rigidbody:
   m_ObjectHideFlags: 0

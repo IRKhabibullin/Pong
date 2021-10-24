@@ -113,10 +113,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buffDuration: 5
-  maxLifeTime: 5
+  maxLifeTime: 8
   speedMultiplier: 2
-  normal: {fileID: 2100000, guid: 40c0e9759ac62fb478ccd0bbcc1150df, type: 2}
-  hasted: {fileID: 2100000, guid: 7129cc9d8c2fbf14189e24758b09d413, type: 2}
 --- !u!114 &3307734462871879009
 MonoBehaviour:
   m_ObjectHideFlags: 0

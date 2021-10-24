@@ -8,7 +8,7 @@ namespace Singleplayer
         private GameController _gc;
 
         private readonly float width = 5f;
-        private readonly float maxSpeed = 30f;
+        private readonly float maxSpeed = 40f;
         private Vector3 ballPosition = new Vector3(0, 2.05f, 0);  // where ball must be placed when player is pitcher
 
         public string Name;

@@ -128,5 +128,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buffDuration: 5
-  maxLifeTime: 5
+  maxLifeTime: 8
   speedMultiplier: 2
