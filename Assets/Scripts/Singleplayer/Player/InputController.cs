@@ -28,10 +28,12 @@ namespace Singleplayer
             matchController = GameObject.Find("GameManager").GetComponent<IMatchController>();
 
             platform = GetComponent<PlatformController>();
+            gameController.movementSlider.onValueChanged.AddListener(OnMovementSliderChanged);
         }
 
         void Update()
         {
+            if (gameController.controlsType == "alternative") return;
             if (gameController.debugMode)
                 CheckForDebugTouch();
             if (Application.platform == RuntimePlatform.WindowsEditor)
@@ -39,6 +41,11 @@ namespace Singleplayer
                 CheckForKeyboard();
             }
             CheckForTouch();
+        }
+
+        public void OnMovementSliderChanged(float newValue)
+        {
+            platform.SetSpeed(newValue);
         }
 
 

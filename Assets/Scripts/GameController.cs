@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Singleplayer;
 using Multiplayer;
 using MLAPI;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
@@ -28,6 +29,7 @@ public class GameController : MonoBehaviour
     }
 
     public GameMode gameMode;
+    public string controlsType;  // default, alternative
 
     public List<Transform> playersPositions;
     public List<Material> playersMaterials;
@@ -36,6 +38,7 @@ public class GameController : MonoBehaviour
     public ConnectionManager connectionManager;
     public ScoreHandler scoreHandler;
     public CountdownHandler countdownHandler;
+    public Slider movementSlider;
 
     public GameObject winnerPanel;
     public GameObject menuPanel;
@@ -67,6 +70,13 @@ public class GameController : MonoBehaviour
         debugMode = newValue;
     }
 
+    public void ToggleControlsType(bool isDefault)
+    {
+        // also need to enable or disable controls
+        controlsType = isDefault ? "default" : "alternative";
+        PlayerPrefs.SetString("ControlsType", controlsType);
+    }
+
     public void SetDebugText(string text)
     {
         debugText.text = text;
@@ -93,6 +103,7 @@ public class GameController : MonoBehaviour
     public void EnterTheGame()
     {
         matchController.EnterMatch();
+        controlsType = PlayerPrefs.GetString("ControlsType", "alternative");
     }
 
     public void LoadGameMode()
