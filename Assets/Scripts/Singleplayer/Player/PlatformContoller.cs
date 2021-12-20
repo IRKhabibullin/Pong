@@ -17,6 +17,7 @@ namespace Singleplayer
         public float mAngle = 0;  // current rotation speed. Used only on server. Rotation on client is synced from server
         public Vector3 mPosition = new Vector3();  // synced variable for platform position
         public Quaternion mRotation = new Quaternion();  // synced variable for platform rotation
+        public float maxAngle = 45f;
 
         private void Awake()
         {

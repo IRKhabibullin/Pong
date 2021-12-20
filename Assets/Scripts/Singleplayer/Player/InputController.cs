@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 using static GameController;
 
 namespace Singleplayer
@@ -29,6 +30,8 @@ namespace Singleplayer
 
             platform = GetComponent<PlatformController>();
             gameController.movementSlider.onValueChanged.AddListener(OnMovementSliderChanged);
+            gameController.rotationSlider.onValueChanged.AddListener(OnRotationSliderChanged);
+            gameController.rotationSlider.GetComponent<SliderController>().OnRotationValueChanged(0f);
         }
 
         void Update()
@@ -46,6 +49,13 @@ namespace Singleplayer
         public void OnMovementSliderChanged(float newValue)
         {
             platform.SetSpeed(newValue);
+        }
+
+        public void OnRotationSliderChanged(float newValue)
+        {
+            gameController.rotationSlider.GetComponent<SliderController>().OnRotationValueChanged(newValue);
+            float newAngle = newValue / 90f * platform.maxAngle;
+            platform.SetRotation(newAngle);
         }
 
 
@@ -110,6 +120,17 @@ namespace Singleplayer
 
                 // Can't move while rotating
                 platform.SetSpeed(0);
+            }
+        }
+
+        void AlternativeInputTouch()
+        {
+            foreach (var touch in Input.touches)
+            {
+                // Vector2 touchPosition = mainCamera.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, -mainCamera.transform.position.z));
+                Vector3 touchPosition = mainCamera.ScreenToWorldPoint(touch.position);
+                RaycastHit raycastHit;
+                Physics.Raycast(touchPosition, Camera.main.transform.forward, out raycastHit, Mathf.Infinity, 1);
             }
         }
 

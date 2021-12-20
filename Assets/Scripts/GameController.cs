@@ -39,6 +39,7 @@ public class GameController : MonoBehaviour
     public ScoreHandler scoreHandler;
     public CountdownHandler countdownHandler;
     public Slider movementSlider;
+    public Slider rotationSlider;
 
     public GameObject winnerPanel;
     public GameObject menuPanel;
