@@ -76,7 +76,6 @@ namespace Multiplayer
                 string ipAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList.First(
                     f => f.AddressFamily == AddressFamily.InterNetwork).ToString();
                 transport.ConnectAddress = ipAddress;
-                GameObject.Find("GameManager").GetComponent<GameController>().SetDebugText(ipAddress);
                 return new DiscoveryResponse
                 {
                     ServerId = ServerId,
@@ -113,7 +112,6 @@ namespace Multiplayer
                     f => f.AddressFamily == AddressFamily.InterNetwork);
             Debug.Log($"Ip {ipAddress} {GetSubnetMask(ipAddress)}");
             transport.ConnectAddress = ipAddress.ToString();
-            GameObject.Find("GameManager").GetComponent<GameController>().SetDebugText($"{ipAddress} {GetSubnetMask(ipAddress)}");
             return new DiscoveryRequest();
         }
 

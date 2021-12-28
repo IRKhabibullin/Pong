@@ -37,10 +37,8 @@ namespace Multiplayer
         #region Gamemode triggers
         private void TriggerPowerUpClassic()
         {
-            Debug.Log($"TriggerPowerUpClassic");
             if (UnityEngine.Random.Range(0f, 1f) <= triggerChance)
             {
-                Debug.Log($"TriggerPowerUpClassic triggered");
                 Vector3 powerUpPosition = new Vector3(UnityEngine.Random.Range(-30f, 30f),
                                                       UnityEngine.Random.Range(-2f, 2f), 0);
                 var prefab = classicModePrefabs[UnityEngine.Random.Range(0, classicModePrefabs.Length)];
@@ -48,12 +46,10 @@ namespace Multiplayer
                 powerUpInstances.Add(powerUp);
                 powerUp.Spawn();
             }
-            Debug.Log($"TriggerPowerUpClassic finished");
         }
 
         private void TriggerPowerUpAccuracy()
         {
-            Debug.Log($"TriggerPowerUpAccuracy");
             foreach (NetworkObject _instance in powerUpInstances)
             {
                 // if there is an instance of powerUp, we don't create more
@@ -67,7 +63,6 @@ namespace Multiplayer
             var powerUp = Instantiate(accuracyModePrefab, powerUpPosition, accuracyModePrefab.transform.rotation);
             powerUpInstances.Add(powerUp);
             powerUp.Spawn();
-            Debug.Log($"TriggerPowerUpAccuracy finished");
         }
         #endregion
 

@@ -132,7 +132,6 @@ namespace Multiplayer
             }
             if (NetworkManager.Singleton.ConnectedClientsList.Count == 2)
             {
-                Debug.Log($"TogglePlayerReadyServerRpc {_gc.matchController}");
                 (_gc.matchController as NetworkMatchController).ReadyToStart(everyoneIsReady);
             }
         }

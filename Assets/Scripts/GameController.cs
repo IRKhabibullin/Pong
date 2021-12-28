@@ -63,8 +63,6 @@ public class GameController : MonoBehaviour
     public GameObject[] classicModePrefabs;
     public GameObject accuracyModePrefab;
 
-    public TextMeshProUGUI debugText;
-
     public bool debugMode;
     #endregion
 
@@ -114,11 +112,6 @@ public class GameController : MonoBehaviour
         PlayerPrefs.SetString("ControlsType", controlsType);
     }
     #endregion
-
-    public void SetDebugText(string text)
-    {
-        debugText.text = text;
-    }
 
     public void SetUpAIMatchController()
     {
@@ -181,7 +174,6 @@ public class GameController : MonoBehaviour
 
     public void OnReadyButtonClicked()
     {
-        Debug.Log($"OnReadyButtonClicked {matchController}");
         (matchController as NetworkMatchController).OnReadyButtonClicked();
     }
 }
