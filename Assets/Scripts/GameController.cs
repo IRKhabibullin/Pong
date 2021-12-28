@@ -40,6 +40,8 @@ public class GameController : MonoBehaviour
     public CountdownHandler countdownHandler;
     public Slider movementSlider;
     public Slider rotationSlider;
+    public GameObject controlLevers;
+    public TextMeshProUGUI controlsToggleText;
 
     public GameObject winnerPanel;
     public GameObject menuPanel;
@@ -66,17 +68,52 @@ public class GameController : MonoBehaviour
     public bool debugMode;
     #endregion
 
+    private void Start()
+    {
+        controlsType = PlayerPrefs.GetString("ControlsType", "alternative");
+        controlsToggleText.text = controlsType;
+        if (controlsType == "default")
+        {
+            movementSlider.gameObject.SetActive(false);
+            rotationSlider.gameObject.SetActive(false);
+            controlLevers.SetActive(false);
+        }
+        else
+        {
+            movementSlider.gameObject.SetActive(true);
+            rotationSlider.gameObject.SetActive(true);
+            controlLevers.SetActive(true);
+        }
+    }
+
+    #region Toggles
     public void ToggleDebugMode(bool newValue)
     {
         debugMode = newValue;
     }
 
-    public void ToggleControlsType(bool isDefault)
+    public void ToggleControlsType()
     {
+        string controlsType = PlayerPrefs.GetString("ControlsType");
         // also need to enable or disable controls
-        controlsType = isDefault ? "default" : "alternative";
+        if (controlsType == "alternative")
+        {
+            controlsType = "default";
+            movementSlider.gameObject.SetActive(false);
+            rotationSlider.gameObject.SetActive(false);
+            controlLevers.SetActive(false);
+        }
+        else
+        {
+            controlsType = "alternative";
+            movementSlider.gameObject.SetActive(true);
+            rotationSlider.gameObject.SetActive(true);
+            controlLevers.SetActive(true);
+        }
+        controlsToggleText.text = controlsType;
         PlayerPrefs.SetString("ControlsType", controlsType);
     }
+    #endregion
 
     public void SetDebugText(string text)
     {
@@ -112,6 +149,7 @@ public class GameController : MonoBehaviour
         gameMode = (GameMode)PlayerPrefs.GetInt("GameMode");
         GameObject.Find("GameModeDropdown").GetComponent<TMP_Dropdown>().value = PlayerPrefs.GetInt("GameMode");
     }
+
     public void ResetReadyState()
     {
         readyButtonText.text = ReadyText;

@@ -7,6 +7,7 @@ namespace Singleplayer
 {
     public class AIMatchController : MonoBehaviour, IMatchController
     {
+        #region Variables
         private GameController _gc;
         public GameState gameState = GameState.Initial;
         public GameMode gameMode;
@@ -21,6 +22,7 @@ namespace Singleplayer
             get { return gameState; }
             set { gameState = value; }
         }
+        #endregion
 
         private void Awake()
         {

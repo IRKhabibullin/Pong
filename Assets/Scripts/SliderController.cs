@@ -7,6 +7,8 @@ public class SliderController : MonoBehaviour
     public Transform button;
     public float _value = 0;
 
+    private int maxMovementRange = 14;
+
     public void OnRotationValueChanged(float value)
     {
         float amount = (value / 180f) * 0.5f;
@@ -18,6 +20,6 @@ public class SliderController : MonoBehaviour
     public void OnMovementValueChanged(float value)
     {
         // button.localEulerAngles = new Vector3(0, -value, 0);
-        button.localPosition = new Vector3(value, 0, 2.5f);
+        button.localPosition = new Vector3(value * maxMovementRange, 0, 2.5f);
     }
 }

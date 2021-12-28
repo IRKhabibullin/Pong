@@ -112,7 +112,7 @@ namespace Singleplayer
                 {
                     startAngle = angleBetweenTouches;
                 }
-                // if player already has two fingers put on a screen and he is moving any of them now, we rotate for angle diff from previous frame
+                // if player already had two fingers put on a screen and he is moving any of them now, we rotate for angle diff from previous frame
                 else if (firstTouch.phase.Equals(TouchPhase.Moved) || secondTouch.phase.Equals(TouchPhase.Moved))
                 {
                     platform.SetRotation(angleBetweenTouches - startAngle);
