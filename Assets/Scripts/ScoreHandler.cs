@@ -14,6 +14,8 @@ public class ScoreHandler : NetworkBehaviour {
     private NetworkDictionary<string, int> networkScores = new NetworkDictionary<string, int>();
     private Dictionary<string, TextMeshProUGUI> scoreTexts = new Dictionary<string, TextMeshProUGUI>();
     [SerializeField] private int winScore = 10;
+    [SerializeField] private GameObject scoreCanvas;
+    [SerializeField] private GameObject scoreFrame;
 
     public void InitScore()
     {
@@ -43,6 +45,8 @@ public class ScoreHandler : NetworkBehaviour {
 
     public void InitScoreTexts()
     {
+        scoreCanvas.SetActive(true);
+        scoreFrame.SetActive(true);
         scoreTexts.Clear();
         foreach (var player_name in scores.Keys)
         {
@@ -65,6 +69,8 @@ public class ScoreHandler : NetworkBehaviour {
     }
     public void ClearScores()
     {
+        scoreCanvas.SetActive(false);
+        scoreFrame.SetActive(false);
         foreach (var score in new List<string>(scores.Keys))
         {
             scores[score] = 0;

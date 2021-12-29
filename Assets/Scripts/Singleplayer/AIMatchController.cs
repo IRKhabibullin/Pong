@@ -72,6 +72,7 @@ namespace Singleplayer
         public void ExitMatch()
         {
             GetComponent<PowerUpsManager>().ClearPowerUps();
+            _gc.scoreHandler.ClearScores();
             if (countdownCoroutine != null)
                 StopCoroutine(countdownCoroutine);
             if (_gc.ballController != null)
