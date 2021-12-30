@@ -42,6 +42,7 @@ public class GameController : MonoBehaviour
     public Slider rotationSlider;
     public GameObject controlLevers;
     public TextMeshProUGUI controlsToggleText;
+    public TextMeshProUGUI difficultyToggleText;
 
     public GameObject winnerPanel;
     public GameObject menuPanel;
@@ -68,6 +69,9 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
+        string difficulty = PlayerPrefs.GetString("Difficulty");
+        difficultyToggleText.text = difficulty == "" ? "normal" : difficulty;
+
         controlsType = PlayerPrefs.GetString("ControlsType", "alternative");
         controlsToggleText.text = controlsType;
         if (controlsType == "default")
@@ -88,6 +92,25 @@ public class GameController : MonoBehaviour
     public void ToggleDebugMode(bool newValue)
     {
         debugMode = newValue;
+    }
+
+    public void ToggleDifficulty()
+    {
+        string difficulty = PlayerPrefs.GetString("Difficulty");
+        switch (difficulty)
+        {
+            case "easy":
+                difficulty = "normal";
+                break;
+            case "hard":
+                difficulty = "easy";
+                break;
+            default:
+                difficulty = "hard";
+                break;
+        }
+        difficultyToggleText.text = difficulty;
+        PlayerPrefs.SetString("Difficulty", difficulty);
     }
 
     public void ToggleControlsType()

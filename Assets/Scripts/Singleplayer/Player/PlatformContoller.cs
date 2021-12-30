@@ -9,20 +9,38 @@ namespace Singleplayer
 
         private readonly float width = 5f;
         private readonly float maxSpeed = 40f;
+        private float difficultySpeedRatio = 1f;
         private Vector3 ballPosition = new Vector3(0, 2.05f, 0);  // where ball must be placed when player is pitcher
 
         public string Name;
         public int LaunchDirection { get; set; }
-        public Vector3 mSpeed = Vector3.zero;  // current speed. Used only on server. Position on client is synced from server
-        public float mAngle = 0;  // current rotation speed. Used only on server. Rotation on client is synced from server
-        public Vector3 mPosition = new Vector3();  // synced variable for platform position
-        public Quaternion mRotation = new Quaternion();  // synced variable for platform rotation
+        public Vector3 mSpeed = Vector3.zero;  // current speed
+        public float mAngle = 0;  // current rotation speed
+        public Vector3 mPosition = new Vector3();  // platform position
+        public Quaternion mRotation = new Quaternion();  // platform rotation
         public float maxAngle = 45f;
 
         private void Awake()
         {
             _gc = GameObject.Find("GameManager").GetComponent<GameController>();
             Name = PlayerPrefs.GetString("PlayerName");
+            string difficulty = PlayerPrefs.GetString("Difficulty");
+            switch (difficulty)
+            {
+                case "easy":
+                    difficultySpeedRatio = 1.5f;
+                    break;
+                case "normal":
+                    difficultySpeedRatio = 1f;
+                    break;
+                case "hard":
+                    difficultySpeedRatio = 0.7f;
+                    break;
+            }
+            if (gameObject.GetComponent<AIController>())
+            {
+                difficultySpeedRatio = 1 / difficultySpeedRatio;
+            }
         }
 
         void FixedUpdate()
@@ -61,7 +79,7 @@ namespace Singleplayer
                 mSpeed = Vector3.zero;
                 return;
             }
-            mSpeed = new Vector3(direction, 0, 0) * maxSpeed;
+            mSpeed = new Vector3(direction, 0, 0) * maxSpeed * difficultySpeedRatio;
         }
 
         public float GetCurrentAngle()
