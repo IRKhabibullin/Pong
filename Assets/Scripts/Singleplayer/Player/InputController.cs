@@ -123,23 +123,12 @@ namespace Singleplayer
             }
         }
 
-        void AlternativeInputTouch()
-        {
-            foreach (var touch in Input.touches)
-            {
-                // Vector2 touchPosition = mainCamera.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, -mainCamera.transform.position.z));
-                Vector3 touchPosition = mainCamera.ScreenToWorldPoint(touch.position);
-                RaycastHit raycastHit;
-                Physics.Raycast(touchPosition, Camera.main.transform.forward, out raycastHit, Mathf.Infinity, 1);
-            }
-        }
-
         /// <summary>
         /// Reading input from desktop
         /// </summary>
         void CheckForKeyboard()
         {
-            if (matchController.GameState == GameState.Prepare && !gameController.debugMode)
+            if (matchController != null && matchController.GameState == GameState.Prepare && !gameController.debugMode)
             {
                 return;
             }

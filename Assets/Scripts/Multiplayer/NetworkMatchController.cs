@@ -41,6 +41,7 @@ namespace Multiplayer
                 ResetReadyState();
             _gc.menuPanel.SetActive(false);
             _gc.leaveButton.SetActive(true);
+            _gc.ToggleControls(true);
         }
 
         public void OnBothPlayersConnected()
@@ -120,6 +121,7 @@ namespace Multiplayer
             countdownCoroutine = StartCoroutine(_gc.countdownHandler.CountDown());
             yield return countdownCoroutine;
 
+            StartAfterCountDownClientRpc();
             gameState.Value = GameState.Play;
             if (!_gc.debugMode)
             {
@@ -134,6 +136,12 @@ namespace Multiplayer
             _gc.startButton.SetActive(false);
         }
 
+        [ClientRpc]
+        private void StartAfterCountDownClientRpc()
+        {
+            _gc.ToggleControlsInteraction(true);
+        }
+
         public void FinishRound()
         {
             FinishRoundClientRpc();
@@ -146,6 +154,7 @@ namespace Multiplayer
         public void FinishRoundClientRpc()
         {
             ResetReadyState();
+            _gc.ToggleControlsInteraction(false);
             _gc.startButton.SetActive(false);
         }
 

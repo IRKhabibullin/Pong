@@ -45,7 +45,7 @@ namespace Singleplayer
 
         void FixedUpdate()
         {
-            if (_gc.matchController.MovementAllowed() || _gc.debugMode)
+            if (_gc.debugMode || _gc.testPlatform != null || _gc.matchController.MovementAllowed())
             {
                 // move
                 if (!Physics.Raycast(transform.position, new Vector3(Math.Sign(mSpeed.x), 0, 0), width, LayerMask.GetMask("SideWall")))

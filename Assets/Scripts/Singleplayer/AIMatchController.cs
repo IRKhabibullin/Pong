@@ -38,6 +38,7 @@ namespace Singleplayer
             _gc.menuPanel.SetActive(false);
             _gc.leaveButton.SetActive(true);
             _gc.startButton.SetActive(true);
+            _gc.ToggleControls(true);
 
             var player = Instantiate(_gc.playerPrefab, _gc.playerPrefab.transform.position, _gc.playerPrefab.transform.rotation);
             player.tag = "Player1";
@@ -109,6 +110,7 @@ namespace Singleplayer
             countdownCoroutine = StartCoroutine(_gc.countdownHandler.CountDown());
             yield return countdownCoroutine;
 
+            _gc.ToggleControlsInteraction(true);
             gameState = GameState.Play;
             if (!_gc.debugMode)
             {
@@ -118,6 +120,7 @@ namespace Singleplayer
 
         public void FinishRound()
         {
+            _gc.ToggleControlsInteraction(false);
             _gc.ballController.StopBall();
             gameObject.GetComponent<PowerUpsManager>().ClearPowerUps();
             gameState = GameState.Prepare;

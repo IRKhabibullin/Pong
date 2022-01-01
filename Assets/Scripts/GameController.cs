@@ -43,6 +43,7 @@ public class GameController : MonoBehaviour
     public GameObject controlLevers;
     public TextMeshProUGUI controlsToggleText;
     public TextMeshProUGUI difficultyToggleText;
+    public GameObject testPlatform;
 
     public GameObject winnerPanel;
     public GameObject menuPanel;
@@ -74,21 +75,9 @@ public class GameController : MonoBehaviour
 
         controlsType = PlayerPrefs.GetString("ControlsType", "alternative");
         controlsToggleText.text = controlsType;
-        if (controlsType == "default")
-        {
-            movementSlider.gameObject.SetActive(false);
-            rotationSlider.gameObject.SetActive(false);
-            controlLevers.SetActive(false);
-        }
-        else
-        {
-            movementSlider.gameObject.SetActive(true);
-            rotationSlider.gameObject.SetActive(true);
-            controlLevers.SetActive(true);
-        }
     }
 
-    #region Toggles
+    #region Settings
     public void ToggleDebugMode(bool newValue)
     {
         debugMode = newValue;
@@ -116,7 +105,6 @@ public class GameController : MonoBehaviour
     public void ToggleControlsType()
     {
         string controlsType = PlayerPrefs.GetString("ControlsType");
-        // also need to enable or disable controls
         if (controlsType == "alternative")
         {
             controlsType = "default";
@@ -133,6 +121,45 @@ public class GameController : MonoBehaviour
         }
         controlsToggleText.text = controlsType;
         PlayerPrefs.SetString("ControlsType", controlsType);
+    }
+
+    public void ToggleControls(bool value)
+    {
+        string controlsType = PlayerPrefs.GetString("ControlsType");
+        if (controlsType == "alternative")
+        {
+            movementSlider.gameObject.SetActive(value);
+            rotationSlider.gameObject.SetActive(value);
+            movementSlider.value = 0;
+            rotationSlider.value = 0;
+            controlLevers.SetActive(value);
+        }
+    }
+
+    public void ToggleControlsInteraction(bool value)
+    {
+        string controlsType = PlayerPrefs.GetString("ControlsType");
+        if (controlsType == "alternative")
+        {
+            movementSlider.interactable = value;
+            rotationSlider.interactable = value;
+        }
+    }
+
+    public void CreateTestPlatform()
+    {
+        testPlatform = Instantiate(playerPrefab, playerPrefab.transform.position, playerPrefab.transform.rotation);
+        testPlatform.tag = "Player1";
+        testPlatform.AddComponent<Singleplayer.PlatformController>().SetUp(0);
+        testPlatform.AddComponent<Singleplayer.InputController>();
+    }
+
+    public void DestroyTestPlatform()
+    {
+        if (testPlatform != null)
+        {
+            Destroy(testPlatform);
+        }
     }
     #endregion
 
@@ -179,6 +206,8 @@ public class GameController : MonoBehaviour
         readyButton.SetActive(false);
         startButton.SetActive(false);
         countdownHandler.ResetCountdown();
+        ToggleControls(false);
+        ToggleControlsInteraction(false);
         matchController.ExitMatch();
         Destroy(matchController as Component);
         Destroy(powerUpManager);
