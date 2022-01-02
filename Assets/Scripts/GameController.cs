@@ -11,6 +11,25 @@ public class GameController : MonoBehaviour
     #region Variables
     public const string ReadyText = "Ready";
     public const string NotReadyText = "Not ready";
+    public Dictionary<string, Dictionary<string, string>> controlsHints = new Dictionary<string, Dictionary<string, string>>
+    {
+        {
+            "movement",
+            new Dictionary<string, string>
+            {
+                {"default", "Put the finger on one of the sides of the screen to move the platform"},
+                {"alternative", "Move the left lever left or right to move the platform accordingly"}
+            }
+        },
+        {
+            "rotation",
+            new Dictionary<string, string>
+            {
+                {"default", "Put the fingers on both sides of the screen and move them up or down to rotate the platform"},
+                {"alternative", "Move the right lever clockwise or counterclockwise to rotate the platform"}
+            }
+        }
+    };
 
     public IMatchController matchController;
     public Component powerUpManager;
@@ -42,6 +61,8 @@ public class GameController : MonoBehaviour
     public Slider rotationSlider;
     public GameObject controlLevers;
     public TextMeshProUGUI controlsToggleText;
+    public TextMeshProUGUI movementControlHintText;
+    public TextMeshProUGUI rotationControlHintText;
     public TextMeshProUGUI difficultyToggleText;
     public GameObject testPlatform;
 
@@ -75,6 +96,8 @@ public class GameController : MonoBehaviour
 
         controlsType = PlayerPrefs.GetString("ControlsType", "alternative");
         controlsToggleText.text = controlsType;
+        movementControlHintText.text = controlsHints["movement"][controlsType];
+        rotationControlHintText.text = controlsHints["rotation"][controlsType];
     }
 
     #region Settings
@@ -119,8 +142,18 @@ public class GameController : MonoBehaviour
             rotationSlider.gameObject.SetActive(true);
             controlLevers.SetActive(true);
         }
+        movementControlHintText.text = controlsHints["movement"][controlsType];
+        rotationControlHintText.text = controlsHints["rotation"][controlsType];
         controlsToggleText.text = controlsType;
         PlayerPrefs.SetString("ControlsType", controlsType);
+    }
+
+    public void ToggleSettingsPanel(bool value)
+    {
+        ToggleControls(value);
+        ToggleControlsInteraction(value);
+        ToggleTestPlatform(value);
+
     }
 
     public void ToggleControls(bool value)
@@ -146,19 +179,21 @@ public class GameController : MonoBehaviour
         }
     }
 
-    public void CreateTestPlatform()
+    public void ToggleTestPlatform(bool value)
     {
-        testPlatform = Instantiate(playerPrefab, playerPrefab.transform.position, playerPrefab.transform.rotation);
-        testPlatform.tag = "Player1";
-        testPlatform.AddComponent<Singleplayer.PlatformController>().SetUp(0);
-        testPlatform.AddComponent<Singleplayer.InputController>();
-    }
-
-    public void DestroyTestPlatform()
-    {
-        if (testPlatform != null)
+        if (value)
         {
-            Destroy(testPlatform);
+            testPlatform = Instantiate(playerPrefab, playerPrefab.transform.position, playerPrefab.transform.rotation);
+            testPlatform.tag = "Player1";
+            testPlatform.AddComponent<Singleplayer.PlatformController>().SetUp(0);
+            testPlatform.AddComponent<Singleplayer.InputController>();
+        }
+        else
+        {
+            if (testPlatform != null)
+            {
+                Destroy(testPlatform);
+            }
         }
     }
     #endregion
