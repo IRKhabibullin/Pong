@@ -123,6 +123,35 @@ MonoBehaviour:
     m_Key: HintRotationAlt
     m_Metadata:
       m_Items: []
+  - m_Id: 1293531278143488
+    m_Key: Pong/Canvas/Menu/MainMenu/SettingsPanel/LanguageSetting/LanguageText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1302706259423232
+    m_Key: Pong/Canvas/Menu/MainMenu/SettingsPanel/LanguageSetting/LanguageToggle/Text
+      (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1303758740320256
+    m_Key: DifficultyEasy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1303770882830336
+    m_Key: DifficultyNormal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1303774238273536
+    m_Key: DifficultyHard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1303776486420480
+    m_Key: ControlsDefault
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1303778197696512
+    m_Key: ControlsAlternative
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

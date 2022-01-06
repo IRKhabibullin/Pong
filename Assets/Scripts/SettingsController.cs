@@ -83,6 +83,7 @@ public class SettingsController : MonoBehaviour
         }
         difficultyToggleText.text = settingsDynamicText["difficulty"][difficulty].GetLocalizedString();
         PlayerPrefs.SetString("Difficulty", difficulty);
+        _gc.testPlatform.GetComponent<Singleplayer.PlatformController>().SetSpeedRatio(difficulty);
     }
 
     public void ToggleControlsType()

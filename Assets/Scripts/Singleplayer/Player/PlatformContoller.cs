@@ -9,7 +9,6 @@ namespace Singleplayer
 
         private readonly float width = 5f;
         private readonly float maxSpeed = 40f;
-        private float difficultySpeedRatio = 1f;
         private Vector3 ballPosition = new Vector3(0, 2.05f, 0);  // where ball must be placed when player is pitcher
 
         public string Name;
@@ -19,12 +18,30 @@ namespace Singleplayer
         public Vector3 mPosition = new Vector3();  // platform position
         public Quaternion mRotation = new Quaternion();  // platform rotation
         public float maxAngle = 45f;
+        public float difficultySpeedRatio = 1f;
 
         private void Awake()
         {
             _gc = GameObject.Find("GameManager").GetComponent<GameController>();
             Name = PlayerPrefs.GetString("PlayerName");
-            string difficulty = PlayerPrefs.GetString("Difficulty", "normal");
+            SetSpeedRatio(PlayerPrefs.GetString("Difficulty", "normal"));
+        }
+
+        void FixedUpdate()
+        {
+            if (_gc.debugMode || _gc.testPlatform != null || _gc.matchController.MovementAllowed())
+            {
+                // move
+                if (!Physics.Raycast(transform.position, new Vector3(Math.Sign(mSpeed.x), 0, 0), width, LayerMask.GetMask("SideWall")))
+                    mPosition += mSpeed * Time.fixedDeltaTime;
+            }
+            // sync position on clients
+            transform.position = mPosition;
+            transform.rotation = mRotation;
+        }
+
+        public void SetSpeedRatio(string difficulty)
+        {
             switch (difficulty)
             {
                 case "easy":
@@ -41,19 +58,6 @@ namespace Singleplayer
             {
                 difficultySpeedRatio = 1 / difficultySpeedRatio;
             }
-        }
-
-        void FixedUpdate()
-        {
-            if (_gc.debugMode || _gc.testPlatform != null || _gc.matchController.MovementAllowed())
-            {
-                // move
-                if (!Physics.Raycast(transform.position, new Vector3(Math.Sign(mSpeed.x), 0, 0), width, LayerMask.GetMask("SideWall")))
-                    mPosition += mSpeed * Time.fixedDeltaTime;
-            }
-            // sync position on clients
-            transform.position = mPosition;
-            transform.rotation = mRotation;
         }
 
         public void SetUp(int side)

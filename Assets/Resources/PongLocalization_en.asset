@@ -130,6 +130,34 @@ MonoBehaviour:
       platform
     m_Metadata:
       m_Items: []
+  - m_Id: 1293531278143488
+    m_Localized: Language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1302706259423232
+    m_Localized: english
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1303758740320256
+    m_Localized: easy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1303770882830336
+    m_Localized: normal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1303774238273536
+    m_Localized: hard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1303776486420480
+    m_Localized: default
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1303778197696512
+    m_Localized: alternative
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
