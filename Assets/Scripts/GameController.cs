@@ -11,25 +11,6 @@ public class GameController : MonoBehaviour
     #region Variables
     public const string ReadyText = "Ready";
     public const string NotReadyText = "Not ready";
-    public Dictionary<string, Dictionary<string, string>> controlsHints = new Dictionary<string, Dictionary<string, string>>
-    {
-        {
-            "movement",
-            new Dictionary<string, string>
-            {
-                {"default", "Put the finger on one of the sides of the screen to move the platform"},
-                {"alternative", "Move the left lever left or right to move the platform accordingly"}
-            }
-        },
-        {
-            "rotation",
-            new Dictionary<string, string>
-            {
-                {"default", "Put the fingers on both sides of the screen and move them up or down to rotate the platform"},
-                {"alternative", "Move the right lever clockwise or counterclockwise to rotate the platform"}
-            }
-        }
-    };
 
     public IMatchController matchController;
     public Component powerUpManager;
@@ -60,10 +41,6 @@ public class GameController : MonoBehaviour
     public Slider movementSlider;
     public Slider rotationSlider;
     public GameObject controlLevers;
-    public TextMeshProUGUI controlsToggleText;
-    public TextMeshProUGUI movementControlHintText;
-    public TextMeshProUGUI rotationControlHintText;
-    public TextMeshProUGUI difficultyToggleText;
     public GameObject testPlatform;
 
     public GameObject winnerPanel;
@@ -91,69 +68,7 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        string difficulty = PlayerPrefs.GetString("Difficulty");
-        difficultyToggleText.text = difficulty == "" ? "normal" : difficulty;
-
         controlsType = PlayerPrefs.GetString("ControlsType", "alternative");
-        controlsToggleText.text = controlsType;
-        movementControlHintText.text = controlsHints["movement"][controlsType];
-        rotationControlHintText.text = controlsHints["rotation"][controlsType];
-    }
-
-    #region Settings
-    public void ToggleDebugMode(bool newValue)
-    {
-        debugMode = newValue;
-    }
-
-    public void ToggleDifficulty()
-    {
-        string difficulty = PlayerPrefs.GetString("Difficulty");
-        switch (difficulty)
-        {
-            case "easy":
-                difficulty = "normal";
-                break;
-            case "hard":
-                difficulty = "easy";
-                break;
-            default:
-                difficulty = "hard";
-                break;
-        }
-        difficultyToggleText.text = difficulty;
-        PlayerPrefs.SetString("Difficulty", difficulty);
-    }
-
-    public void ToggleControlsType()
-    {
-        string controlsType = PlayerPrefs.GetString("ControlsType");
-        if (controlsType == "alternative")
-        {
-            controlsType = "default";
-            movementSlider.gameObject.SetActive(false);
-            rotationSlider.gameObject.SetActive(false);
-            controlLevers.SetActive(false);
-        }
-        else
-        {
-            controlsType = "alternative";
-            movementSlider.gameObject.SetActive(true);
-            rotationSlider.gameObject.SetActive(true);
-            controlLevers.SetActive(true);
-        }
-        movementControlHintText.text = controlsHints["movement"][controlsType];
-        rotationControlHintText.text = controlsHints["rotation"][controlsType];
-        controlsToggleText.text = controlsType;
-        PlayerPrefs.SetString("ControlsType", controlsType);
-    }
-
-    public void ToggleSettingsPanel(bool value)
-    {
-        ToggleControls(value);
-        ToggleControlsInteraction(value);
-        ToggleTestPlatform(value);
-
     }
 
     public void ToggleControls(bool value)
@@ -178,25 +93,6 @@ public class GameController : MonoBehaviour
             rotationSlider.interactable = value;
         }
     }
-
-    public void ToggleTestPlatform(bool value)
-    {
-        if (value)
-        {
-            testPlatform = Instantiate(playerPrefab, playerPrefab.transform.position, playerPrefab.transform.rotation);
-            testPlatform.tag = "Player1";
-            testPlatform.AddComponent<Singleplayer.PlatformController>().SetUp(0);
-            testPlatform.AddComponent<Singleplayer.InputController>();
-        }
-        else
-        {
-            if (testPlatform != null)
-            {
-                Destroy(testPlatform);
-            }
-        }
-    }
-    #endregion
 
     public void SetUpAIMatchController()
     {

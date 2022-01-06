@@ -1,0 +1,139 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: PongLocalization_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 140f074e87a642d4bbe385f961bf5ca3, type: 2}
+  m_Metadata:
+    m_Items:
+    - rid: 6650691914354393195
+  m_TableData:
+  - m_Id: 1024854519808
+    m_Localized: Play
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1101270544384
+    m_Localized: Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1166668132352
+    m_Localized: Exit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1279360692224
+    m_Localized: Difficulty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1333047783424
+    m_Localized: Controls
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1373988384768
+    m_Localized: Back
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1548500791296
+    m_Localized: Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1634832150528
+    m_Localized: Enter name...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1693770510336
+    m_Localized: Game mode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1739115130880
+    m_Localized: Classic
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1922313940992
+    m_Localized: Play with bot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2068883894272
+    m_Localized: Host
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2097942032384
+    m_Localized: Find
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2188580941824
+    m_Localized: Set the name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2260047687680
+    m_Localized: OK
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2323880800256
+    m_Localized: Host disconnected
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2563413307392
+    m_Localized: Back
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2957552054272
+    m_Localized: Leave
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3052775337984
+    m_Localized: Ready
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3081485348864
+    m_Localized: Start
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3117862547456
+    m_Localized: Someone won!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3170362650624
+    m_Localized: OK
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3256446545920
+    m_Localized: Waiting for opponent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 42954170757120
+    m_Localized: Tap on one of the sides of the screen to move the platform
+    m_Metadata:
+      m_Items:
+      - rid: 6650691914354393195
+  - m_Id: 686786969268224
+    m_Localized: Tap on both sides of the screen and move them up or down to rotate
+      the platform
+    m_Metadata:
+      m_Items: []
+  - m_Id: 686756954828800
+    m_Localized: Move the left lever left or right to move the platform accordingly
+    m_Metadata:
+      m_Items: []
+  - m_Id: 686808301498368
+    m_Localized: Move the right lever clockwise or counterclockwise to rotate the
+      platform
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 6650691914354393195
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 00f05653a703000000f0160c11270000

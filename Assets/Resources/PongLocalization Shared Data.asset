@@ -1,0 +1,136 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: PongLocalization Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: PongLocalization
+  m_TableCollectionNameGuidString: 140f074e87a642d4bbe385f961bf5ca3
+  m_Entries:
+  - m_Id: 1024854519808
+    m_Key: Pong/Canvas/Menu/MainMenu/MenuPanel/PlayButton/Text (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1101270544384
+    m_Key: Pong/Canvas/Menu/MainMenu/MenuPanel/SettingsButton/Text (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1166668132352
+    m_Key: Pong/Canvas/Menu/MainMenu/MenuPanel/ExitButton/Text (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1279360692224
+    m_Key: Pong/Canvas/Menu/MainMenu/SettingsPanel/DifficultyText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1333047783424
+    m_Key: Pong/Canvas/Menu/MainMenu/SettingsPanel/ControlsText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1373988384768
+    m_Key: Pong/Canvas/Menu/MainMenu/SettingsPanel/BackButton/Text (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1548500791296
+    m_Key: Pong/Canvas/Menu/LobbyPanel/Panel/NameLabel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1634832150528
+    m_Key: Pong/Canvas/Menu/LobbyPanel/Panel/NameInput/Text Area/Placeholder
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1693770510336
+    m_Key: Pong/Canvas/Menu/LobbyPanel/Panel/GameModeLabel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1739115130880
+    m_Key: Pong/Canvas/Menu/LobbyPanel/Panel/GameModeDropdown/Label
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1922313940992
+    m_Key: Pong/Canvas/Menu/LobbyPanel/Panel/PlayWithBotButton/Text (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2068883894272
+    m_Key: Pong/Canvas/Menu/LobbyPanel/Panel/HostButton/Text (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2097942032384
+    m_Key: Pong/Canvas/Menu/LobbyPanel/Panel/FindButton/Text (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2188580941824
+    m_Key: Pong/Canvas/Menu/LobbyPanel/NameNotSetWarning/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2260047687680
+    m_Key: Pong/Canvas/Menu/LobbyPanel/NameNotSetWarning/Button/Text (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2323880800256
+    m_Key: Pong/Canvas/Menu/LobbyPanel/ServerDisconnectedPanel/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2563413307392
+    m_Key: Pong/Canvas/Menu/LobbyPanel/BackButton/Text (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2957552054272
+    m_Key: Pong/Canvas/Game/LeaveButton/Text (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3052775337984
+    m_Key: Pong/Canvas/Game/ReadyButton/Text (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3081485348864
+    m_Key: Pong/Canvas/Game/StartButton/Text (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3117862547456
+    m_Key: Pong/Canvas/Game/WinnerPanel/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3170362650624
+    m_Key: Pong/Canvas/Game/WinnerPanel/Button/Text (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3256446545920
+    m_Key: Pong/Canvas/Game/WaitingOpponentPanel/Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 42954170757120
+    m_Key: HintMovementDefault
+    m_Metadata:
+      m_Items: []
+  - m_Id: 686756954828800
+    m_Key: HintMovementAlt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 686786969268224
+    m_Key: HintRotationDefault
+    m_Metadata:
+      m_Items: []
+  - m_Id: 686808301498368
+    m_Key: HintRotationAlt
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 6650691914354393112
+  references:
+    version: 2
+    RefIds:
+    - rid: 6650691914354393112
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1641157595571

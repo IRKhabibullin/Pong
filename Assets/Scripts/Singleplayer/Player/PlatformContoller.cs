@@ -24,7 +24,7 @@ namespace Singleplayer
         {
             _gc = GameObject.Find("GameManager").GetComponent<GameController>();
             Name = PlayerPrefs.GetString("PlayerName");
-            string difficulty = PlayerPrefs.GetString("Difficulty");
+            string difficulty = PlayerPrefs.GetString("Difficulty", "normal");
             switch (difficulty)
             {
                 case "easy":
