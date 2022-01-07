@@ -1,8 +1,11 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Localization;
+using UnityEngine.Localization.PropertyVariants;
 using UnityEngine.Localization.Settings;
+using UnityEngine.Localization.Tables;
 
 public class SettingsController : MonoBehaviour
 {
@@ -13,41 +16,49 @@ public class SettingsController : MonoBehaviour
     public TextMeshProUGUI rotationControlHintText;
     public TextMeshProUGUI difficultyToggleText;
 
+    public List<GameObject> localizableObjects;
+    public TMP_Dropdown gameModeDropdown;
+
     public Dictionary<string, Dictionary<string, LocalizedString>> settingsDynamicText = new Dictionary<string, Dictionary<string, LocalizedString>>
     {
         {
             "movement",
             new Dictionary<string, LocalizedString>
             {
-                {"default", new LocalizedString { TableReference = "PongLocalization", TableEntryReference = "HintMovementDefault"}},
-                {"alternative", new LocalizedString { TableReference = "PongLocalization", TableEntryReference = "HintMovementAlt"}}
+                {"default", new LocalizedString("PongLocalization", "HintMovementDefault")},
+                {"alternative", new LocalizedString("PongLocalization", "HintMovementAlt")}
             }
         },
         {
             "rotation",
             new Dictionary<string, LocalizedString>
             {
-                {"default", new LocalizedString { TableReference = "PongLocalization", TableEntryReference = "HintRotationDefault"}},
-                {"alternative", new LocalizedString { TableReference = "PongLocalization", TableEntryReference = "HintRotationAlt"}}
+                {"default", new LocalizedString("PongLocalization", "HintRotationDefault")},
+                {"alternative", new LocalizedString("PongLocalization", "HintRotationAlt")}
             }
         },
         {
             "difficulty",
             new Dictionary<string, LocalizedString>
             {
-                {"easy", new LocalizedString { TableReference = "PongLocalization", TableEntryReference = "DifficultyEasy"}},
-                {"normal", new LocalizedString { TableReference = "PongLocalization", TableEntryReference = "DifficultyNormal"}},
-                {"hard", new LocalizedString { TableReference = "PongLocalization", TableEntryReference = "DifficultyHard"}}
+                {"easy", new LocalizedString("PongLocalization", "DifficultyEasy")},
+                {"normal", new LocalizedString("PongLocalization", "DifficultyNormal")},
+                {"hard", new LocalizedString("PongLocalization", "DifficultyHard")}
             }
         },
         {
             "controls",
             new Dictionary<string, LocalizedString>
             {
-                {"default", new LocalizedString { TableReference = "PongLocalization", TableEntryReference = "ControlsDefault"}},
-                {"alternative", new LocalizedString { TableReference = "PongLocalization", TableEntryReference = "ControlsAlternative"}}
+                {"default", new LocalizedString("PongLocalization", "ControlsDefault")},
+                {"alternative", new LocalizedString("PongLocalization", "ControlsAlternative")}
             }
         }
+    };
+    public List<LocalizedString> gameModeLocalizedNames = new List<LocalizedString>
+    {
+        new LocalizedString("PongLocalization", "GameModeClassic"),
+        new LocalizedString("PongLocalization", "GameModeAccuracy")
     };
 
     private void OnEnable()
@@ -110,6 +121,22 @@ public class SettingsController : MonoBehaviour
         controlsToggleText.text = settingsDynamicText["controls"][controlsType].GetLocalizedString();
     }
 
+    public IEnumerator SetLanguage(string language)
+    {
+        yield return LocalizationSettings.InitializationOperation;
+
+        foreach (var locale in LocalizationSettings.AvailableLocales.Locales)
+        {
+            if (locale.name == language)
+            {
+                LocalizationSettings.SelectedLocale = locale;
+                PlayerPrefs.SetString("Language", locale.name);
+                break;
+            }
+        }
+        UpdateLocalizedFields();
+    }
+
     public void ToggleLanguage()
     {
         int selectedLanguageIndex = 0;
@@ -125,14 +152,25 @@ public class SettingsController : MonoBehaviour
                 break;
             }
         }
-        LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[selectedLanguageIndex];
-        PlayerPrefs.SetString("Language", LocalizationSettings.SelectedLocale.name);
 
-        // Need to update other settings localizations
+        StartCoroutine(SetLanguage(LocalizationSettings.AvailableLocales.Locales[selectedLanguageIndex].name));
+    }
+
+    public void UpdateLocalizedFields()
+    {
         controlsToggleText.text = settingsDynamicText["controls"][_gc.controlsType].GetLocalizedString();
         difficultyToggleText.text = settingsDynamicText["difficulty"][PlayerPrefs.GetString("Difficulty", "normal")].GetLocalizedString();
         movementControlHintText.text = settingsDynamicText["movement"][_gc.controlsType].GetLocalizedString();
         rotationControlHintText.text = settingsDynamicText["rotation"][_gc.controlsType].GetLocalizedString();
+
+        foreach (var localizedObject in localizableObjects)
+        {
+            localizedObject.GetComponent<GameObjectLocalizer>().ApplyLocaleVariant(LocalizationSettings.SelectedLocale);
+        }
+        for (int i = 0; i < gameModeLocalizedNames.Count; i++)
+        {
+            gameModeDropdown.options[i].text = gameModeLocalizedNames[i].GetLocalizedString();
+        }
     }
 
     public void ToggleTestPlatform(bool value)

@@ -2,6 +2,8 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 using static GameController;
+using UnityEngine.Localization;
+using System.Collections.Generic;
 
 namespace Singleplayer
 {
@@ -17,6 +19,7 @@ namespace Singleplayer
         public PlatformController botPlatform;
         public IPlatformController Pitcher { get; set; }
         public GameObject LastTouched { get; set; }
+        public LocalizedString winnerText = new LocalizedString("PongLocalization", "WinnerText");
         public GameState GameState
         {
             get { return gameState; }
@@ -136,7 +139,8 @@ namespace Singleplayer
 
         public void WinnerNotification(string winner)
         {
-            _gc.winnerPanel.GetComponentInChildren<TextMeshProUGUI>().text = $"{winner} won!";
+            winnerText.Arguments = new object[] { new Dictionary<string, string>() { { "winner", winner } } };
+            _gc.winnerPanel.GetComponentInChildren<TextMeshProUGUI>().text = winnerText.GetLocalizedString();
             _gc.winnerPanel.SetActive(true);
         }
         #endregion

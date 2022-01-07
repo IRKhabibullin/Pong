@@ -14,6 +14,7 @@ public class GameController : MonoBehaviour
 
     public IMatchController matchController;
     public Component powerUpManager;
+    public SettingsController settings;
 
     public enum GameState
     {
@@ -68,6 +69,12 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
+        string language = PlayerPrefs.GetString("Language");
+        Debug.Log($"Language is {language}");
+        if (language != "")
+        {
+            StartCoroutine(settings.SetLanguage(language));
+        }
         controlsType = PlayerPrefs.GetString("ControlsType", "alternative");
     }
 

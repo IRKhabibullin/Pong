@@ -95,10 +95,6 @@ MonoBehaviour:
     m_Key: Pong/Canvas/Game/StartButton/Text (TMP)
     m_Metadata:
       m_Items: []
-  - m_Id: 3117862547456
-    m_Key: Pong/Canvas/Game/WinnerPanel/Text
-    m_Metadata:
-      m_Items: []
   - m_Id: 3170362650624
     m_Key: Pong/Canvas/Game/WinnerPanel/Button/Text (TMP)
     m_Metadata:
@@ -150,6 +146,22 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 1303778197696512
     m_Key: ControlsAlternative
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1432263377481728
+    m_Key: GameModeClassic
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1432264212148224
+    m_Key: GameModeAccuracy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1699892163964928
+    m_Key: WinnerText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1704417067200512
+    m_Key: Pong/Canvas/Game/Score/Panel/WinCondition
     m_Metadata:
       m_Items: []
   m_Metadata:

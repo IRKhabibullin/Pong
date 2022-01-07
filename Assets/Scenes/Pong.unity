@@ -287,7 +287,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7991354133215235343, guid: 0fc15d86e11c2654ea41405f53c788de, type: 3}
       propertyPath: m_Value
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7991354133258672384, guid: 0fc15d86e11c2654ea41405f53c788de, type: 3}
       propertyPath: m_Name
@@ -633,7 +633,7 @@ MonoBehaviour:
         m_VariantData:
         - localeIdentifier:
             m_Code: en
-          value: 5
+          value: 0
         - localeIdentifier:
             m_Code: ru
           value: 5
@@ -1088,7 +1088,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1392498420}
+  - {fileID: 1388242582}
   m_Father: {fileID: 612305228}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1912,7 +1912,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 168604687}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -649.12494}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3440,7 +3440,6 @@ GameObject:
   - component: {fileID: 398007872}
   - component: {fileID: 398007874}
   - component: {fileID: 398007873}
-  - component: {fileID: 398007875}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -3565,44 +3564,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 398007871}
   m_CullTransparentMesh: 1
---- !u!114 &398007875
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 398007871}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69beb381e244f92449b8c4cf954630e9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_TrackedObjects:
-  - rid: 6650691914354393158
-  references:
-    version: 2
-    RefIds:
-    - rid: 6650691914354393158
-      type: {class: TrackedUGuiGraphic, ns: UnityEngine.Localization.PropertyVariants.TrackedObjects, asm: Unity.Localization}
-      data:
-        m_Target: {fileID: 398007873}
-        m_TrackedProperties:
-          items:
-          - rid: 6650691914354393159
-        m_UpdateType: 0
-    - rid: 6650691914354393159
-      type: {class: LocalizedStringProperty, ns: UnityEngine.Localization.PropertyVariants.TrackedProperties, asm: Unity.Localization}
-      data:
-        m_Localized:
-          m_TableReference:
-            m_TableCollectionName: GUID:140f074e87a642d4bbe385f961bf5ca3
-          m_TableEntryReference:
-            m_KeyId: 3117862547456
-            m_Key: 
-          m_FallbackState: 0
-          m_WaitForCompletion: 0
-          m_LocalVariables: []
-        m_PropertyPath: m_text
 --- !u!1 &419379645
 GameObject:
   m_ObjectHideFlags: 0
@@ -4159,11 +4120,11 @@ RectTransform:
   m_Father: {fileID: 1834787251}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 230, y: -15}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 300, y: 0}
   m_SizeDelta: {x: 610, y: 350}
-  m_Pivot: {x: 0, y: 1}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &475564058
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6666,9 +6627,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 40, y: 25}
+  m_AnchoredPosition: {x: 50, y: -20}
   m_SizeDelta: {x: 80, y: 40}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0, y: 1}
 --- !u!114 &879655826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10039,6 +10000,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powerUpManager: {fileID: 0}
+  settings: {fileID: 1569169281}
   gameMode: 0
   controlsType: 
   playersPositions:
@@ -10379,7 +10341,7 @@ Transform:
   m_Father: {fileID: 1635390584}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1392498419
+--- !u!1 &1388242581
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -10387,9 +10349,10 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1392498420}
-  - component: {fileID: 1392498422}
-  - component: {fileID: 1392498421}
+  - component: {fileID: 1388242582}
+  - component: {fileID: 1388242585}
+  - component: {fileID: 1388242584}
+  - component: {fileID: 1388242583}
   m_Layer: 5
   m_Name: WinCondition
   m_TagString: Untagged
@@ -10397,13 +10360,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &1392498420
+--- !u!224 &1388242582
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1392498419}
+  m_GameObject: {fileID: 1388242581}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -10415,15 +10378,101 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 100, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1392498421
+--- !u!114 &1388242583
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1392498419}
+  m_GameObject: {fileID: 1388242581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69beb381e244f92449b8c4cf954630e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TrackedObjects:
+  - rid: 6650692017747132422
+  references:
+    version: 2
+    RefIds:
+    - rid: 6650692017747132422
+      type: {class: TrackedUGuiGraphic, ns: UnityEngine.Localization.PropertyVariants.TrackedObjects, asm: Unity.Localization}
+      data:
+        m_Target: {fileID: 1388242584}
+        m_TrackedProperties:
+          items:
+          - rid: 6650692017747132423
+          - rid: 6650692017747132424
+          - rid: 6650692017747132425
+          - rid: 6650692017747132426
+          - rid: 6650692017747132427
+        m_UpdateType: 0
+    - rid: 6650692017747132423
+      type: {class: LocalizedStringProperty, ns: UnityEngine.Localization.PropertyVariants.TrackedProperties, asm: Unity.Localization}
+      data:
+        m_Localized:
+          m_TableReference:
+            m_TableCollectionName: GUID:140f074e87a642d4bbe385f961bf5ca3
+          m_TableEntryReference:
+            m_KeyId: 1704417067200512
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
+        m_PropertyPath: m_text
+    - rid: 6650692017747132424
+      type: {class: FloatTrackedProperty, ns: UnityEngine.Localization.PropertyVariants.TrackedProperties, asm: Unity.Localization}
+      data:
+        m_PropertyPath: m_fontSize
+        m_VariantData:
+        - localeIdentifier:
+            m_Code: en
+          value: 22
+        - localeIdentifier:
+            m_Code: ru
+          value: 22
+    - rid: 6650692017747132425
+      type: {class: FloatTrackedProperty, ns: UnityEngine.Localization.PropertyVariants.TrackedProperties, asm: Unity.Localization}
+      data:
+        m_PropertyPath: m_fontSizeBase
+        m_VariantData:
+        - localeIdentifier:
+            m_Code: en
+          value: 22
+        - localeIdentifier:
+            m_Code: ru
+          value: 22
+    - rid: 6650692017747132426
+      type: {class: EnumTrackedProperty, ns: UnityEngine.Localization.PropertyVariants.TrackedProperties, asm: Unity.Localization}
+      data:
+        m_PropertyPath: m_HorizontalAlignment
+        m_VariantData:
+        - localeIdentifier:
+            m_Code: en
+          value: 2
+        - localeIdentifier:
+            m_Code: ru
+          value: 2
+    - rid: 6650692017747132427
+      type: {class: EnumTrackedProperty, ns: UnityEngine.Localization.PropertyVariants.TrackedProperties, asm: Unity.Localization}
+      data:
+        m_PropertyPath: m_VerticalAlignment
+        m_VariantData:
+        - localeIdentifier:
+            m_Code: en
+          value: 512
+        - localeIdentifier:
+            m_Code: ru
+          value: 512
+--- !u!114 &1388242584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1388242581}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
@@ -10437,7 +10486,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 5 to win
+  m_text: New Text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -10464,15 +10513,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22
-  m_fontSizeBase: 22
+  m_fontSize: 36
+  m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
+  m_HorizontalAlignment: 1
+  m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -10506,13 +10555,13 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!222 &1392498422
+--- !u!222 &1388242585
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1392498419}
+  m_GameObject: {fileID: 1388242581}
   m_CullTransparentMesh: 1
 --- !u!1 &1399643760
 GameObject:
@@ -12406,6 +12455,45 @@ MonoBehaviour:
   movementControlHintText: {fileID: 1151727727}
   rotationControlHintText: {fileID: 249025963}
   difficultyToggleText: {fileID: 493973050}
+  localizableObjects:
+  - {fileID: 1567427630}
+  - {fileID: 1256686531}
+  - {fileID: 419379645}
+  - {fileID: 736187828}
+  - {fileID: 1881845380}
+  - {fileID: 1743056470}
+  - {fileID: 1099357646}
+  - {fileID: 422822546}
+  - {fileID: 1498332097}
+  - {fileID: 828459644}
+  - {fileID: 1315943810}
+  - {fileID: 444345043}
+  - {fileID: 1559796797}
+  - {fileID: 1632813825}
+  - {fileID: 148387593}
+  - {fileID: 1531643725}
+  - {fileID: 1388242581}
+  gameModeDropdown: {fileID: 188223682}
+  gameModeLocalizedNames:
+  - m_TableReference:
+      m_TableCollectionName: PongLocalization
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: GameModeClassic
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  - m_TableReference:
+      m_TableCollectionName: PongLocalization
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: GameModeAccuracy
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &1571425799
 GameObject:
   m_ObjectHideFlags: 0
@@ -12608,7 +12696,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1605268938}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -649.12494}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -13572,11 +13660,11 @@ RectTransform:
   m_Father: {fileID: 1834787251}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 15, y: -15}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 50, y: 0}
   m_SizeDelta: {x: 200, y: 350}
-  m_Pivot: {x: 0, y: 1}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1660330716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16278,7 +16366,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -540, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1985579819
 MonoBehaviour:
@@ -16422,7 +16510,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -540, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2028187387
 GameObject:
