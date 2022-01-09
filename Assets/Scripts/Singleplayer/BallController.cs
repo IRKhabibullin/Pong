@@ -8,6 +8,7 @@ namespace Singleplayer
         public UnityEvent<string> backWallTouchEvent;
         public UnityEvent<GameObject> platformTouchEvent;
         public Rigidbody Rb { get; set; }
+        public AudioSource hitSound;
 
         private IMatchController _mc;
 
@@ -35,6 +36,7 @@ namespace Singleplayer
 
         void OnCollisionEnter(Collision collision)
         {
+            hitSound.Play();
             if (backWallsLayer.value == collision.gameObject.layer)
             {
                 backWallTouchEvent.Invoke(collision.gameObject.tag);
