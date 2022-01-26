@@ -47,6 +47,8 @@ public class GameController : MonoBehaviour
     public GameObject winnerPanel;
     public GameObject menuPanel;
     public GameObject waitingForOpponentPanel;
+    public GameObject rulesClassicPanel;
+    public GameObject rulesAccuracyPanel;
 
     public GameObject leaveButton;
     public GameObject startButton;
@@ -129,6 +131,14 @@ public class GameController : MonoBehaviour
     {
         PlayerPrefs.SetInt("GameMode", modeIndex);
         gameMode = (GameMode)modeIndex;
+    }
+
+    public void ShowRules()
+    {
+        if (gameMode == GameMode.Classic)
+            rulesClassicPanel.SetActive(true);
+        else
+            rulesAccuracyPanel.SetActive(true);
     }
 
     public void LoadGameMode()
