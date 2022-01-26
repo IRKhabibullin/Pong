@@ -170,6 +170,11 @@ MonoBehaviour:
     m_Localized: 5 to win
     m_Metadata:
       m_Items: []
+  - m_Id: 8495698770452480
+    m_Localized: Welcome to The Pong! Before you start, go to the settings menu,
+      learn about controls types and choose the one that fits you more.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

@@ -70,7 +70,7 @@ public class SettingsController : MonoBehaviour
         rotationControlHintText.text = settingsDynamicText["rotation"][_gc.controlsType].GetLocalizedString();
     }
 
-    public void ToggleSettingsPanel(bool value)
+    public void ToggleControlsObejcts(bool value)
     {
         _gc.ToggleControls(value);
         _gc.ToggleControlsInteraction(value);

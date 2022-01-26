@@ -6,8 +6,9 @@ public class MenuHandler : MonoBehaviour
 {
     public enum MenuPage
     {
-        MainMenu,    // Starting page
-        LobbyPanel,  // Panel to host or find a game
+        MainMenu,      // Starting page
+        LobbyPanel,    // Panel to host or find a game
+        Settings,      // Settings panel
     }
 
     private MenuPage currentPage;
@@ -16,12 +17,20 @@ public class MenuHandler : MonoBehaviour
     [SerializeField] private GameObject nameNotSetWarning;
 
     [SerializeField] private GameObject mainMenu;
+    [SerializeField] private GameObject settingsPanel;
     [SerializeField] private GameObject lobbyPanel;
+    [SerializeField] private GameObject welcomePanel;
 
     public void Start()
     {
         playerName.text = PlayerPrefs.GetString("PlayerName");
         currentPage = MenuPage.MainMenu;
+        // Check if user opens an app for the first time. If he is, then we show welcome panel
+        if (CheckFirstEnter())
+        {
+            welcomePanel.SetActive(true);
+            PlayerPrefs.SetInt("FirstEnter", 1);
+        }
     }
 
     public void Update()
@@ -38,14 +47,14 @@ public class MenuHandler : MonoBehaviour
                         mainMenu.SetActive(true);
                         currentPage = MenuPage.MainMenu;
                         break;
+                    case MenuPage.Settings:
+                        settingsPanel.SetActive(false);
+                        mainMenu.SetActive(true);
+                        currentPage = MenuPage.MainMenu;
+                        break;
                 }
             }
         }
-    }
-
-    public void SelectGameMode(int modeIndex)
-    {
-        PlayerPrefs.SetInt("GameMode", modeIndex);
     }
 
     public void ExitGame() {
@@ -75,10 +84,22 @@ public class MenuHandler : MonoBehaviour
         return true;
     }
 
+    public void ToSettings()
+    {
+        mainMenu.SetActive(false);
+        settingsPanel.SetActive(true);
+        currentPage = MenuPage.Settings;
+    }
+
     public void ToLobby()
     {
         lobbyPanel.SetActive(true);
         mainMenu.SetActive(false);
         currentPage = MenuPage.LobbyPanel;
+    }
+
+    public bool CheckFirstEnter()
+    {
+        return PlayerPrefs.GetInt("FirstEnter") != 1;
     }
 }

@@ -164,6 +164,10 @@ MonoBehaviour:
     m_Key: Pong/Canvas/Game/Score/Panel/WinCondition
     m_Metadata:
       m_Items: []
+  - m_Id: 8495698770452480
+    m_Key: Pong/Canvas/Menu/WinnerPanel (1)/Text
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

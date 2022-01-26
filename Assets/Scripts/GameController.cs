@@ -122,7 +122,13 @@ public class GameController : MonoBehaviour
     public void EnterTheGame()
     {
         matchController.EnterMatch();
-        controlsType = PlayerPrefs.GetString("ControlsType", "alternative");
+        controlsType = PlayerPrefs.GetString("ControlsType", "default");
+    }
+
+    public void SelectGameMode(int modeIndex)
+    {
+        PlayerPrefs.SetInt("GameMode", modeIndex);
+        gameMode = (GameMode)modeIndex;
     }
 
     public void LoadGameMode()

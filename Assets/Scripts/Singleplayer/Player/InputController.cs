@@ -54,7 +54,7 @@ namespace Singleplayer
         {
             gameController.rotationSlider.GetComponent<SliderController>().OnRotationValueChanged(newValue);
             float newAngle = newValue / 90f * platform.maxAngle;
-            platform.SetRotation(newAngle);
+            platform.SetRotation(-newAngle);
         }
 
 
