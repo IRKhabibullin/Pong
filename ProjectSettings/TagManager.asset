@@ -4,10 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Player1
-  - Player2
-  - PowerUp
   - Ball
+  - Blue
+  - Red
   layers:
   - Default
   - TransparentFX
@@ -15,10 +14,10 @@ TagManager:
   - 
   - Water
   - UI
-  - SideWall
   - BackWall
+  - SideWall
   - Platform
-  - Ball
+  - 
   - 
   - 
   - 
