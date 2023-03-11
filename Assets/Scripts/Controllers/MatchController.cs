@@ -37,8 +37,10 @@ public class MatchController : MonoBehaviour
     private void OnEnable()
     {
         EventsManager.LobbyChannel.OnPlayWithBotButtonPressed += LoadMatchWithBot;
+        EventsManager.LobbyChannel.OnHostButtonPressed += LoadHostedMatch;
         EventsManager.MatchChannel.OnExitButtonPressed += DisableMatchPanel;
         EventsManager.ScoreChannel.OnWinConditionReached += FinishMatch;
+        EventsManager.LobbyChannel.OnFindButtonPressed += JoinHostedMatch;
     }
 
     private void OnDisable()
@@ -46,8 +48,10 @@ public class MatchController : MonoBehaviour
         if (!EventsManager.HasInstance) return;
         
         EventsManager.LobbyChannel.OnPlayWithBotButtonPressed -= LoadMatchWithBot;
+        EventsManager.LobbyChannel.OnHostButtonPressed -= LoadHostedMatch;
         EventsManager.MatchChannel.OnExitButtonPressed -= DisableMatchPanel;
         EventsManager.ScoreChannel.OnWinConditionReached -= FinishMatch;
+        EventsManager.LobbyChannel.OnFindButtonPressed -= JoinHostedMatch;
     }
 
     private void LoadMatchWithBot()
@@ -83,9 +87,39 @@ public class MatchController : MonoBehaviour
 
     private void DisableMatchPanel()
     {
-        Destroy(player1Platform.gameObject);
-        Destroy(player2Platform.gameObject);
-        
+        if (MatchMode == MatchMode.Singleplayer)
+        {
+            Destroy(player1Platform.gameObject);
+            Destroy(player2Platform.gameObject);
+        }
+        else
+        {
+            ConnectionManager.Instance.Leave();
+        }
+
         matchPanel.gameObject.SetActive(false);
+    }
+
+    private void LoadHostedMatch()
+    {
+        matchPanel.gameObject.SetActive(true);
+        MatchMode = MatchMode.Multiplayer;
+
+        ConnectionManager.Instance.Host();
+
+        // sideNames[BoardSide.Blue] = "<Player name>";
+        // sideNames[BoardSide.Red] = "Benjamin bot";
+        
+        scoreController.InitScore(winCondition);
+
+        // EventsManager.MatchChannel.RaiseOnMatchPanelLoadedEvent();
+    }
+
+    private void JoinHostedMatch()
+    {
+        matchPanel.gameObject.SetActive(true);
+        MatchMode = MatchMode.Multiplayer;
+        // ConnectionManager.Instance.Join();
+        scoreController.InitScore(winCondition);
     }
 }

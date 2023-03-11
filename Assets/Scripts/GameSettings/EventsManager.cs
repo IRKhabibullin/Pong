@@ -1,5 +1,4 @@
-using System;
-using System.Collections.Generic;
+using ScriptableObjects.Channels;
 using UnityEngine;
 
 public class EventsManager : MonoBehaviour
@@ -9,12 +8,16 @@ public class EventsManager : MonoBehaviour
     [SerializeField] private RoundChannel roundChannel;
     [SerializeField] private LobbyChannel lobbyChannel;
     [SerializeField] private MatchChannel matchChannel;
+    [SerializeField] private NetworkChannel networkChannel;
+    [SerializeField] private MatchmakingChannel matchmakingChannel;
 
     public static BoardChannel BoardChannel => Instance.boardChannel;
     public static ScoreChannel ScoreChannel => Instance.scoreChannel;
     public static RoundChannel RoundChannel => Instance.roundChannel;
     public static LobbyChannel LobbyChannel => Instance.lobbyChannel;
     public static MatchChannel MatchChannel => Instance.matchChannel;
+    public static NetworkChannel NetworkChannel => Instance.networkChannel;
+    public static MatchmakingChannel MatchmakingChannel => Instance.matchmakingChannel;
 
     #region singleton setup
     public static EventsManager Instance
@@ -52,5 +55,7 @@ public class EventsManager : MonoBehaviour
         roundChannel.ClearSubscriptions();
         lobbyChannel.ClearSubscriptions();
         matchChannel.ClearSubscriptions();
+        networkChannel.ClearSubscriptions();
+        matchmakingChannel.ClearSubscriptions();
     }
 }
