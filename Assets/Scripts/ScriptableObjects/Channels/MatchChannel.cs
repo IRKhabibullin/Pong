@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Channels/Match channel")]
-public class MatchChannel : ScriptableObject
+public class MatchChannel : BaseChannel
 {
     public event Action OnExitButtonPressed;
     public event Action OnMatchPanelLoaded;

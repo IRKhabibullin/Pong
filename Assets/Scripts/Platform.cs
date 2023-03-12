@@ -44,7 +44,7 @@ public class Platform : MonoBehaviour
 
     private void OnEnable()
     {
-        EventsManager.RoundChannel.OnRoundFinished += ResetPosition;
+        EventsManager.Instance.RoundChannel.OnRoundFinished += ResetPosition;
     }
 
     private void OnDisable()
@@ -52,6 +52,6 @@ public class Platform : MonoBehaviour
         if (!EventsManager.HasInstance)
             return;
         
-        EventsManager.RoundChannel.OnRoundFinished -= ResetPosition;
+        EventsManager.Instance.RoundChannel.OnRoundFinished -= ResetPosition;
     }
 }

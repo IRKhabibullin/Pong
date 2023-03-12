@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Channels/Network channel")]
-public class NetworkChannel : ScriptableObject
+public class NetworkChannel : BaseChannel
 {
     public event Action<MatchData> OnMatchFound;
 

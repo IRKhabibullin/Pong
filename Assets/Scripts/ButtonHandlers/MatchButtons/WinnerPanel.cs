@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-public class WinnerPanel : MonoBehaviour
+public class WinnerPanel : BaseSubscriber
 {
     [SerializeField] private TextMeshProUGUI winnerLabel;
     
@@ -11,16 +11,12 @@ public class WinnerPanel : MonoBehaviour
         gameObject.transform.GetChild(0).gameObject.SetActive(true);
     }
 
-    private void OnEnable()
+    #region Event handlers
+
+    public void OnMatchFinishedHandler(string winnerName)
     {
-        EventsManager.MatchChannel.OnMatchFinished += ShowWinner;
+        ShowWinner(winnerName);
     }
 
-    private void OnDisable()
-    {
-        if (!EventsManager.HasInstance)
-            return;
-        
-        EventsManager.MatchChannel.OnMatchFinished -= ShowWinner;
-    }
+    #endregion
 }

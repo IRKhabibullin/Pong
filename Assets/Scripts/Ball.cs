@@ -32,11 +32,11 @@ public class Ball : MonoBehaviour
         
         if (GlobalSettings.LayerIncluded(GlobalSettings.Settings.BackWallLayer, collision.gameObject.layer))
         {
-            EventsManager.BoardChannel.RaiseBackWallTouchEvent(GlobalSettings.GetSideByTag(collision.gameObject.tag));
+            EventsManager.Instance.BoardChannel.RaiseBackWallTouchEvent(GlobalSettings.GetSideByTag(collision.gameObject.tag));
         }
         if (GlobalSettings.LayerIncluded(GlobalSettings.Settings.PlatformLayer, collision.gameObject.layer))
         {
-            EventsManager.BoardChannel.RaisePlatformTouchEvent(GlobalSettings.GetSideByTag(collision.gameObject.tag));
+            EventsManager.Instance.BoardChannel.RaisePlatformTouchEvent(GlobalSettings.GetSideByTag(collision.gameObject.tag));
         }
     }
 
@@ -47,19 +47,19 @@ public class Ball : MonoBehaviour
 
     private void OnEnable()
     {
-        EventsManager.RoundChannel.OnCountdownFinished += Launch;
-        EventsManager.RoundChannel.OnRoundFinished += Reset;
+        EventsManager.Instance.RoundChannel.OnCountdownFinished += Launch;
+        EventsManager.Instance.RoundChannel.OnRoundFinished += Reset;
 
-        EventsManager.MatchChannel.OnExitButtonPressed += Despawn;
+        EventsManager.Instance.MatchChannel.OnExitButtonPressed += Despawn;
     }
 
     private void OnDisable()
     {
         if (!EventsManager.HasInstance) return;
         
-        EventsManager.RoundChannel.OnCountdownFinished -= Launch;
-        EventsManager.RoundChannel.OnRoundFinished -= Reset;
+        EventsManager.Instance.RoundChannel.OnCountdownFinished -= Launch;
+        EventsManager.Instance.RoundChannel.OnRoundFinished -= Reset;
         
-        EventsManager.MatchChannel.OnExitButtonPressed -= Despawn;
+        EventsManager.Instance.MatchChannel.OnExitButtonPressed -= Despawn;
     }
 }

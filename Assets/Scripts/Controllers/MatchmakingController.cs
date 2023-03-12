@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +26,7 @@ namespace Controllers
             else
             {
                 relevantMatches.Add(matchData, Time.time);
-                EventsManager.MatchmakingChannel.RaiseOnMatchesListChangedEvent();
+                EventsManager.Instance.MatchmakingChannel.RaiseOnMatchesListChangedEvent();
             }
         
             Debug.Log($"Relevant {relevantMatches.Count} matches");
@@ -54,25 +53,34 @@ namespace Controllers
 
             if (matchesToRemove.Count > 0)
             {
-                EventsManager.MatchmakingChannel.RaiseOnMatchesListChangedEvent();
+                EventsManager.Instance.MatchmakingChannel.RaiseOnMatchesListChangedEvent();
             }
 
             yield return trackingPeriodWait;
         }
 
+        #region Event handlers
+
+        public void OnFindButtonPressedHandler()
+        {
+            StartTrackingMatches();
+        }
+
+        public void OnMatchFoundHandler(MatchData matchData)
+        {
+            AddFoundMatch(matchData);
+        }
+
+        #endregion
+
         private void OnEnable()
         {
-            EventsManager.NetworkChannel.OnMatchFound += AddFoundMatch;
-            EventsManager.LobbyChannel.OnFindButtonPressed += StartTrackingMatches;
+            EventsManager.SetCallbacks(this);
         }
 
         private void OnDisable()
         {
-            if (!EventsManager.HasInstance)
-                return;
-        
-            EventsManager.NetworkChannel.OnMatchFound -= AddFoundMatch;
-            EventsManager.LobbyChannel.OnFindButtonPressed -= StartTrackingMatches;
+            EventsManager.ResetCallbacks(this);
         }
     }
 }

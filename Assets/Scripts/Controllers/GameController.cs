@@ -1,25 +1,22 @@
 using UnityEngine;
 
-public class GameController : MonoBehaviour
+public class GameController : BaseSubscriber
 {
     [SerializeField] private GameObject ballPrefab;
 
-    private void OnEnable()
+    #region Event handlers
+
+    public void OnPlayWithBotButtonPressedHandler()
     {
-        EventsManager.LobbyChannel.OnPlayWithBotButtonPressed += CreateBall;
-        
-        EventsManager.BoardChannel.OnPlatformTouched += TriggerPowerUp;
+        CreateBall();
+    }
+    
+    public void OnPlatformTouchedHandler(BoardSide side)
+    {
+        TriggerPowerUp(side);
     }
 
-    private void OnDisable()
-    {
-        if (!EventsManager.HasInstance) return;
-        
-        EventsManager.LobbyChannel.OnPlayWithBotButtonPressed -= CreateBall;
-        
-        EventsManager.BoardChannel.OnPlatformTouched -= TriggerPowerUp;
-    }
-
+    #endregion
 
     private void TriggerPowerUp(BoardSide side)
     {

@@ -11,13 +11,13 @@ public class SingleplayerRoundCreator : MonoBehaviour
     
     private void OnEnable()
     {
-        EventsManager.LobbyChannel.OnPlayWithBotButtonPressed += CreateBot;
+        EventsManager.Instance.LobbyChannel.OnPlayWithBotButtonPressed += CreateBot;
     }
 
     private void OnDisable()
     {
         if (!EventsManager.HasInstance) return;
         
-        EventsManager.LobbyChannel.OnPlayWithBotButtonPressed -= CreateBot;
+        EventsManager.Instance.LobbyChannel.OnPlayWithBotButtonPressed -= CreateBot;
     }
 }

@@ -1,34 +1,41 @@
 using System;
 using UnityEngine;
 
-public class LobbyController : MonoBehaviour
+public class LobbyController : BaseSubscriber
 {
     [SerializeField] private GameObject lobbyPanel;
     [SerializeField] private GameObject searchPanel;
 
-    private void OnEnable()
+    #region Event handlers
+    
+    public void OnPlayWithBotButtonPressedHandler()
     {
-        EventsManager.LobbyChannel.OnPlayWithBotButtonPressed += HideLobbyPanel;
-        EventsManager.MatchmakingChannel.OnMatchJoined += HideLobbyPanel;
-        EventsManager.LobbyChannel.OnHostButtonPressed += HideLobbyPanel;
-        EventsManager.LobbyChannel.OnHostButtonPressed += HostMatch;
-        EventsManager.LobbyChannel.OnFindButtonPressed += FindMatch;
-        EventsManager.LobbyChannel.OnFindButtonPressed += ShowSearchPanel;
-        EventsManager.MatchChannel.OnExitButtonPressed += ShowLobbyPanel;
+        HideLobbyPanel();
     }
 
-    private void OnDisable()
+    public void OnMatchJoinedHandler()
     {
-        if (!EventsManager.HasInstance) return;
-        
-        EventsManager.LobbyChannel.OnPlayWithBotButtonPressed -= HideLobbyPanel;
-        EventsManager.MatchmakingChannel.OnMatchJoined -= HideLobbyPanel;
-        EventsManager.LobbyChannel.OnHostButtonPressed -= HideLobbyPanel;
-        EventsManager.MatchChannel.OnExitButtonPressed -= ShowLobbyPanel;
-        EventsManager.LobbyChannel.OnFindButtonPressed -= ShowSearchPanel;
-        EventsManager.LobbyChannel.OnHostButtonPressed -= HostMatch;
-        EventsManager.LobbyChannel.OnFindButtonPressed -= FindMatch;
+        HideLobbyPanel();
     }
+
+    public void OnHostButtonPressedHandler()
+    {
+        HideLobbyPanel();
+        HostMatch();
+    }
+
+    public void OnFindButtonPressedHandler()
+    {
+        FindMatch();
+        ShowSearchPanel();
+    }
+
+    public void OnExitButtonPressedHandler()
+    {
+        ShowLobbyPanel();
+    }
+    
+    #endregion
 
     private void HideLobbyPanel(Guid gameId)
     {

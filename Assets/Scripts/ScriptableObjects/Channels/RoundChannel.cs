@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Channels/Round channel")]
-public class RoundChannel : ScriptableObject
+public class RoundChannel : BaseChannel
 {
     #region UI events
     

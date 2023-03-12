@@ -1,5 +1,4 @@
 using System;
-using Controllers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,6 +19,6 @@ public class HostedMatchPanel : MonoBehaviour
 
     private void JoinMatch()
     {
-        EventsManager.MatchmakingChannel.RaiseOnMatchJoined(matchId);
+        EventsManager.Instance.MatchmakingChannel.RaiseOnMatchJoinedEvent(matchId);
     }
 }

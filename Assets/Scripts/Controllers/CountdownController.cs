@@ -3,7 +3,7 @@ using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 
-public class CountdownController : MonoBehaviour
+public class CountdownController : BaseSubscriber
 {
     [SerializeField] private TextMeshProUGUI countdownText;
 
@@ -45,20 +45,20 @@ public class CountdownController : MonoBehaviour
         yield return countdownSecond;
         UpdateCountdown("");
         
-        EventsManager.RoundChannel.RaiseOnCountdownFinishedEvent();
+        EventsManager.Instance.RoundChannel.RaiseOnCountdownFinishedEvent();
     }
 
-    private void OnEnable()
+    #region Event handlers
+
+    public void OnStartButtonPressedHandler()
     {
-        EventsManager.RoundChannel.OnStartButtonPressed += StartCountDown;
-        EventsManager.MatchChannel.OnExitButtonPressed += HideCountdown;
+        StartCountDown();
+    }
+    
+    public void OnExitButtonPressedHandler()
+    {
+        HideCountdown();
     }
 
-    private void OnDisable()
-    {
-        if (!EventsManager.HasInstance) return;
-        
-        EventsManager.RoundChannel.OnStartButtonPressed -= StartCountDown;
-        EventsManager.MatchChannel.OnExitButtonPressed -= HideCountdown;
-    }
+    #endregion
 }

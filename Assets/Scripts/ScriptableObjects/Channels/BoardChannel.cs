@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Channels/Board channel")]
-public class BoardChannel : ScriptableObject
+public class BoardChannel : BaseChannel
 {
     public event Action OnBallLaunched;
     public event Action<BoardSide> OnPlatformTouched;

@@ -2,6 +2,6 @@ public class PlayWithBotButton : AbstractButtonHandler
 {
     protected override void RaiseOnClickEvent()
     {
-        EventsManager.LobbyChannel.RaisePlayWithBotButtonPressedEvent();
+        EventsManager.Instance.LobbyChannel.RaisePlayWithBotButtonPressedEvent();
     }
 }

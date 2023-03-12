@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Channels/Score channel")]
-public class ScoreChannel : ScriptableObject
+public class ScoreChannel : BaseChannel
 {
     public event Action<GameScoreData> OnGameScoreChanged;
     public event Action<BoardSide> OnWinConditionReached;

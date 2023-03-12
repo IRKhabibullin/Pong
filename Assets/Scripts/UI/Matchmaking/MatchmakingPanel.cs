@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace UI
 {
-    public class MatchmakingPanel : MonoBehaviour
+    public class MatchmakingPanel : BaseSubscriber
     {
         [SerializeField] private HostedMatchPanel matchInstancePrefab;
         [SerializeField] private Transform matchesContainer;
@@ -21,17 +21,9 @@ namespace UI
             }
         }
 
-        private void OnEnable()
+        public void OnMatchesListChangedHandler()
         {
-            EventsManager.MatchmakingChannel.OnMatchesListChanged += UpdateMatchesObjects;
-        }
-
-        private void OnDisable()
-        {
-            if (!EventsManager.HasInstance)
-                return;
-            
-            EventsManager.MatchmakingChannel.OnMatchesListChanged -= UpdateMatchesObjects;
+            UpdateMatchesObjects();
         }
     }
 }

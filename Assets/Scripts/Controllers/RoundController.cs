@@ -10,22 +10,22 @@ public class RoundController : MonoBehaviour
     
     private void OnEnable()
     {
-        EventsManager.MatchChannel.OnMatchPanelLoaded += LoadPanel;
-        EventsManager.MatchChannel.OnExitButtonPressed += CleanUp;
-        EventsManager.MatchChannel.OnMatchFinished += DisableRoundPanel;
-        EventsManager.RoundChannel.OnStartButtonPressed += DisableStartButton;
-        EventsManager.BoardChannel.OnBackWallTouched += FinishRound;
+        EventsManager.Instance.MatchChannel.OnMatchPanelLoaded += LoadPanel;
+        EventsManager.Instance.MatchChannel.OnExitButtonPressed += CleanUp;
+        EventsManager.Instance.MatchChannel.OnMatchFinished += DisableRoundPanel;
+        EventsManager.Instance.RoundChannel.OnStartButtonPressed += DisableStartButton;
+        EventsManager.Instance.BoardChannel.OnBackWallTouched += FinishRound;
     }
 
     private void OnDisable()
     {
         if (!EventsManager.HasInstance) return;
         
-        EventsManager.MatchChannel.OnMatchPanelLoaded -= LoadPanel;
-        EventsManager.MatchChannel.OnExitButtonPressed -= CleanUp;
-        EventsManager.MatchChannel.OnMatchFinished -= DisableRoundPanel;
-        EventsManager.RoundChannel.OnStartButtonPressed -= DisableStartButton;
-        EventsManager.BoardChannel.OnBackWallTouched -= FinishRound;
+        EventsManager.Instance.MatchChannel.OnMatchPanelLoaded -= LoadPanel;
+        EventsManager.Instance.MatchChannel.OnExitButtonPressed -= CleanUp;
+        EventsManager.Instance.MatchChannel.OnMatchFinished -= DisableRoundPanel;
+        EventsManager.Instance.RoundChannel.OnStartButtonPressed -= DisableStartButton;
+        EventsManager.Instance.BoardChannel.OnBackWallTouched -= FinishRound;
     }
 
     private void LoadPanel()
@@ -57,7 +57,7 @@ public class RoundController : MonoBehaviour
 
     private void FinishRound(BoardSide boardSide)
     {
-        EventsManager.RoundChannel.RaiseOnRoundFinishedEvent();
+        EventsManager.Instance.RoundChannel.RaiseOnRoundFinishedEvent();
         
         PrepareRound();
     }

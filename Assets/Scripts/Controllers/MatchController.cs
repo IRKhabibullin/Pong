@@ -36,22 +36,22 @@ public class MatchController : MonoBehaviour
 
     private void OnEnable()
     {
-        EventsManager.LobbyChannel.OnPlayWithBotButtonPressed += LoadMatchWithBot;
-        EventsManager.LobbyChannel.OnHostButtonPressed += LoadHostedMatch;
-        EventsManager.MatchChannel.OnExitButtonPressed += DisableMatchPanel;
-        EventsManager.ScoreChannel.OnWinConditionReached += FinishMatch;
-        EventsManager.LobbyChannel.OnFindButtonPressed += JoinHostedMatch;
+        EventsManager.Instance.LobbyChannel.OnPlayWithBotButtonPressed += LoadMatchWithBot;
+        EventsManager.Instance.LobbyChannel.OnHostButtonPressed += LoadHostedMatch;
+        EventsManager.Instance.MatchChannel.OnExitButtonPressed += DisableMatchPanel;
+        EventsManager.Instance.ScoreChannel.OnWinConditionReached += FinishMatch;
+        EventsManager.Instance.LobbyChannel.OnFindButtonPressed += JoinHostedMatch;
     }
 
     private void OnDisable()
     {
         if (!EventsManager.HasInstance) return;
         
-        EventsManager.LobbyChannel.OnPlayWithBotButtonPressed -= LoadMatchWithBot;
-        EventsManager.LobbyChannel.OnHostButtonPressed -= LoadHostedMatch;
-        EventsManager.MatchChannel.OnExitButtonPressed -= DisableMatchPanel;
-        EventsManager.ScoreChannel.OnWinConditionReached -= FinishMatch;
-        EventsManager.LobbyChannel.OnFindButtonPressed -= JoinHostedMatch;
+        EventsManager.Instance.LobbyChannel.OnPlayWithBotButtonPressed -= LoadMatchWithBot;
+        EventsManager.Instance.LobbyChannel.OnHostButtonPressed -= LoadHostedMatch;
+        EventsManager.Instance.MatchChannel.OnExitButtonPressed -= DisableMatchPanel;
+        EventsManager.Instance.ScoreChannel.OnWinConditionReached -= FinishMatch;
+        EventsManager.Instance.LobbyChannel.OnFindButtonPressed -= JoinHostedMatch;
     }
 
     private void LoadMatchWithBot()
@@ -67,12 +67,12 @@ public class MatchController : MonoBehaviour
         player1Platform = LoadPlayerPlatform().GetComponent<Platform>();
         player2Platform = LoadBotPlatform().GetComponent<Platform>();
         
-        EventsManager.MatchChannel.RaiseOnMatchPanelLoadedEvent();
+        EventsManager.Instance.MatchChannel.RaiseOnMatchPanelLoadedEvent();
     }
 
     private void FinishMatch(BoardSide winnerSide)
     {
-        EventsManager.MatchChannel.RaiseOnMatchFinishedEvent(sideNames[winnerSide]);
+        EventsManager.Instance.MatchChannel.RaiseOnMatchFinishedEvent(sideNames[winnerSide]);
     }
 
     private GameObject LoadPlayerPlatform()

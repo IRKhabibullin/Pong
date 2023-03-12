@@ -176,7 +176,7 @@ public class NetworkDiscovery : MonoBehaviour
         {
             foreach (var message in GetMessages())
             {
-                EventsManager.NetworkChannel.RaiseOnMatchFoundEvent(message);
+                EventsManager.Instance.NetworkChannel.RaiseOnMatchFoundEvent(message);
             }
 
             yield return discoverySettings.discoveryFrequency;

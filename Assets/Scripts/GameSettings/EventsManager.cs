@@ -1,23 +1,41 @@
+using System.Linq;
+using System.Reflection;
+using JetBrains.Annotations;
 using ScriptableObjects.Channels;
 using UnityEngine;
 
 public class EventsManager : MonoBehaviour
 {
-    [SerializeField] private BoardChannel boardChannel;
-    [SerializeField] private ScoreChannel scoreChannel;
-    [SerializeField] private RoundChannel roundChannel;
-    [SerializeField] private LobbyChannel lobbyChannel;
-    [SerializeField] private MatchChannel matchChannel;
-    [SerializeField] private NetworkChannel networkChannel;
-    [SerializeField] private MatchmakingChannel matchmakingChannel;
+    #region Channels
 
-    public static BoardChannel BoardChannel => Instance.boardChannel;
-    public static ScoreChannel ScoreChannel => Instance.scoreChannel;
-    public static RoundChannel RoundChannel => Instance.roundChannel;
-    public static LobbyChannel LobbyChannel => Instance.lobbyChannel;
-    public static MatchChannel MatchChannel => Instance.matchChannel;
-    public static NetworkChannel NetworkChannel => Instance.networkChannel;
-    public static MatchmakingChannel MatchmakingChannel => Instance.matchmakingChannel;
+    [field: SerializeField] public BoardChannel BoardChannel { get; [UsedImplicitly] private set; }
+    [field: SerializeField] public ScoreChannel ScoreChannel { get; [UsedImplicitly] private set; }
+    [field: SerializeField] public RoundChannel RoundChannel { get; [UsedImplicitly] private set; }
+    [field: SerializeField] public LobbyChannel LobbyChannel { get; [UsedImplicitly] private set; }
+    [field: SerializeField] public MatchChannel MatchChannel { get; [UsedImplicitly] private set; }
+    [field: SerializeField] public NetworkChannel NetworkChannel { get; [UsedImplicitly] private set; }
+    [field: SerializeField] public MatchmakingChannel MatchmakingChannel { get; [UsedImplicitly] private set; }
+
+    #endregion
+
+    public static void SetCallbacks(object subscriberObject)
+    {
+        foreach (var field in Instance.GetType().GetRuntimeFields().Where(f => f.FieldType.BaseType == typeof(BaseChannel)))
+        {
+            ((BaseChannel)field.GetValue(Instance)).SetCallbacks(subscriberObject);
+        }
+    }
+
+    public static void ResetCallbacks(object subscriberObject)
+    {
+        if (!HasInstance)
+            return;
+        
+        foreach (var field in Instance.GetType().GetRuntimeFields().Where(f => f.FieldType.BaseType == typeof(BaseChannel)))
+        {
+            ((BaseChannel)field.GetValue(Instance)).ResetCallbacks(subscriberObject);
+        }
+    }
 
     #region singleton setup
     public static EventsManager Instance
@@ -50,12 +68,12 @@ public class EventsManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        boardChannel.ClearSubscriptions();
-        scoreChannel.ClearSubscriptions();
-        roundChannel.ClearSubscriptions();
-        lobbyChannel.ClearSubscriptions();
-        matchChannel.ClearSubscriptions();
-        networkChannel.ClearSubscriptions();
-        matchmakingChannel.ClearSubscriptions();
+        BoardChannel.ClearSubscriptions();
+        ScoreChannel.ClearSubscriptions();
+        RoundChannel.ClearSubscriptions();
+        LobbyChannel.ClearSubscriptions();
+        MatchChannel.ClearSubscriptions();
+        NetworkChannel.ClearSubscriptions();
+        MatchmakingChannel.ClearSubscriptions();
     }
 }

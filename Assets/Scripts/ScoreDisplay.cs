@@ -9,14 +9,14 @@ public class ScoreDisplay : MonoBehaviour
 
     private void OnEnable()
     {
-        EventsManager.ScoreChannel.OnGameScoreChanged += UpdateScores;
+        EventsManager.Instance.ScoreChannel.OnGameScoreChanged += UpdateScores;
     }
 
     private void OnDisable()
     {
         if (!EventsManager.HasInstance) return;
         
-        EventsManager.ScoreChannel.OnGameScoreChanged -= UpdateScores;
+        EventsManager.Instance.ScoreChannel.OnGameScoreChanged -= UpdateScores;
     }
     
     private void UpdateScores(GameScoreData data)

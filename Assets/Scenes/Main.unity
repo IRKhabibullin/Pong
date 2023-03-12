@@ -4366,13 +4366,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfdd563c722defc499c40ed8dfc0492d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boardChannel: {fileID: 11400000, guid: d0e58b01c173b314480811f3da66b472, type: 2}
-  scoreChannel: {fileID: 11400000, guid: 45706e9d85afd6f47b14e5b0e72cd229, type: 2}
-  roundChannel: {fileID: 11400000, guid: 4ed09cf084c9ef54f84a80396e2ffa90, type: 2}
-  lobbyChannel: {fileID: 11400000, guid: 2b34247d322d9d248b32d604d9631233, type: 2}
-  matchChannel: {fileID: 11400000, guid: 6eecb12f29203bc40baf5b78be27aa9f, type: 2}
-  networkChannel: {fileID: 11400000, guid: d7308cd7c7c49e842b437e4bcb5d2602, type: 2}
-  matchmakingChannel: {fileID: 11400000, guid: 0e2c442ad38ef7247984bda7cdfe1645, type: 2}
+  <BoardChannel>k__BackingField: {fileID: 11400000, guid: d0e58b01c173b314480811f3da66b472, type: 2}
+  <ScoreChannel>k__BackingField: {fileID: 11400000, guid: 45706e9d85afd6f47b14e5b0e72cd229, type: 2}
+  <RoundChannel>k__BackingField: {fileID: 11400000, guid: 4ed09cf084c9ef54f84a80396e2ffa90, type: 2}
+  <LobbyChannel>k__BackingField: {fileID: 11400000, guid: 2b34247d322d9d248b32d604d9631233, type: 2}
+  <MatchChannel>k__BackingField: {fileID: 11400000, guid: 6eecb12f29203bc40baf5b78be27aa9f, type: 2}
+  <NetworkChannel>k__BackingField: {fileID: 11400000, guid: d7308cd7c7c49e842b437e4bcb5d2602, type: 2}
+  <MatchmakingChannel>k__BackingField: {fileID: 11400000, guid: 0e2c442ad38ef7247984bda7cdfe1645, type: 2}
 --- !u!1 &656184286
 GameObject:
   m_ObjectHideFlags: 0

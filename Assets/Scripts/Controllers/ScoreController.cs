@@ -10,31 +10,31 @@ public class ScoreController : MonoBehaviour
     {
         gameScoreData = new GameScoreData(winCondition);
 
-        EventsManager.ScoreChannel.RaiseOnChangedEvent(gameScoreData);
+        EventsManager.Instance.ScoreChannel.RaiseOnChangedEvent(gameScoreData);
     }
 
     private void UpdateScore(BoardSide side)
     {
         gameScoreData.AddScore(side, 1);
 
-        EventsManager.ScoreChannel.RaiseOnChangedEvent(gameScoreData);
+        EventsManager.Instance.ScoreChannel.RaiseOnChangedEvent(gameScoreData);
 
         if (gameScoreData.IsWinConditionReached(out var winnerSide))
         {
-            EventsManager.ScoreChannel.RaiseOnWinConditionReachedEvent(winnerSide);
+            EventsManager.Instance.ScoreChannel.RaiseOnWinConditionReachedEvent(winnerSide);
         }
     }
 
     private void OnEnable()
     {
-        EventsManager.BoardChannel.OnBackWallTouched += UpdateScore;
+        EventsManager.Instance.BoardChannel.OnBackWallTouched += UpdateScore;
     }
 
     private void OnDisable()
     {
         if (!EventsManager.HasInstance) return;
 
-        EventsManager.BoardChannel.OnBackWallTouched -= UpdateScore;
+        EventsManager.Instance.BoardChannel.OnBackWallTouched -= UpdateScore;
     }
 }
 
